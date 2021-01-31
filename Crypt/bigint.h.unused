@@ -1,0 +1,87 @@
+#ifndef BIGINT_INCLUDE
+#define BIGINT_INCLUDE
+
+#include <iostream>
+
+#include "global.h"
+#include "mpir.h"
+#include "mpirxx.h"
+
+
+// Classe BigInt permettant d'interfacer l'utilisation de GMP/MPIR
+extern "C" struct CAPI BigInt {
+public:
+	BigInt();
+	BigInt(int val);
+	~BigInt();
+
+	void set(const char* value, int base);
+	char* str(const int base) const;
+
+	// Opérateurs pour usage simplifié
+	BigInt& operator=(const BigInt& other);
+	BigInt& operator=(const int& value);
+	BigInt& operator=(const char* value);
+
+	BigInt& operator*=(const BigInt& mult);
+	BigInt& operator*=(const int& mult);
+
+	BigInt& operator/=(const BigInt& divider);
+	BigInt& operator/=(const int& divider);
+
+	BigInt& operator+=(const BigInt& additive);
+	BigInt& operator+=(const int& additive);
+
+	BigInt& operator-=(const BigInt& subtractive);
+	BigInt& operator-=(const int& subtractive);
+
+	BigInt& operator%=(const BigInt& modulo);
+	BigInt& operator%=(const int& modulo);
+
+	BigInt& operator*(const BigInt& mult);
+	BigInt& operator*(const int& mult);
+
+	BigInt& operator/(const BigInt& divider);
+	BigInt& operator/(const int& divider);
+
+	BigInt& operator+(const BigInt& additive);
+	BigInt& operator+(const int& additive);
+
+	BigInt& operator-(const BigInt& subtractive);
+	BigInt& operator-(const int& subtractive);
+
+	BigInt& operator%(const BigInt& modulo);
+	BigInt& operator%(const int& modulo);
+
+	BigInt& operator++();
+	BigInt operator++(int);
+
+	BigInt& operator--();
+	BigInt operator--(int);
+
+	//BigInt& operator+();
+	BigInt& operator-();
+
+	bool operator==(const BigInt& other);
+	bool operator==(const int& other);
+
+	bool operator!=(const BigInt& other);
+	bool operator!=(const int& other);
+
+	bool operator<(const BigInt& other);
+	bool operator<(const int& other);
+
+	bool operator>(const BigInt& other);
+	bool operator>(const int& other);
+
+	bool operator>=(const BigInt& other);
+	bool operator>=(const int& other);
+
+	bool operator<=(const BigInt& other);
+	bool operator<=(const int& other);
+
+	extern CAPI friend std::ostream& operator<<(std::ostream& out, const BigInt& number);
+protected:
+	mpz_t _val;
+};
+#endif

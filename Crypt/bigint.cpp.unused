@@ -1,0 +1,167 @@
+#include "pch.h"
+
+using namespace std;
+
+
+BigInt::BigInt()
+{
+	mpz_init(_val);
+}
+
+BigInt::BigInt(int val) : BigInt()
+{
+	mpz_set_si(_val, val);
+}
+
+BigInt::~BigInt()
+{
+	mpz_clear(_val);
+}
+
+
+void BigInt::set(const char* value, int base)
+{
+	mpz_set_str(_val, value, base);
+}
+
+char* BigInt::str(const int base) const
+{
+	return mpz_get_str(NULL, base, _val);
+}
+
+
+BigInt& BigInt::operator=(const BigInt& other)
+{
+	mpz_set(_val, other._val);
+
+	return *this;
+}
+
+BigInt& BigInt::operator=(const int& value)
+{
+	mpz_set_si(_val, value);
+
+	return *this;
+}
+
+BigInt& BigInt::operator=(const char* value)
+{
+	set(value, 0);
+
+	return *this;
+}
+
+BigInt& BigInt::operator*(const BigInt& mult)
+{
+	mpz_mul(_val, _val, mult._val);
+
+	return *this;
+}
+
+BigInt& BigInt::operator*(const int& mult)
+{
+	mpz_mul_si(_val, _val, mult);
+
+	return *this;
+}
+
+BigInt& BigInt::operator/(const BigInt& divider)
+{
+	mpz_div(_val, _val, divider._val);
+
+	return *this;
+
+}
+
+BigInt& BigInt::operator/(const int& divider)
+{
+	mpz_div_ui(_val, _val, divider);
+
+	return *this;
+}
+
+BigInt& BigInt::operator+(const BigInt& additive)
+{
+	mpz_add(_val, _val, additive._val);
+
+	return *this;
+}
+
+BigInt& BigInt::operator+(const int& additive)
+{
+	mpz_add_ui(_val, _val, additive);
+
+	return *this;
+}
+
+BigInt& BigInt::operator-(const BigInt& subtractive)
+{
+	mpz_sub(_val, _val, subtractive._val);
+
+	return *this;
+}
+
+BigInt& BigInt::operator-(const int& subtractive)
+{
+	mpz_sub_ui(_val, _val, subtractive);
+
+	return *this;
+}
+
+BigInt& BigInt::operator%(const BigInt& modulo)
+{
+	mpz_mod(_val, _val, modulo._val);
+
+	return *this;
+}
+
+BigInt& BigInt::operator%(const int& modulo)
+{
+	mpz_mod_ui(_val, _val, modulo);
+
+	return *this;
+}
+
+BigInt& BigInt::operator++()
+{
+	mpz_add_ui(_val, _val, 1);
+
+	return *this;
+}
+
+BigInt BigInt::operator++(int)
+{
+	BigInt temp = *this;
+	++*this;
+	
+	return temp;
+}
+
+BigInt& BigInt::operator--()
+{
+	mpz_sub_ui(_val, _val, 1);
+
+	return *this;
+}
+
+BigInt BigInt::operator--(int)
+{
+	BigInt temp = *this;
+	--*this;
+
+	return temp;
+}
+
+BigInt& BigInt::operator-()
+{
+	mpz_mul_si(_val, _val, -1);
+
+	return *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const BigInt& number)
+{
+	out << mpz_get_str(NULL, 10, number._val);
+
+	return out;
+}
