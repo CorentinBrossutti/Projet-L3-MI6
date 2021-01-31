@@ -1,0 +1,2 @@
+D:\mpir\msvc\vs19\dll_mpir_gc\Win32\Debug\mpir.dll
+D:\mpir\msvc\vs19\dll_mpir_gc\Win32\Debug\mpir.pdb
