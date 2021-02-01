@@ -27,19 +27,36 @@ bigint bigint_from(const char* val, uint8_t(*converter)(char))
 	return bigint(sstream.str(), 2);
 }
 
+CAPI std::string bigint_to(const bigint& val, char(*converter)(uint8_t))
+{
+	stringstream sstream;
+
+	byteset bytes(val);
+	for (unsigned int i = 0; i < bytes.size(); i++)
+		sstream << converter(bytes[i].to_ulong());
+
+	return sstream.str();
+}
+
 
 byteset::byteset(bigint from)
 {
 	unsigned int count = countb(from);
 
 	_bytes = new bitset<8>[count];
-	for (unsigned int i = 0; i < count; i++)
+	/*for (unsigned int i = 0; i < count; i++)
 	{
 		// Cela fonctionne car get_ui retourne le nombre constitué des bits de poids faible
 		// Et bitset prend aussi les bits de poids faible si le nombre en constructeur est trop grand
 		_bytes[count - i - 1] = bitset<8>(from.get_ui());
 		// Couplé avec le right shift on arrive donc à itérer octet par octet
 		from >>= 8;
+	}*/
+	string str = from.get_str(2);
+	str.insert(0, count * 8 - sizeb(from), '0');
+	for (unsigned int i = 0; i < count; i++)
+	{
+		_bytes[i] = bitset<8>(str.substr(i * 8, 8));
 	}
 
 	_size = count;

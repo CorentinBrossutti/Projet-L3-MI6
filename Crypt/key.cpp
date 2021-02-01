@@ -2,6 +2,9 @@
 #include "crypt/key.h"
 #include "crypt/math.h"
 
+#include <fstream>
+
+using namespace std;
 
 RealKey::RealKey(const RealKey& source)
 {
@@ -17,9 +20,20 @@ RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bigin
 {
 }
 
+void RealKey::save(const char* filepath)
+{
+	save(filepath, ascii_convert_to);
+}
+
 void RealKey::save(const char* filepath, char(*converter)(uint8_t))
 {
-	// TODO
+	ofstream ofs;
+	ofs.open(filepath, ios::out);
+	if (ofs.fail())
+		return;
+
+	ofs << bigint_to(value, converter);
+	ofs.close();
 }
 
 
@@ -48,4 +62,10 @@ KeyPair::~KeyPair()
 		delete a;
 		delete b;
 	}
+}
+
+void KeyPair::save(const char* filepath)
+{
+	a->save(filepath);
+	b->save(filepath);
 }

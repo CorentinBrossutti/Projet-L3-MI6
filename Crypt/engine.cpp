@@ -36,16 +36,7 @@ bool Message::encrypted() const
 
 string Message::get(char (*converter)(uint8_t))
 {
-	if (!_strcontent.empty())
-		return _strcontent;
-
-	stringstream sstream;
-
-	byteset bytes(_content);
-	for (unsigned int i = 0; i < bytes.size(); i++)
-		sstream << converter(bytes[i].to_ulong());
-
-	return (_strcontent = sstream.str());
+	return _strcontent.empty() ? (_strcontent = bigint_to(_content, converter)) : _strcontent;
 }
 
 void Message::write(const char* filepath, char (*converter)(uint8_t))
@@ -55,7 +46,7 @@ void Message::write(const char* filepath, char (*converter)(uint8_t))
 	if (ofs.fail())
 		return;
 
-	ofs << get();
+	ofs << get(converter);
 	ofs.close();
 }
 

@@ -7,6 +7,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    Message m(0b0110000101100010);
+    cout << m << endl;
+
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;

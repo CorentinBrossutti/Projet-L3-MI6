@@ -6,6 +6,7 @@
 // Une clé de cryptage générique
 extern struct CAPI Key
 {
+	virtual void save(const char* filepath) = 0;
 };
 
 // Clé de cryptage encapsulant un entier
@@ -18,7 +19,8 @@ public:
 	RealKey(const bigint& value);
 	RealKey(const char* textval, uint8_t(*converter)(char) = ascii_convert_from);
 
-	void save(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
+	virtual void save(const char* filepath);
+	virtual void save(const char* filepath, char (*converter)(uint8_t));
 };
 
 // Une paire de clé de cryptage. Permet le polymorphisme et un design composite
@@ -34,4 +36,6 @@ public:
 	KeyPair(const bigint& aval, const bigint& bval);
 	KeyPair(Key* a, Key* b, bool autodelete = true);
 	~KeyPair();
+
+	virtual void save(const char* filepath);
 };
