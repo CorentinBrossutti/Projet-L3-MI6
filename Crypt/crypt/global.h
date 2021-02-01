@@ -27,5 +27,8 @@
 #define CAPI IMPORT
 #endif
 
-
 using bigint = mpz_class;
+
+
+extern "C" CAPI char ascii_convert_to(uint8_t val);
+extern "C" CAPI uint8_t ascii_convert_from(char val);

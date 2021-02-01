@@ -42,5 +42,5 @@ extern class CAPI Rsa : public Engine
 public:
 	virtual RsaKey* generate();
 
-	virtual bigint run(const bigint& source, RsaKey* key);
+	virtual bigint run(const bigint& source, Key* key);
 };

@@ -33,6 +33,9 @@
     <ClInclude Include="crypt\rsa.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="crypt\std.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -48,6 +51,12 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="rsa.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="std.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

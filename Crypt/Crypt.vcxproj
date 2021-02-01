@@ -175,8 +175,10 @@
     <ClInclude Include="crypt\math.h" />
     <ClInclude Include="crypt\rsa.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="crypt\std.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="rsa.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="engine.cpp" />
@@ -187,6 +189,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="std.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

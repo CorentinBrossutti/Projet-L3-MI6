@@ -16,6 +16,9 @@ public:
 
 	RealKey(const RealKey& source);
 	RealKey(const bigint& value);
+	RealKey(const char* textval, uint8_t(*converter)(char) = ascii_convert_from);
+
+	void save(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
 };
 
 // Une paire de clé de cryptage. Permet le polymorphisme et un design composite

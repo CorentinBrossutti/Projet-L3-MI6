@@ -11,6 +11,7 @@
 unsigned int sizeb(const bigint& number);
 // Retourne le nombre d'octets d'un big int
 unsigned int countb(const bigint& number);
+extern "C" CAPI bigint bigint_from(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
 
 
 // Ensemble d'octets (et non de bits...) liés à un bigint

@@ -32,7 +32,7 @@ RsaKey* Rsa::generate()
     return new RsaKey(0, 0, 0);
 }
 
-bigint Rsa::run(const bigint& source, RsaKey* key)
+bigint Rsa::run(const bigint& source, Key* key)
 {
     // TODO
     return bigint();

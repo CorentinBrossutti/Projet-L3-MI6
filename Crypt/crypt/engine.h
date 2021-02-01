@@ -9,10 +9,6 @@
 #define PADSIZE 64
 
 
-// Fonctions de conversion caractère ASCII <=> octet
-extern "C" char CAPI ascii_convert_to(uint8_t val);
-extern "C" uint8_t CAPI ascii_convert_from(char val);
-
 class Engine;
 
 // Un message à transmettre, contient un bigint encrypté ou non correspondant au message
@@ -30,6 +26,8 @@ public:
 	// Permet d'obtenir la représentation textuelle (si pertinent) du message, utilisant une fonction de conversion optionelle (défaut ASCII)
 	// Noter que si le message n'est pas textuel, ou encrypté, cette représentation est inutile
 	std::string get(char (*converter)(uint8_t) = ascii_convert_to);
+
+	void write(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
 
 	extern CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
@@ -63,4 +61,7 @@ public:
 	void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE);
 	// Décrypte une message avec une clé donnée
 	void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE);
+
+	// Opération dynamique basée sur un argument textuel
+	bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE);
 };

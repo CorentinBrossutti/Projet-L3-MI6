@@ -14,9 +14,10 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
+# Modif : lib debug et release
+#[Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+#[Rr]elease/
 [Rr]eleases/
 x64/
 x86/
@@ -338,3 +339,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Crypt/Debug
+/SDPE/Debug

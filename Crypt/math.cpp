@@ -17,6 +17,16 @@ unsigned int countb(const bigint& number)
 	return unsigned int(ceil(sizeb(number) / 8.0));
 }
 
+bigint bigint_from(const char* val, uint8_t(*converter)(char))
+{
+	stringstream sstream;
+	// On transforme le message en entier, pour ça on itère sur les caractères...
+	for (unsigned int i = 0; val[i] != '\0'; i++)
+		sstream << bitset<8>(converter(val[i])).to_string();
+
+	return bigint(sstream.str(), 2);
+}
+
 
 byteset::byteset(bigint from)
 {
