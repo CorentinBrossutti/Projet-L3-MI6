@@ -9,5 +9,10 @@
 
 // ajouter les en-têtes à précompiler ici
 #include "crypt/global.h"
+/*#include "crypt/engine.h"
+#include "crypt/key.h"
+#include "crypt/math.h"
+#include "crypt/rsa.h"
+#include "crypt/std.h"*/
 
 #endif //PCH_H

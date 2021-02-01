@@ -1,6 +1,6 @@
 #pragma once
 
-// Ce fichier contient des constantes globales
+// Le fichier global.h contient des constantes globales
 #include "mpirxx.h"
 
 // Définit les constantes d'import/export DLL/SO (librairie)

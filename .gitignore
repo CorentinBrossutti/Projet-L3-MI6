@@ -341,3 +341,5 @@ ASALocalRun/
 healthchecksdb
 /Crypt/Debug
 /SDPE/Debug
+/Crypt/win64/Debug
+/SDPE/win64/Debug
