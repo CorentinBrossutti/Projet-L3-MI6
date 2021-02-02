@@ -40,6 +40,9 @@ public:
 extern class CAPI Rsa : public Engine
 {
 public:
+	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
+	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
+
 	virtual RsaKey* generate();
 
 	virtual bigint run(const bigint& source, Key* key);

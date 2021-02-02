@@ -31,11 +31,11 @@ Key* keys::parse_stream(istream& stream, uint8_t(*converter)(char))
 
 	if (engine == "RSA")
 	{
-		bigint n = bigint_from(buf.c_str(), converter);
+		bigint n = bop::from(buf.c_str(), converter);
 		if (!getline(stream, buf))
 			throw invalid_argument("Invalid data passed at keys::parse_raw ; key data couldn't be read");
-		// E ou D en fonction de ce qu'on traite. Dans la cas d'une paire il s'agit de e
-		bigint ed = bigint_from(buf.c_str(), converter);
+		// E ou D en fonction de ce qu'on traite. Dans le cas d'une paire il s'agit de e
+		bigint ed = bop::from(buf.c_str(), converter);
 		if (info == "PUBLIC KEY")
 			return new PublicKey(n, ed);
 		else if (info == "PRIVATE KEY")
@@ -44,7 +44,7 @@ Key* keys::parse_stream(istream& stream, uint8_t(*converter)(char))
 		{
 			if (!getline(stream, buf))
 				throw invalid_argument("Invalid data passed at keys::parse_raw ; key data couldn't be read");
-			bigint d = bigint_from(buf.c_str(), converter);
+			bigint d = bop::from(buf.c_str(), converter);
 			return new RsaKey(n, ed, d);
 		}
 		else

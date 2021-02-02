@@ -7,17 +7,17 @@
 using namespace std;
 
 
-unsigned int sizeb(const bigint& number)
+unsigned int bop::sizebin(const bigint& number)
 {
 	return mpz_sizeinbase(number.get_mpz_t(), 2);
 }
 
-unsigned int countb(const bigint& number)
+unsigned int bop::count_bytes(const bigint& number)
 {
-	return unsigned int(ceil(sizeb(number) / 8.0));
+	return unsigned int(ceil(sizebin(number) / 8.0));
 }
 
-bigint bigint_from(const char* val, uint8_t(*converter)(char))
+bigint bop::from(const char* val, uint8_t(*converter)(char))
 {
 	stringstream sstream;
 	// On transforme le message en entier, pour ça on itère sur les caractères...
@@ -27,7 +27,7 @@ bigint bigint_from(const char* val, uint8_t(*converter)(char))
 	return bigint(sstream.str(), 2);
 }
 
-CAPI std::string bigint_to(const bigint& val, char(*converter)(uint8_t))
+std::string bop::to(const bigint& val, char(*converter)(uint8_t))
 {
 	stringstream sstream;
 
@@ -39,9 +39,9 @@ CAPI std::string bigint_to(const bigint& val, char(*converter)(uint8_t))
 }
 
 
-byteset::byteset(bigint from)
+byteset::byteset(const bigint& from)
 {
-	unsigned int count = countb(from);
+	unsigned int count = bop::count_bytes(from);
 
 	_bytes = new bitset<8>[count];
 	/*for (unsigned int i = 0; i < count; i++)
@@ -53,7 +53,7 @@ byteset::byteset(bigint from)
 		from >>= 8;
 	}*/
 	string str = from.get_str(2);
-	str.insert(0, count * 8 - sizeb(from), '0');
+	str.insert(0, count * 8 - bop::sizebin(from), '0');
 	for (unsigned int i = 0; i < count; i++)
 	{
 		_bytes[i] = bitset<8>(str.substr(i * 8, 8));

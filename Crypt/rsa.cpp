@@ -26,6 +26,16 @@ RsaKey::RsaKey(const bigint& n, const bigint& e, const bigint& d)
 }
 
 
+bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize)
+{
+    return Engine::encode(source, ((RsaKey*)key)->publ, padsize);
+}
+
+bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
+{
+    return Engine::decode(source, ((RsaKey*)key)->priv, padsize);
+}
+
 RsaKey* Rsa::generate()
 {
     // TODO
@@ -34,6 +44,8 @@ RsaKey* Rsa::generate()
 
 bigint Rsa::run(const bigint& source, Key* key)
 {
-    // TODO
+    // Clé publique ou clé privé, peu importe, on utilise a (= n) et b (= e ou d)
+    KeyPair* kp = (KeyPair*)key;
+    //TODO
     return bigint();
 }

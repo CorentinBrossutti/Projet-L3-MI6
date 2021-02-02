@@ -7,19 +7,23 @@
 #include <bitset>
 
 
-// Retourne le nombre de bits d'un big int
-unsigned int sizeb(const bigint& number);
-// Retourne le nombre d'octets d'un big int
-unsigned int countb(const bigint& number);
-extern "C" CAPI bigint bigint_from(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
-extern "C" CAPI std::string bigint_to(const bigint & val, char(*converter)(uint8_t) = ascii_convert_to);
+// BIGINT operations
+namespace bop
+{
+	// Retourne le nombre de bits d'un big int
+	unsigned int sizebin(const bigint& number);
+	// Retourne le nombre d'octets d'un big int
+	unsigned int count_bytes(const bigint& number);
+	extern "C" CAPI bigint from(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
+	extern "C" CAPI std::string to(const bigint & val, char(*converter)(uint8_t) = ascii_convert_to);
+}
 
 
 // Ensemble d'octets (et non de bits...) liés à un bigint
 extern struct CAPI byteset
 {
 public:
-	byteset(bigint from);
+	byteset(const bigint& from);
 	~byteset();
 
 	unsigned int size() const;

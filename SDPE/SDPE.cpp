@@ -37,11 +37,11 @@ int main(int argc, char** argv)
     else
         cout << "Impossible d'effectuer l'opération donnée. Vérifiez que l'opération existe et est valide." << endl;
 
-    if (engine != nullptr)
+    if (engine)
         delete engine;
-    if (key != nullptr)
+    if (key)
         delete key;
-    if (msg != nullptr)
+    if (msg)
         delete msg;
     return ret;
 }

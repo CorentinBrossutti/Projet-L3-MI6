@@ -24,7 +24,7 @@ Message::Message(const bigint& number, bool encrypted)
 
 Message::Message(const char* msg, uint8_t (*converter)(char))
 {
-	_content = bigint_from(msg, converter);
+	_content = bop::from(msg, converter);
 	_strcontent = string(msg);
 	_encrypted = false;
 }
@@ -36,7 +36,7 @@ bool Message::encrypted() const
 
 string Message::get(char (*converter)(uint8_t))
 {
-	return _strcontent.empty() ? (_strcontent = bigint_to(_content, converter)) : _strcontent;
+	return _strcontent.empty() ? (_strcontent = bop::to(_content, converter)) : _strcontent;
 }
 
 void Message::write(const char* filepath, char (*converter)(uint8_t))

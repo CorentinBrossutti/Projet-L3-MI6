@@ -16,7 +16,7 @@ RealKey::RealKey(const bigint& value)
 	this->value = value;
 }
 
-RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bigint_from(textval, converter))
+RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bop::from(textval, converter))
 {
 }
 
@@ -32,7 +32,7 @@ void RealKey::save(const char* filepath, char(*converter)(uint8_t))
 	if (ofs.fail())
 		return;
 
-	ofs << bigint_to(value, converter);
+	ofs << bop::to(value, converter);
 	ofs.close();
 }
 
@@ -41,7 +41,7 @@ KeyPair::KeyPair()
 {
 	a = nullptr;
 	b = nullptr;
-	autodelete = false;
+	autodelete = true;
 }
 
 KeyPair::KeyPair(const bigint& aval, const bigint& bval) : KeyPair(new RealKey(aval), new RealKey(bval))
@@ -59,8 +59,10 @@ KeyPair::~KeyPair()
 {
 	if (autodelete)
 	{
-		delete a;
-		delete b;
+		if (a)
+			delete a;
+		if (b)
+			delete b;
 	}
 }
 
