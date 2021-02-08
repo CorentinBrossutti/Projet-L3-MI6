@@ -1,14 +1,14 @@
 #include "clienttcp.h"
 #include "ui_clienttcp.h"
 
-ClientTCP::ClientTCP(QWidget *parent)
+ClientTcp::ClientTcp(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::ClientTCP)
+    , ui(new Ui::ClientTcp)
 {
     ui->setupUi(this);
 }
 
-ClientTCP::~ClientTCP()
+ClientTcp::~ClientTcp()
 {
     delete ui;
 }

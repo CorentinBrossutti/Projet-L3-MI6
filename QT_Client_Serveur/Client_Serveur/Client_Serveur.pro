@@ -19,15 +19,12 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    clienttcp.cpp \
     serveurtcp.cpp
 
 HEADERS += \
-    clienttcp.h \
     serveurtcp.h
 
-FORMS += \
-    clienttcp.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
