@@ -10,14 +10,17 @@
 #define UI_CLIENTTCP_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QSlider>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
-#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -25,121 +28,159 @@ QT_BEGIN_NAMESPACE
 class Ui_ClientTcp
 {
 public:
-    QWidget *centralwidget;
+    QWidget *mainwindow1;
     QHBoxLayout *horizontalLayout;
-    QWidget *Widget;
-    QGridLayout *gridLayout_4;
+    QWidget *mainwindow2;
     QGridLayout *gridLayout;
-    QLabel *label;
-    QSpinBox *spinBox;
-    QSlider *verticalSlider;
+    QTextEdit *display_message;
+    QWidget *group_connexion;
     QGridLayout *gridLayout_2;
-    QSpinBox *spinBox_2;
-    QSlider *verticalSlider_2;
-    QLabel *label_2;
+    QLabel *label_ip;
+    QPushButton *bouton_connexion;
+    QLabel *label_port;
+    QSpinBox *box_port;
+    QLineEdit *lineEdit;
+    QSpacerItem *horizontalSpacer;
+    QWidget *group_nom;
     QGridLayout *gridLayout_3;
-    QLabel *label_3;
-    QSpinBox *spinBox_3;
-    QSlider *verticalSlider_3;
-    QStatusBar *statusbar;
+    QLabel *label_image;
+    QLabel *label_nom;
+    QWidget *group_message;
+    QGridLayout *groupe_message;
+    QLabel *label_pseudo;
+    QLineEdit *lineEdit_3;
+    QLabel *label_message;
+    QLineEdit *lineEdit_2;
+    QPushButton *pushButton;
 
     void setupUi(QMainWindow *ClientTcp)
     {
         if (ClientTcp->objectName().isEmpty())
             ClientTcp->setObjectName(QString::fromUtf8("ClientTcp"));
-        ClientTcp->resize(549, 419);
-        centralwidget = new QWidget(ClientTcp);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        horizontalLayout = new QHBoxLayout(centralwidget);
+        ClientTcp->resize(950, 600);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8("../../../../Pictures/bulle dialogue 2.jpg"), QSize(), QIcon::Normal, QIcon::Off);
+        ClientTcp->setWindowIcon(icon);
+        mainwindow1 = new QWidget(ClientTcp);
+        mainwindow1->setObjectName(QString::fromUtf8("mainwindow1"));
+        horizontalLayout = new QHBoxLayout(mainwindow1);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        Widget = new QWidget(centralwidget);
-        Widget->setObjectName(QString::fromUtf8("Widget"));
-        gridLayout_4 = new QGridLayout(Widget);
-        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
-        gridLayout = new QGridLayout();
+        mainwindow2 = new QWidget(mainwindow1);
+        mainwindow2->setObjectName(QString::fromUtf8("mainwindow2"));
+        mainwindow2->setEnabled(true);
+        mainwindow2->setToolTipDuration(-1);
+        gridLayout = new QGridLayout(mainwindow2);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        label = new QLabel(Widget);
-        label->setObjectName(QString::fromUtf8("label"));
+        display_message = new QTextEdit(mainwindow2);
+        display_message->setObjectName(QString::fromUtf8("display_message"));
+        display_message->setReadOnly(true);
 
-        gridLayout->addWidget(label, 0, 0, 1, 1);
+        gridLayout->addWidget(display_message, 1, 0, 1, 1);
 
-        spinBox = new QSpinBox(Widget);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
-        spinBox->setMaximum(255);
-
-        gridLayout->addWidget(spinBox, 1, 0, 1, 1);
-
-        verticalSlider = new QSlider(Widget);
-        verticalSlider->setObjectName(QString::fromUtf8("verticalSlider"));
-        verticalSlider->setMaximum(255);
-        verticalSlider->setOrientation(Qt::Vertical);
-
-        gridLayout->addWidget(verticalSlider, 2, 0, 1, 1);
-
-
-        gridLayout_4->addLayout(gridLayout, 0, 0, 1, 1);
-
-        gridLayout_2 = new QGridLayout();
+        group_connexion = new QWidget(mainwindow2);
+        group_connexion->setObjectName(QString::fromUtf8("group_connexion"));
+        group_connexion->setMaximumSize(QSize(16777215, 150));
+        gridLayout_2 = new QGridLayout(group_connexion);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        spinBox_2 = new QSpinBox(Widget);
-        spinBox_2->setObjectName(QString::fromUtf8("spinBox_2"));
-        spinBox_2->setMaximum(255);
+        label_ip = new QLabel(group_connexion);
+        label_ip->setObjectName(QString::fromUtf8("label_ip"));
 
-        gridLayout_2->addWidget(spinBox_2, 2, 0, 1, 1);
+        gridLayout_2->addWidget(label_ip, 0, 0, 1, 1);
 
-        verticalSlider_2 = new QSlider(Widget);
-        verticalSlider_2->setObjectName(QString::fromUtf8("verticalSlider_2"));
-        verticalSlider_2->setMaximum(255);
-        verticalSlider_2->setOrientation(Qt::Vertical);
+        bouton_connexion = new QPushButton(group_connexion);
+        bouton_connexion->setObjectName(QString::fromUtf8("bouton_connexion"));
 
-        gridLayout_2->addWidget(verticalSlider_2, 3, 0, 1, 1);
+        gridLayout_2->addWidget(bouton_connexion, 0, 4, 1, 1);
 
-        label_2 = new QLabel(Widget);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_port = new QLabel(group_connexion);
+        label_port->setObjectName(QString::fromUtf8("label_port"));
 
-        gridLayout_2->addWidget(label_2, 1, 0, 1, 1);
+        gridLayout_2->addWidget(label_port, 0, 2, 1, 1);
 
+        box_port = new QSpinBox(group_connexion);
+        box_port->setObjectName(QString::fromUtf8("box_port"));
+        box_port->setMaximum(100000);
 
-        gridLayout_4->addLayout(gridLayout_2, 0, 1, 1, 1);
+        gridLayout_2->addWidget(box_port, 0, 3, 1, 1);
 
-        gridLayout_3 = new QGridLayout();
+        lineEdit = new QLineEdit(group_connexion);
+        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+
+        gridLayout_2->addWidget(lineEdit, 0, 1, 1, 1);
+
+        horizontalSpacer = new QSpacerItem(33, 381, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer, 0, 6, 1, 1);
+
+        group_nom = new QWidget(group_connexion);
+        group_nom->setObjectName(QString::fromUtf8("group_nom"));
+        group_nom->setMaximumSize(QSize(300, 150));
+        gridLayout_3 = new QGridLayout(group_nom);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
-        label_3 = new QLabel(Widget);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_image = new QLabel(group_nom);
+        label_image->setObjectName(QString::fromUtf8("label_image"));
+        label_image->setMaximumSize(QSize(300, 100));
+        label_image->setPixmap(QPixmap(QString::fromUtf8("../../../../Pictures/discuter.jpg")));
 
-        gridLayout_3->addWidget(label_3, 0, 0, 1, 1);
+        gridLayout_3->addWidget(label_image, 0, 0, 1, 1);
 
-        spinBox_3 = new QSpinBox(Widget);
-        spinBox_3->setObjectName(QString::fromUtf8("spinBox_3"));
-        spinBox_3->setMaximum(255);
+        label_nom = new QLabel(group_nom);
+        label_nom->setObjectName(QString::fromUtf8("label_nom"));
+        label_nom->setMaximumSize(QSize(100, 30));
+        QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
+        font.setPointSize(14);
+        label_nom->setFont(font);
 
-        gridLayout_3->addWidget(spinBox_3, 1, 0, 1, 1);
-
-        verticalSlider_3 = new QSlider(Widget);
-        verticalSlider_3->setObjectName(QString::fromUtf8("verticalSlider_3"));
-        verticalSlider_3->setMaximum(255);
-        verticalSlider_3->setOrientation(Qt::Vertical);
-
-        gridLayout_3->addWidget(verticalSlider_3, 2, 0, 1, 1);
-
-
-        gridLayout_4->addLayout(gridLayout_3, 0, 2, 1, 1);
+        gridLayout_3->addWidget(label_nom, 1, 0, 1, 1, Qt::AlignHCenter);
 
 
-        horizontalLayout->addWidget(Widget);
+        gridLayout_2->addWidget(group_nom, 0, 7, 1, 1);
 
-        ClientTcp->setCentralWidget(centralwidget);
-        statusbar = new QStatusBar(ClientTcp);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        ClientTcp->setStatusBar(statusbar);
+
+        gridLayout->addWidget(group_connexion, 0, 0, 1, 1);
+
+        group_message = new QWidget(mainwindow2);
+        group_message->setObjectName(QString::fromUtf8("group_message"));
+        groupe_message = new QGridLayout(group_message);
+        groupe_message->setObjectName(QString::fromUtf8("groupe_message"));
+        groupe_message->setContentsMargins(-1, -1, -1, 1);
+        label_pseudo = new QLabel(group_message);
+        label_pseudo->setObjectName(QString::fromUtf8("label_pseudo"));
+
+        groupe_message->addWidget(label_pseudo, 0, 0, 1, 1);
+
+        lineEdit_3 = new QLineEdit(group_message);
+        lineEdit_3->setObjectName(QString::fromUtf8("lineEdit_3"));
+        lineEdit_3->setMaxLength(3640);
+
+        groupe_message->addWidget(lineEdit_3, 0, 1, 1, 1);
+
+        label_message = new QLabel(group_message);
+        label_message->setObjectName(QString::fromUtf8("label_message"));
+
+        groupe_message->addWidget(label_message, 0, 2, 1, 1);
+
+        lineEdit_2 = new QLineEdit(group_message);
+        lineEdit_2->setObjectName(QString::fromUtf8("lineEdit_2"));
+
+        groupe_message->addWidget(lineEdit_2, 0, 3, 1, 1);
+
+        pushButton = new QPushButton(group_message);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        groupe_message->addWidget(pushButton, 0, 4, 1, 1);
+
+        groupe_message->setColumnStretch(3, 1);
+
+        gridLayout->addWidget(group_message, 2, 0, 1, 1);
+
+
+        horizontalLayout->addWidget(mainwindow2);
+
+        ClientTcp->setCentralWidget(mainwindow1);
 
         retranslateUi(ClientTcp);
-        QObject::connect(verticalSlider, SIGNAL(valueChanged(int)), spinBox, SLOT(setValue(int)));
-        QObject::connect(spinBox, SIGNAL(valueChanged(int)), verticalSlider, SLOT(setValue(int)));
-        QObject::connect(verticalSlider_2, SIGNAL(valueChanged(int)), spinBox_2, SLOT(setValue(int)));
-        QObject::connect(spinBox_2, SIGNAL(valueChanged(int)), verticalSlider_2, SLOT(setValue(int)));
-        QObject::connect(verticalSlider_3, SIGNAL(valueChanged(int)), spinBox_3, SLOT(setValue(int)));
-        QObject::connect(spinBox_3, SIGNAL(valueChanged(int)), verticalSlider_3, SLOT(setValue(int)));
 
         QMetaObject::connectSlotsByName(ClientTcp);
     } // setupUi
@@ -147,9 +188,18 @@ public:
     void retranslateUi(QMainWindow *ClientTcp)
     {
         ClientTcp->setWindowTitle(QCoreApplication::translate("ClientTcp", "ClientTcp", nullptr));
-        label->setText(QCoreApplication::translate("ClientTcp", "RED", nullptr));
-        label_2->setText(QCoreApplication::translate("ClientTcp", "GREEN", nullptr));
-        label_3->setText(QCoreApplication::translate("ClientTcp", "BLUE", nullptr));
+        label_ip->setText(QCoreApplication::translate("ClientTcp", "IP du serveur :", nullptr));
+        bouton_connexion->setText(QCoreApplication::translate("ClientTcp", "Connexion", nullptr));
+        label_port->setText(QCoreApplication::translate("ClientTcp", "Port du serveur :", nullptr));
+        lineEdit->setPlaceholderText(QCoreApplication::translate("ClientTcp", "255.255.255.255", nullptr));
+        label_image->setText(QString());
+        label_nom->setText(QCoreApplication::translate("ClientTcp", "MI6 Chat", nullptr));
+        label_pseudo->setText(QCoreApplication::translate("ClientTcp", "Pseudo :", nullptr));
+        lineEdit_3->setText(QString());
+        lineEdit_3->setPlaceholderText(QCoreApplication::translate("ClientTcp", "Votre pseudo ici", nullptr));
+        label_message->setText(QCoreApplication::translate("ClientTcp", "message :", nullptr));
+        lineEdit_2->setPlaceholderText(QCoreApplication::translate("ClientTcp", "Votre message ici", nullptr));
+        pushButton->setText(QCoreApplication::translate("ClientTcp", "Envoyer", nullptr));
     } // retranslateUi
 
 };
