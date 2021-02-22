@@ -1,6 +1,11 @@
-QT       += core gui
+TEMPLATE = app
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui
+QT       += widgets network
+QT += widgets
+TARGET =
+DEPENDPATH += .
+INCLUDEPATH += .
 
 CONFIG += c++11
 
@@ -8,6 +13,8 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
+#Input
 SOURCES += \
     main.cpp \
     clienttcp.cpp
