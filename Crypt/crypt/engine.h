@@ -12,7 +12,7 @@
 class Engine;
 
 // Un message à transmettre, contient un bigint encrypté ou non correspondant au message
-extern class CAPI Message
+class CAPI Message
 {
 	friend class Engine;
 public:
@@ -29,7 +29,7 @@ public:
 
 	void write(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
 
-	extern CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
+	CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
 	bool _encrypted;
 	bigint _content;
@@ -38,7 +38,7 @@ protected:
 
 
 // Un moteur de cryptage générique
-extern class CAPI Engine
+class CAPI Engine
 {
 public:
 	// Génère une clé de cryptage

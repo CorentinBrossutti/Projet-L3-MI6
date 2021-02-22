@@ -54,10 +54,8 @@ byteset::byteset(const bigint& from)
 	}*/
 	string str = from.get_str(2);
 	str.insert(0, count * 8 - bop::sizebin(from), '0');
-	for (unsigned int i = 0; i < count; i++)
-	{
+	for (unsigned int i = 1; i < count; i++)
 		_bytes[i] = bitset<8>(str.substr(i * 8, 8));
-	}
 
 	_size = count;
 }

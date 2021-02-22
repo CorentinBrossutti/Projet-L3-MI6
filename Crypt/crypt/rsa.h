@@ -6,7 +6,7 @@
 
 
 // Clé publique RSA, une paire composée de deux clés numériques
-extern class CAPI PublicKey : public KeyPair
+class CAPI PublicKey : public KeyPair
 {
 public:
 	RealKey* n;
@@ -16,7 +16,7 @@ public:
 };
 
 // Clé privée RSA, une paire composée de deux clés numériques
-extern class CAPI PrivateKey : public KeyPair
+class CAPI PrivateKey : public KeyPair
 {
 public:
 	RealKey* n;
@@ -26,7 +26,7 @@ public:
 };
 
 // Clé "trousseau" RSA, composée d'une clé publique et d'une clé privée (design composite donc)
-extern class CAPI RsaKey : public KeyPair
+class CAPI RsaKey : public KeyPair
 {
 public:
 	PublicKey* publ;
@@ -37,7 +37,7 @@ public:
 
 
 // Moteur de cryptage asymétrique RSA
-extern class CAPI Rsa : public Engine
+class CAPI Rsa : public Engine
 {
 public:
 	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);

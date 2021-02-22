@@ -4,13 +4,13 @@
 
 
 // Une clé de cryptage générique
-extern struct CAPI Key
+struct CAPI Key
 {
 	virtual void save(const char* filepath) = 0;
 };
 
 // Clé de cryptage encapsulant un entier
-extern struct CAPI RealKey : public Key
+struct CAPI RealKey : public Key
 {
 public:
 	bigint value;
@@ -24,7 +24,7 @@ public:
 };
 
 // Une paire de clé de cryptage. Permet le polymorphisme et un design composite
-extern struct CAPI KeyPair : public Key
+struct CAPI KeyPair : public Key
 {
 public:
 	Key* a;
