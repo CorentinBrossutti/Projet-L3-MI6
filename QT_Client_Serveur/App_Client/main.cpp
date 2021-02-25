@@ -1,6 +1,5 @@
-#include "clienttcp.h"
-
 #include <QApplication>
+#include "clienttcp.h"
 
 int main(int argc, char *argv[])
 {

@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ClientTcp_t {
     QByteArrayData data[11];
-    char stringdata0[171];
+    char stringdata0[174];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,18 +36,18 @@ QT_MOC_LITERAL(0, 0, 9), // "ClientTcp"
 QT_MOC_LITERAL(1, 10, 26), // "on_boutonConnexion_clicked"
 QT_MOC_LITERAL(2, 37, 0), // ""
 QT_MOC_LITERAL(3, 38, 24), // "on_boutonEnvoyer_clicked"
-QT_MOC_LITERAL(4, 63, 24), // "on_message_returnPressed"
-QT_MOC_LITERAL(5, 88, 13), // "donneesRecues"
-QT_MOC_LITERAL(6, 102, 8), // "connecte"
-QT_MOC_LITERAL(7, 111, 10), // "deconnecte"
-QT_MOC_LITERAL(8, 122, 12), // "erreurSocket"
-QT_MOC_LITERAL(9, 135, 28), // "QAbstractSocket::SocketError"
-QT_MOC_LITERAL(10, 164, 6) // "erreur"
+QT_MOC_LITERAL(4, 63, 27), // "on_boxMessage_returnPressed"
+QT_MOC_LITERAL(5, 91, 13), // "donneesRecues"
+QT_MOC_LITERAL(6, 105, 8), // "connecte"
+QT_MOC_LITERAL(7, 114, 10), // "deconnecte"
+QT_MOC_LITERAL(8, 125, 12), // "erreurSocket"
+QT_MOC_LITERAL(9, 138, 28), // "QAbstractSocket::SocketError"
+QT_MOC_LITERAL(10, 167, 6) // "erreur"
 
     },
     "ClientTcp\0on_boutonConnexion_clicked\0"
     "\0on_boutonEnvoyer_clicked\0"
-    "on_message_returnPressed\0donneesRecues\0"
+    "on_boxMessage_returnPressed\0donneesRecues\0"
     "connecte\0deconnecte\0erreurSocket\0"
     "QAbstractSocket::SocketError\0erreur"
 };
@@ -95,7 +95,7 @@ void ClientTcp::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         switch (_id) {
         case 0: _t->on_boutonConnexion_clicked(); break;
         case 1: _t->on_boutonEnvoyer_clicked(); break;
-        case 2: _t->on_message_returnPressed(); break;
+        case 2: _t->on_boxMessage_returnPressed(); break;
         case 3: _t->donneesRecues(); break;
         case 4: _t->connecte(); break;
         case 5: _t->deconnecte(); break;

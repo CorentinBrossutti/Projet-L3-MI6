@@ -3,7 +3,7 @@ TEMPLATE = app
 QT       += core gui
 QT       += widgets network
 QT += widgets
-TARGET =
+TARGET = .
 DEPENDPATH += .
 INCLUDEPATH += .
 

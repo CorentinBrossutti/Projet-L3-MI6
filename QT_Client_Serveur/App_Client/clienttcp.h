@@ -1,7 +1,7 @@
 #ifndef CLIENTTCP_H
 #define CLIENTTCP_H
 
-//#include <QMainWindow>
+#include <QMainWindow>
 #include <QtWidgets>
 #include <QtNetwork>
 #include "ui_clienttcp.h" //La fenêtre générée
@@ -22,7 +22,7 @@ public:
 private slots:
     void on_boutonConnexion_clicked();
     void on_boutonEnvoyer_clicked();
-    void on_message_returnPressed();
+    void on_boxMessage_returnPressed();
     void donneesRecues();
     void connecte();
     void deconnecte();
