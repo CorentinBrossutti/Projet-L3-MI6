@@ -3,7 +3,7 @@
 // Le fichier global.h contient des constantes globales
 #include "mpirxx.h"
 
-// Définit les constantes d'import/export DLL/SO (librairie)
+// DÃ©finit les constantes d'import/export DLL/SO (librairie)
 #if defined(_MSC_VER)
 //  Compilateur Windows
 #define EXPORT __declspec(dllexport)
@@ -19,9 +19,9 @@
 #pragma warning Compilateur inconnu ?
 #endif
 
-// Définit si l'API est en mode export/import, permet d'optimiser dans certains cas
-// CRYPT_EXPORTS est une variable globale à définir lors de la compilation
-#ifdef CRYPT_EXPORTS
+// DÃ©finit si l'API est en mode export/import, permet d'optimiser dans certains cas
+// CRYPT_EXPORTS est une variable globale Ã  dÃ©finir lors de la compilation
+#ifdef CRYPT_LIBRARY
 #define CAPI EXPORT
 #else
 #define CAPI IMPORT

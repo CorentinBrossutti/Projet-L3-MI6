@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "crypt/global.h"
 #include "crypt/math.h"
 
 #include <sstream>
@@ -20,7 +20,7 @@ unsigned int bop::count_bytes(const bigint& number)
 bigint bop::from(const char* val, uint8_t(*converter)(char))
 {
 	stringstream sstream;
-	// On transforme le message en entier, pour ça on itère sur les caractères...
+	// On transforme le message en entier, pour Ã§a on itÃ¨re sur les caractÃ¨res...
 	for (unsigned int i = 0; val[i] != '\0'; i++)
 		sstream << bitset<8>(converter(val[i])).to_string();
 
@@ -46,10 +46,10 @@ byteset::byteset(const bigint& from)
 	_bytes = new bitset<8>[count];
 	/*for (unsigned int i = 0; i < count; i++)
 	{
-		// Cela fonctionne car get_ui retourne le nombre constitué des bits de poids faible
+		// Cela fonctionne car get_ui retourne le nombre constituÃ© des bits de poids faible
 		// Et bitset prend aussi les bits de poids faible si le nombre en constructeur est trop grand
 		_bytes[count - i - 1] = bitset<8>(from.get_ui());
-		// Couplé avec le right shift on arrive donc à itérer octet par octet
+		// CouplÃ© avec le right shift on arrive donc Ã  itÃ©rer octet par octet
 		from >>= 8;
 	}*/
 	string str = from.get_str(2);
@@ -73,7 +73,7 @@ unsigned int byteset::size() const
 bitset<8> byteset::get(unsigned int index) const
 {
 	if (index >= _size)
-		throw invalid_argument("L'indice spécifié est trop grand pour le byteset.");
+		throw invalid_argument("L'indice spï¿½cifiï¿½ est trop grand pour le byteset.");
 
 	return _bytes[index];
 }

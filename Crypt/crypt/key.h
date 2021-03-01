@@ -3,13 +3,13 @@
 #include "global.h"
 
 
-// Une clé de cryptage générique
+// Une clÃ© de cryptage gÃ©nÃ©rique
 struct CAPI Key
 {
 	virtual void save(const char* filepath) = 0;
 };
 
-// Clé de cryptage encapsulant un entier
+// ClÃ© de cryptage encapsulant un entier
 struct CAPI RealKey : public Key
 {
 public:
@@ -23,13 +23,13 @@ public:
 	virtual void save(const char* filepath, char (*converter)(uint8_t));
 };
 
-// Une paire de clé de cryptage. Permet le polymorphisme et un design composite
+// Une paire de clÃ©s de cryptage. Permet le polymorphisme et un design composite
 struct CAPI KeyPair : public Key
 {
 public:
 	Key* a;
 	Key* b;
-	// Supprimer automatiquement les clés allouées ?
+	// Supprimer automatiquement les clÃ©s allouÃ©es ?
 	bool autodelete;
 
 	KeyPair();

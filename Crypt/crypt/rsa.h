@@ -5,7 +5,7 @@
 #include "engine.h"
 
 
-// Clé publique RSA, une paire composée de deux clés numériques
+// ClÃ© publique RSA, une paire composÃ©e de deux clÃ©s numÃ©riques
 class CAPI PublicKey : public KeyPair
 {
 public:
@@ -15,7 +15,7 @@ public:
 	PublicKey(const bigint& n, const bigint& e);
 };
 
-// Clé privée RSA, une paire composée de deux clés numériques
+// ClÃ© privÃ©e RSA, une paire composÃ©e de deux clÃ©s numÃ©riques
 class CAPI PrivateKey : public KeyPair
 {
 public:
@@ -25,7 +25,7 @@ public:
 	PrivateKey(const bigint& n, const bigint& d);
 };
 
-// Clé "trousseau" RSA, composée d'une clé publique et d'une clé privée (design composite donc)
+// ClÃ© "trousseau" RSA, composÃ©e d'une clÃ© publique et d'une clÃ© privÃ©e (design composite donc)
 class CAPI RsaKey : public KeyPair
 {
 public:
@@ -36,7 +36,7 @@ public:
 };
 
 
-// Moteur de cryptage asymétrique RSA
+// Moteur de cryptage asymÃ©trique RSA
 class CAPI Rsa : public Engine
 {
 public:

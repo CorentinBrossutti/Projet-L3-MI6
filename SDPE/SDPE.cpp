@@ -19,23 +19,23 @@ int main(int argc, char** argv)
     {
         cout << "Usage : <SDPE> <moteur> <operation> <fichier_cle> <fichier_message_source> <fichier_message_cible>" << endl;
         cout << "Exemples de moteurs : rsa, aes" << endl;
-        cout << "Exemples d'opération : encrypt, decrypt, sign, verify" << endl;
+        cout << "Exemples d'opÃ©ration : encrypt, decrypt, sign, verify" << endl;
         ret = EXIT_SUCCESS;
     }
     else if (!(engine = engines::resolve(argv[1])))
         cout << "Moteur de cryptage \"" << argv[1] << "\" non reconnu." << endl;
     else if (!(key = keys::parse_file(argv[3])))
-        cout << "La clé ne peut être lue." << endl;
+        cout << "La clÃ© ne peut Ãªtre lue." << endl;
     else if (!(msg = messages::retrieve(argv[4])))
-        cout << "Aucun message n'a pu être extrait du fichier donné (ou le message est vide)." << endl;
+        cout << "Aucun message n'a pu Ãªtre extrait du fichier donnÃ© (ou le message est vide)." << endl;
     else if (/*engine->operate(argv[2], *msg, key)*/true)
     {
         msg->write(argv[5]);
-        cout << "Message traité et écrit dans le fichier cible." << endl;
+        cout << "Message traitÃ© et Ã©crit dans le fichier cible." << endl;
         ret = EXIT_SUCCESS;
     }
     else
-        cout << "Impossible d'effectuer l'opération donnée. Vérifiez que l'opération existe et est valide." << endl;
+        cout << "Impossible d'effectuer l'opÃ©ration donnÃ©e. VÃ©rifiez que l'opÃ©ration existe et est valide." << endl;
 
     if (engine)
         delete engine;

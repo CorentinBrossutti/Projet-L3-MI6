@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "crypt/global.h"
 #include "crypt/rsa.h"
 
 
@@ -44,7 +44,7 @@ RsaKey* Rsa::generate()
 
 bigint Rsa::run(const bigint& source, Key* key)
 {
-    // Clé publique ou clé privé, peu importe, on utilise a (= n) et b (= e ou d)
+    // ClÃ© publique ou clÃ© privÃ©, peu importe, on utilise a (= n) et b (= e ou d)
     KeyPair* kp = (KeyPair*)key;
     //TODO
     return bigint();

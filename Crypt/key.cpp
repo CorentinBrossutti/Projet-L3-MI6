@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "crypt/global.h"
 #include "crypt/key.h"
 #include "crypt/math.h"
 

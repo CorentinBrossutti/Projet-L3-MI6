@@ -19,7 +19,7 @@ namespace bop
 }
 
 
-// Ensemble d'octets (et non de bits...) liés à un bigint
+// Ensemble d'octets (et non de bits...) liÃ©s Ã  un bigint
 extern struct CAPI byteset
 {
 public:
@@ -27,7 +27,7 @@ public:
 	~byteset();
 
 	unsigned int size() const;
-	// Retourne l'octet à l'indice donné
+	// Retourne l'octet Ã  l'indice donnÃ©
 	std::bitset<8> get(unsigned int index) const;
 
 	std::bitset<8> operator [](int index) const;
