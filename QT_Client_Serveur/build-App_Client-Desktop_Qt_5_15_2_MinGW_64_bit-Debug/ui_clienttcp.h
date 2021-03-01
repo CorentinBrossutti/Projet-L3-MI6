@@ -32,12 +32,13 @@ public:
     QHBoxLayout *horizontalLayout;
     QWidget *mainwindow2;
     QGridLayout *gridLayout;
+    QTextBrowser *displayMessage;
     QWidget *group_connexion;
     QGridLayout *gridLayout_2;
     QLabel *label_ip;
+    QSpinBox *boxPort;
     QPushButton *boutonConnexion;
     QLabel *label_port;
-    QSpinBox *boxPort;
     QLineEdit *boxIp;
     QSpacerItem *horizontalSpacer;
     QWidget *group_nom;
@@ -49,9 +50,8 @@ public:
     QLabel *label_pseudo;
     QLineEdit *boxPseudo;
     QLabel *label_message;
-    QLineEdit *boxMessage;
     QPushButton *boutonEnvoyer;
-    QTextBrowser *displayMessage;
+    QLineEdit *boxMessage;
 
     void setupUi(QMainWindow *ClientTcp)
     {
@@ -71,6 +71,11 @@ public:
         mainwindow2->setToolTipDuration(-1);
         gridLayout = new QGridLayout(mainwindow2);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        displayMessage = new QTextBrowser(mainwindow2);
+        displayMessage->setObjectName(QString::fromUtf8("displayMessage"));
+
+        gridLayout->addWidget(displayMessage, 2, 1, 1, 1);
+
         group_connexion = new QWidget(mainwindow2);
         group_connexion->setObjectName(QString::fromUtf8("group_connexion"));
         group_connexion->setMaximumSize(QSize(16777215, 150));
@@ -81,6 +86,12 @@ public:
 
         gridLayout_2->addWidget(label_ip, 0, 0, 1, 1);
 
+        boxPort = new QSpinBox(group_connexion);
+        boxPort->setObjectName(QString::fromUtf8("boxPort"));
+        boxPort->setMaximum(100000);
+
+        gridLayout_2->addWidget(boxPort, 0, 3, 1, 1);
+
         boutonConnexion = new QPushButton(group_connexion);
         boutonConnexion->setObjectName(QString::fromUtf8("boutonConnexion"));
 
@@ -90,12 +101,6 @@ public:
         label_port->setObjectName(QString::fromUtf8("label_port"));
 
         gridLayout_2->addWidget(label_port, 0, 2, 1, 1);
-
-        boxPort = new QSpinBox(group_connexion);
-        boxPort->setObjectName(QString::fromUtf8("boxPort"));
-        boxPort->setMaximum(100000);
-
-        gridLayout_2->addWidget(boxPort, 0, 3, 1, 1);
 
         boxIp = new QLineEdit(group_connexion);
         boxIp->setObjectName(QString::fromUtf8("boxIp"));
@@ -132,7 +137,7 @@ public:
         gridLayout_2->addWidget(group_nom, 0, 7, 1, 1);
 
 
-        gridLayout->addWidget(group_connexion, 0, 0, 1, 1);
+        gridLayout->addWidget(group_connexion, 1, 1, 1, 1);
 
         group_message = new QWidget(mainwindow2);
         group_message->setObjectName(QString::fromUtf8("group_message"));
@@ -155,24 +160,19 @@ public:
 
         groupe_message->addWidget(label_message, 0, 2, 1, 1);
 
+        boutonEnvoyer = new QPushButton(group_message);
+        boutonEnvoyer->setObjectName(QString::fromUtf8("boutonEnvoyer"));
+
+        groupe_message->addWidget(boutonEnvoyer, 0, 5, 1, 1);
+
         boxMessage = new QLineEdit(group_message);
         boxMessage->setObjectName(QString::fromUtf8("boxMessage"));
 
         groupe_message->addWidget(boxMessage, 0, 3, 1, 1);
 
-        boutonEnvoyer = new QPushButton(group_message);
-        boutonEnvoyer->setObjectName(QString::fromUtf8("boutonEnvoyer"));
-
-        groupe_message->addWidget(boutonEnvoyer, 0, 4, 1, 1);
-
         groupe_message->setColumnStretch(3, 1);
 
-        gridLayout->addWidget(group_message, 2, 0, 1, 1);
-
-        displayMessage = new QTextBrowser(mainwindow2);
-        displayMessage->setObjectName(QString::fromUtf8("displayMessage"));
-
-        gridLayout->addWidget(displayMessage, 1, 0, 1, 1);
+        gridLayout->addWidget(group_message, 3, 1, 1, 1);
 
 
         horizontalLayout->addWidget(mainwindow2);
@@ -197,8 +197,8 @@ public:
         boxPseudo->setText(QString());
         boxPseudo->setPlaceholderText(QCoreApplication::translate("ClientTcp", "Votre pseudo ici", nullptr));
         label_message->setText(QCoreApplication::translate("ClientTcp", "message :", nullptr));
-        boxMessage->setPlaceholderText(QCoreApplication::translate("ClientTcp", "Votre message ici", nullptr));
         boutonEnvoyer->setText(QCoreApplication::translate("ClientTcp", "Envoyer", nullptr));
+        boxMessage->setPlaceholderText(QCoreApplication::translate("ClientTcp", "Votre message ici", nullptr));
     } // retranslateUi
 
 };
