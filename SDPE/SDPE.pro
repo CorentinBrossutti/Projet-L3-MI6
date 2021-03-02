@@ -30,7 +30,7 @@ LIBS += -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../build/unix/crypt/rel
 INCLUDEPATH += $$PWD/../lib/unix/mpir/release
 DEPENDPATH += $$PWD/../lib/unix/mpir/release
 sos_to_move.path = "$$OUT_PWD"
-sos_to_move.files += "$$PWD/../lib/unix/mpir/release/libmpir.so" "$$PWD/../build/unix/crypt/release/libMI6.Crypt.so"
+sos_to_move.files += "$$PWD/../lib/unix/mpir/release/libmpir.so" "$$PWD/../lib/unix/mpir/release/libmpir.so.23" "$$PWD/../build/unix/crypt/release/libMI6.Crypt.so" "$$PWD/../build/unix/crypt/release/libMI6.Crypt.so.1"
 INSTALLS =+ sos_to_move
 }
 else:unix:!macx:CONFIG(debug, debug|release){
@@ -38,7 +38,7 @@ LIBS += -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../build/unix/crypt/debug
 INCLUDEPATH += $$PWD/../lib/unix/mpir/debug
 DEPENDPATH += $$PWD/../lib/unix/mpir/debug
 sos_to_move.path = "$$OUT_PWD"
-sos_to_move.files += "$$PWD/../lib/unix/mpir/debug/libmpir.so" "$$PWD/../build/unix/crypt/debug/libMI6.Crypt.dll"
+sos_to_move.files += "$$PWD/../lib/unix/mpir/debug/libmpir.so" "$$PWD/../lib/unix/mpir/debug/libmpir.so.23" "$$PWD/../build/unix/crypt/debug/libMI6.Crypt.so" "$$PWD/../build/unix/crypt/debug/libMI6.Crypt.so.1"
 INSTALLS =+ sos_to_move
 }
 
