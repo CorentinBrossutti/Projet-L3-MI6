@@ -27,10 +27,10 @@ HEADERS += \
     crypt/std.h
 
 # Default rules for deployment.
-unix {
-    target.path = /usr/lib
-}
-!isEmpty(target.path): INSTALLS += target
+#unix {
+#    target.path = /usr/lib
+#}
+#!isEmpty(target.path): INSTALLS += target
 
 win32:CONFIG(release, debug|release){
 LIBS += -L$$PWD/../lib/win/mpir/release/ -lmpir
@@ -47,4 +47,21 @@ DEPENDPATH += "$$PWD/../lib/win/mpir/debug"
 dlls_to_move.path = "$$OUT_PWD/debug"
 dlls_to_move.files += "$$PWD/../lib/win/mpir/debug/mpir.dll"
 INSTALLS += dlls_to_move
+}
+
+unix:!macx:CONFIG(release, debug|release){
+LIBS += -L$$PWD/../lib/unix/mpir/release/ -lmpir
+INCLUDEPATH += $$PWD/../lib/unix/mpir/release
+DEPENDPATH += $$PWD/../lib/unix/mpir/release
+sos_to_move.path = "$$OUT_PWD/release"
+sos_to_move.files += "$$PWD/../lib/win/mpir/release/mpir.so"
+INSTALLS =+ sos_to_move
+}
+else:unix:!macx:CONFIG(debug, debug|release){
+LIBS += -L$$PWD/../lib/unix/mpir/debug/ -lmpir
+INCLUDEPATH += $$PWD/../lib/unix/mpir/debug
+DEPENDPATH += $$PWD/../lib/unix/mpir/debug
+sos_to_move.path = "$$OUT_PWD/debug"
+sos_to_move.files += "$$PWD/../lib/win/mpir/debug/mpir.so"
+INSTALLS =+ sos_to_move
 }
