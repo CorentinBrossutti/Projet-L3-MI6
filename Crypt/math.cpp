@@ -73,7 +73,7 @@ unsigned int byteset::size() const
 bitset<8> byteset::get(unsigned int index) const
 {
 	if (index >= _size)
-		throw invalid_argument("L'indice sp�cifi� est trop grand pour le byteset.");
+		throw invalid_argument("L'indice spécifié est trop grand pour le byteset.");
 
 	return _bytes[index];
 }
