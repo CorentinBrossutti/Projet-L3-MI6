@@ -77,7 +77,7 @@ Key* keys::parse_file(const char* filepath, uint8_t(*converter)(char))
 }
 
 
-Message* messages::retrieve(const char* filepath, uint8_t(*converter)(char))
+Message* msgs::retrieve(const char* filepath, uint8_t(*converter)(char))
 {
 	ostringstream temp;
 	ifstream reader;

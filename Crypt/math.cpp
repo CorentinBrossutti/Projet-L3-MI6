@@ -14,7 +14,7 @@ unsigned int bop::sizebin(const bigint& number)
 
 unsigned int bop::count_bytes(const bigint& number)
 {
-	return unsigned int(ceil(sizebin(number) / 8.0));
+        return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
 bigint bop::from(const char* val, uint8_t(*converter)(char))

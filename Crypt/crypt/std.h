@@ -16,7 +16,7 @@ namespace keys
 	CAPI Key* parse_file(const char* filepath, uint8_t(*converter)(char) = ascii_convert_from);
 }
 
-namespace messages
+namespace msgs
 {
 	CAPI Message* retrieve(const char* filepath, uint8_t(*converter)(char) = ascii_convert_from);
 }

@@ -1,15 +1,13 @@
 #include "crypt/std.h"
 
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 
 
 int main(int argc, char** argv)
 {
-    Message m(0b0110000101100010);
-    cout << m << endl;
-
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;
@@ -26,7 +24,7 @@ int main(int argc, char** argv)
         cout << "Moteur de cryptage \"" << argv[1] << "\" non reconnu." << endl;
     else if (!(key = keys::parse_file(argv[3])))
         cout << "La clé ne peut être lue." << endl;
-    else if (!(msg = messages::retrieve(argv[4])))
+    else if (!(msg = msgs::retrieve(argv[4])))
         cout << "Aucun message n'a pu être extrait du fichier donné (ou le message est vide)." << endl;
     else if (/*engine->operate(argv[2], *msg, key)*/true)
     {

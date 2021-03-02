@@ -26,19 +26,19 @@ INSTALLS += dlls_to_move
 }
 
 unix:!macx:CONFIG(release, debug|release){
-LIBS += -L$$PWD/../lib/unix/mpir/release/ -lmpir
+LIBS += -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../build/unix/crypt/release/ -lMI6.Crypt
 INCLUDEPATH += $$PWD/../lib/unix/mpir/release
 DEPENDPATH += $$PWD/../lib/unix/mpir/release
-sos_to_move.path = "$$OUT_PWD/release"
-sos_to_move.files += "$$PWD/../lib/win/mpir/release/mpir.so" "$$PWD/../build/win/crypt/release/MI6.Crypt.so"
+sos_to_move.path = "$$OUT_PWD"
+sos_to_move.files += "$$PWD/../lib/unix/mpir/release/libmpir.so" "$$PWD/../build/unix/crypt/release/libMI6.Crypt.so"
 INSTALLS =+ sos_to_move
 }
 else:unix:!macx:CONFIG(debug, debug|release){
-LIBS += -L$$PWD/../lib/unix/mpir/debug/ -lmpir
+LIBS += -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../build/unix/crypt/debug/ -lMI6.Crypt
 INCLUDEPATH += $$PWD/../lib/unix/mpir/debug
 DEPENDPATH += $$PWD/../lib/unix/mpir/debug
-sos_to_move.path = "$$OUT_PWD/debug"
-sos_to_move.files += "$$PWD/../lib/win/mpir/debug/mpir.so" "$$PWD/../build/win/crypt/debug/MI6.Crypt.dll"
+sos_to_move.path = "$$OUT_PWD"
+sos_to_move.files += "$$PWD/../lib/unix/mpir/debug/libmpir.so" "$$PWD/../build/unix/crypt/debug/libMI6.Crypt.dll"
 INSTALLS =+ sos_to_move
 }
 

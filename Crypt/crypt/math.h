@@ -20,7 +20,7 @@ namespace bop
 
 
 // Ensemble d'octets (et non de bits...) liés à un bigint
-extern struct CAPI byteset
+struct CAPI byteset
 {
 public:
 	byteset(const bigint& from);
