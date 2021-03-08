@@ -184,6 +184,5 @@ RsaKey* Rsa::generate()
 bigint Rsa::run(const bigint& source, Key* key)
 {
     KeyPair* kp = (KeyPair*)key;
-    bigint res = modpow(source, kp->b, kp->a);
-    return res;
+    return modpow(source, kp->b, kp->a);
 }
