@@ -80,7 +80,7 @@ bool Rsa::prime(const bigint& num)
     bigint tab[5];
     for (int i = 0; i < 5; i++)
     {
-        tab[i] = rand() % n;
+        tab[i] = rand() % num;
     }
 
     for (int j = 0; j < 5; j++)
@@ -138,22 +138,22 @@ bigint Rsa::modpow(const bigint& base, bigint& exp, bigint& m)
 
 bigint Rsa::exposant_code(const bigint& m)
 {
-    if (m % 3)
+    if (m % 3 == 0)
     {
         return 3;
     }
 
-    if (m % 7)
+    if (m % 7==0)
     {
         return 7;
     }
 
-    if (m % 11)
+    if (m % 11==0)
     {
         return 11;
     }
 
-    if (m % 13)
+    if (m % 13==0)
     {
         return 13;
     }
