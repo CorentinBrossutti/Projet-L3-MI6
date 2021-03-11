@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtWidgets>
 #include <QtNetwork>
+#include <QtXml>
 #include "ui_clienttcp.h" //La fenêtre générée
 
 /*QT_BEGIN_NAMESPACE

@@ -3,6 +3,7 @@ TARGET = MI6.ChatClient
 QT += core gui
 QT += widgets network
 QT += widgets
+QT += xml
 DEPENDPATH += .
 INCLUDEPATH += .
 
