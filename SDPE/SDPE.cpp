@@ -2,12 +2,18 @@
 
 #include <iostream>
 #include <cstdio>
+#include <string>
 
 using namespace std;
 
 
 int main(int argc, char** argv)
 {
+    Engine* temp = new Rsa();
+    Key* k = temp->generate();
+    delete k;
+    delete temp;
+
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;
@@ -26,7 +32,7 @@ int main(int argc, char** argv)
         cout << "La clé ne peut être lue." << endl;
     else if (!(msg = msgs::retrieve(argv[4])))
         cout << "Aucun message n'a pu être extrait du fichier donné (ou le message est vide)." << endl;
-    else if (/*engine->operate(argv[2], *msg, key)*/true)
+    else if (engine->operate(argv[2], *msg, key))
     {
         msg->write(argv[5]);
         cout << "Message traité et écrit dans le fichier cible." << endl;

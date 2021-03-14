@@ -44,9 +44,9 @@ public:
 	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
 
 	virtual bigint random_integer();
-	virtual bool prime(const bigint& num);
-	virtual bigint euclide(const bigint& a, bigint& b);
-	virtual bigint modpow(const bigint& base, bigint& e, bigint& m);
+    virtual bool prime(const bigint& num);
+    virtual bigint euclide(const bigint& a, const bigint& b);
+    virtual bigint modpow(const bigint& base, const bigint& e, const bigint& m);
 	virtual bigint toBinary(const bigint& m);
 	virtual bigint exposant_code(const bigint& m);
 	

@@ -7,6 +7,7 @@
 #include <string>
 
 #define PADSIZE 64
+#define BLOCK_SIZE 1024
 
 
 class Engine;
@@ -17,12 +18,14 @@ class CAPI Message
 	friend class Engine;
 public:
 	Message();
-	Message(const Message& source);
-	Message(const bigint& content, bool encrypted = false);
+    Message(const Message& source);
+    Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BLOCK_SIZE);
 	// Construit un message depuis du texte, avec une fonction de conversion optionnelle (défaut ASCII)
-	Message(const char* content, uint8_t(*converter)(char) = ascii_convert_from);
+    Message(const char* content, unsigned int blocksz = BLOCK_SIZE, uint8_t(*converter)(char) = ascii_convert_from);
 
 	bool encrypted() const;
+    unsigned int count() const;
+    bigint value() const;
 	// Permet d'obtenir la représentation textuelle (si pertinent) du message, utilisant une fonction de conversion optionelle (défaut ASCII)
 	// Noter que si le message n'est pas textuel, ou encrypté, cette représentation est inutile
 	std::string get(char (*converter)(uint8_t) = ascii_convert_to);
@@ -31,8 +34,10 @@ public:
 
 	CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
+    unsigned int _blocksz;
+    unsigned int _count;
 	bool _encrypted;
-	bigint _content;
+    bigint* _content;
 	std::string _strcontent;
 };
 

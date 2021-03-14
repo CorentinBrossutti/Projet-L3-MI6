@@ -91,17 +91,17 @@ bool Rsa::prime(const bigint& num)
         tab[i] = rand() % num;
     }
 
+    bigint temp;
     for (int j = 0; j < 5; j++)
     {
-        if (modpow(tab[j], num - 1, num) != 1)
-        {
+        temp = num - 1;
+        if (modpow(tab[j], temp, num) != 1)
             return false;
-        }
     }
     return true;
 }
 
-bigint Rsa::euclide(const bigint& a, bigint& b)
+bigint Rsa::euclide(const bigint& a, const bigint& b)
 {
     bigint r1 = a;
     bigint r2 = b;
@@ -115,9 +115,11 @@ bigint Rsa::euclide(const bigint& a, bigint& b)
     {
         q = r1 / r2;
         r3 = r1;
-        u3, v3 = u1, v1;
+        u3 = u1;
+        v3 = v1;
         r1 = r2;
-        u1, v1 = u2, v2;
+        u1 = u2;
+        v1 = v2;
         r2 = r3 - q * r2;
         u2 = u3 - q * u2;
         v2 = v3 - q * v2;
@@ -125,20 +127,20 @@ bigint Rsa::euclide(const bigint& a, bigint& b)
     return u1;
 }
 
-bigint Rsa::modpow(const bigint& base, bigint& exp, bigint& m)
+bigint Rsa::modpow(const bigint& base, const bigint& exp, const bigint& m)
 {
     bigint res = 1;
     bigint exp_b = toBinary(exp);
     bigint num = base;
     while (exp_b != 0)
     {
-        int r = (exp_b % 10);
+        bigint r = (exp_b % 10);
         if (r == 1)
         {
             res = (res * num) % m;
         }
         exp_b /= 10;
-        num = (num * *2) % m;
+        num = (num * num) % m;
     }
 
     return res;
@@ -146,15 +148,13 @@ bigint Rsa::modpow(const bigint& base, bigint& exp, bigint& m)
 
 bigint Rsa::exposant_code(const bigint& m)
 {
-    bigint tab[35] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149 }
+    bigint tab[35] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149 };
     for (int i = 0; i < 25; i++)
     {
         if (m % tab[i] != 0)
-        {
             return tab[i];
-        }
     }
-}
+    return -1;
 }
 
 RsaKey* Rsa::generate()
@@ -182,5 +182,5 @@ RsaKey* Rsa::generate()
 bigint Rsa::run(const bigint& source, Key* key)
 {
     KeyPair* kp = (KeyPair*)key;
-    return modpow(source, kp->b, kp->a);
+    return modpow(source, ((RealKey*)kp->b)->value, ((RealKey*)kp->a)->value);
 }

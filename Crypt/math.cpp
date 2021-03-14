@@ -14,7 +14,7 @@ unsigned int bop::sizebin(const bigint& number)
 
 unsigned int bop::count_bytes(const bigint& number)
 {
-        return (unsigned int)(ceil(sizebin(number) / 8.0));
+    return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
 bigint bop::from(const char* val, uint8_t(*converter)(char))
@@ -36,6 +36,57 @@ std::string bop::to(const bigint& val, char(*converter)(uint8_t))
 		sstream << converter(bytes[i].to_ulong());
 
 	return sstream.str();
+}
+
+vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
+{
+    //check
+    if(val <= blocksz)
+    {
+        vector<bigint> v;
+        v.push_back(val);
+        return v;
+    }
+
+    byteset bset(val);
+    unsigned int temp = 0, i = 0;
+    vector<bigint> coll;
+    for(;i < bset.size() - 1;i++)
+    {
+        temp += bset[i].to_ulong();
+        if(temp + bset[i + 1].to_ulong() > blocksz)
+        {
+            coll.push_back(temp);
+            temp = 0;
+        }
+    }
+    coll.push_back(temp + bset[i + 1].to_ulong());
+
+    return coll;
+}
+
+unsigned int bop::decompose(const bigint& val, bigint* recp, unsigned int blocksz)
+{
+    vector<bigint> temp = decompose_vec(val, blocksz);
+
+    recp = new bigint[temp.size()];
+    unsigned int idx = 0;
+    for(bigint bi : temp)
+        recp[idx++] = bi;
+
+    return temp.size();
+}
+
+bigint bop::recompose(const bigint* from, unsigned int count)
+{
+    if(count == 0)
+        return 0;
+
+    string temp = from[0].get_str();
+    for(unsigned int i = 1;i < count;i++)
+        temp += from[i].get_str();
+
+    return bigint(temp.c_str());
 }
 
 
