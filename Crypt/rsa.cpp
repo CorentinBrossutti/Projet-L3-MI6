@@ -79,26 +79,19 @@ bigint Rsa::toBinary(const bigint& num)
         }
         n= n/2;
     }
-    return (bigint)r;
+    return bigint(r);
 }
 
 bool Rsa::prime(const bigint& num)
 {
     srand(time(NULL));
-    bigint tab[5];
-    for (int i = 0; i < 5; i++)
-    {
-        tab[i] = rand() % num;
-    }
-
-    bigint temp;
-    for (int j = 0; j < 5; j++)
-    {
-        temp = num - 1;
-        if (modpow(tab[j], temp, num) != 1)
-            return false;
-    }
-    return true;
+    bigint  a;
+    a = rand() % num;
+    bigint temp = num - 1;
+    if (modpow(a, temp, num) != 1)
+        return false;
+    else
+        return true;
 }
 
 bigint Rsa::euclide(const bigint& a, const bigint& b)
