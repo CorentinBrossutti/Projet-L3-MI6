@@ -63,13 +63,21 @@ bigint Rsa::random_integer()
     return a;
 }
 
-bigint Rsa::toBinary(const bigint& n)
+bigint Rsa::toBinary(const bigint& num)
 {
     string r;
+    bigint n = num;
     while (n != 0) 
     {
-        r += (n % 2 == 0 ? "0" : "1");
-        n /= 2;
+        if (n%2==0)
+        {
+            r = '0' + r;
+        }
+        else
+        {
+            r = '1' + r;
+        }
+        n= n/2;
     }
     return (bigint)r;
 }
@@ -138,25 +146,15 @@ bigint Rsa::modpow(const bigint& base, bigint& exp, bigint& m)
 
 bigint Rsa::exposant_code(const bigint& m)
 {
-    if (m % 3 == 0)
+    bigint tab[35] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149 }
+    for (int i = 0; i < 25; i++)
     {
-        return 3;
+        if (m % tab[i] != 0)
+        {
+            return tab[i];
+        }
     }
-
-    if (m % 7==0)
-    {
-        return 7;
-    }
-
-    if (m % 11==0)
-    {
-        return 11;
-    }
-
-    if (m % 13==0)
-    {
-        return 13;
-    }
+}
 }
 
 RsaKey* Rsa::generate()
