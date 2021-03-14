@@ -16,6 +16,8 @@ namespace bop
 	// Retourne le nombre d'octets d'un big int
 	unsigned int count_bytes(const bigint& number);
 
+	CAPI bigint tobin(const bigint& from);
+
 	CAPI bigint from(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
     CAPI std::string to(const bigint& val, char(*converter)(uint8_t) = ascii_convert_to);
 

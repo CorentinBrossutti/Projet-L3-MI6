@@ -1,9 +1,12 @@
 #include "crypt/global.h"
 #include "crypt/rsa.h"
+#include "crypt/math.h"
 #include <math.h>
 #include <string>
 #include <stdio.h>
 #include <time.h>
+
+#include <iostream>
 
 using namespace std;
 
@@ -48,50 +51,30 @@ bigint Rsa::random_integer()
     int x;
     srand(time(NULL));
 
-    for (int i = 50; i > 0; i--)
+    for (int i = 50; i > 1; i--)
     {
         x = rand() % 10;
-        a = a + pow(10, i);
+        a += x * pow(10, i);
     }
+    a *= 10;
 
     do
     {
         x = rand() % 10;
     } while (x % 2 == 0 || x== 5);
 
-    a = a + x;
+    a += x;
     return a;
-}
-
-bigint Rsa::toBinary(const bigint& num)
-{
-    string r;
-    bigint n = num;
-    while (n != 0) 
-    {
-        if (n%2==0)
-        {
-            r = '0' + r;
-        }
-        else
-        {
-            r = '1' + r;
-        }
-        n= n/2;
-    }
-    return bigint(r);
 }
 
 bool Rsa::prime(const bigint& num)
 {
     srand(time(NULL));
-    bigint  a;
+    bigint a;
     a = rand() % num;
     bigint temp = num - 1;
-    if (modpow(a, temp, num) != 1)
-        return false;
-    else
-        return true;
+
+    return modpow(a, temp, num) == 1;
 }
 
 bigint Rsa::euclide(const bigint& a, const bigint& b)
@@ -123,7 +106,7 @@ bigint Rsa::euclide(const bigint& a, const bigint& b)
 bigint Rsa::modpow(const bigint& base, const bigint& exp, const bigint& m)
 {
     bigint res = 1;
-    bigint exp_b = toBinary(exp);
+    bigint exp_b = bop::tobin(exp);
     bigint num = base;
     while (exp_b != 0)
     {

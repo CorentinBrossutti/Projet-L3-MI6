@@ -9,10 +9,14 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Engine* temp = new Rsa();
+    /*Engine* temp = new Rsa();
     Key* k = temp->generate();
+    cout << ((RealKey*)((RsaKey*)k)->publ->a)->value << endl;
+    cout << ((RealKey*)((RsaKey*)k)->publ->b)->value << endl;
+    cout << ((RealKey*)((RsaKey*)k)->priv->a)->value << endl;
+    cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
     delete k;
-    delete temp;
+    delete temp;*/
 
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;

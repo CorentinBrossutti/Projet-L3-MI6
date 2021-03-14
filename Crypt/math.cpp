@@ -38,6 +38,11 @@ std::string bop::to(const bigint& val, char(*converter)(uint8_t))
 	return sstream.str();
 }
 
+bigint bop::tobin(const bigint& from)
+{
+    return bigint(from.get_str(2));
+}
+
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
 {
     //check
