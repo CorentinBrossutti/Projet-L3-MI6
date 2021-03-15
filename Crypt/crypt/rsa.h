@@ -40,8 +40,8 @@ public:
 class CAPI Rsa : public Engine
 {
 public:
-	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
-	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
+	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	virtual bigint random_integer();
     virtual bool prime(const bigint& num);

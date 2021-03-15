@@ -17,6 +17,14 @@ unsigned int bop::count_bytes(const bigint& number)
     return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
+string bop::padto(const bigint& from, const unsigned int padval)
+{
+    string str = from.get_str(2);
+    str.insert(0, bop::count_bytes(from) * 8 - bop::sizebin(from), '0');
+
+    return str;
+}
+
 bigint bop::from(const char* val, uint8_t(*converter)(char))
 {
 	stringstream sstream;
@@ -45,32 +53,32 @@ bigint bop::tobin(const bigint& from)
 
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
 {
+    byteset bset(val);
+    vector<bigint> v;
     //check
-    if(val <= blocksz)
+    if(bset.size() <= blocksz)
     {
-        vector<bigint> v;
         v.push_back(val);
         return v;
     }
 
-    byteset bset(val);
-    unsigned int temp = 0, i = 0;
-    vector<bigint> coll;
-    for(;i < bset.size() - 1;i++)
+    string temp;
+    for(unsigned int i = 0;i < bset.size();i++)
     {
-        temp += bset[i].to_ulong();
-        if(temp + bset[i + 1].to_ulong() > blocksz)
+        if ((i != 0 && i % 8 == 0))
         {
-            coll.push_back(temp);
-            temp = 0;
+            v.push_back(bigint(temp, 2));
+            temp = bset[i].to_string();
         }
+        else if (i == bset.size() - 1)
+            v.push_back(bigint(temp + bset[i].to_string(), 2));
+        else
+            temp += bset[i].to_string();
     }
-    coll.push_back(temp + bset[i + 1].to_ulong());
-
-    return coll;
+    return v;
 }
 
-unsigned int bop::decompose(const bigint& val, bigint* recp, unsigned int blocksz)
+unsigned int bop::decompose(const bigint& val, bigint*& recp, unsigned int blocksz)
 {
     vector<bigint> temp = decompose_vec(val, blocksz);
 
@@ -87,11 +95,11 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     if(count == 0)
         return 0;
 
-    string temp = from[0].get_str();
-    for(unsigned int i = 1;i < count;i++)
-        temp += from[i].get_str();
+    string temp;
+    for(unsigned int i = 0;i < count;i++)
+        temp += bop::padto(from[i]);
 
-    return bigint(temp.c_str());
+    return bigint(temp.c_str(), 2);
 }
 
 
@@ -110,10 +118,10 @@ byteset::byteset(const bigint& from)
 	}*/
 	string str = from.get_str(2);
 	str.insert(0, count * 8 - bop::sizebin(from), '0');
-	for (unsigned int i = 1; i < count; i++)
-		_bytes[i] = bitset<8>(str.substr(i * 8, 8));
+    for (unsigned int i = 0; i < count; i++)
+        _bytes[i] = bitset<8>(str.substr(i * 8, 8));
 
-	_size = count;
+    _size = count;
 }
 
 byteset::~byteset()

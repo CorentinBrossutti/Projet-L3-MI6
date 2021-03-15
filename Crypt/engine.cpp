@@ -13,7 +13,6 @@ Message::Message() : Message(0)
 
 Message::Message(const Message& source)
 {
-    _blocksz = source._blocksz;
     _count = source._count;
     _encrypted = source._encrypted;
 	_content = source._content;
@@ -21,13 +20,13 @@ Message::Message(const Message& source)
 
 Message::Message(const bigint& number, bool encrypted, unsigned int blocksz)
 {
-    bop::decompose(number, _content, blocksz);
+    _count = bop::decompose(number, _content, blocksz);
 	_encrypted = encrypted;
 }
 
 Message::Message(const char* msg, unsigned int blocksz, uint8_t (*converter)(char))
 {
-    bop::decompose(bop::from(msg, converter), _content, blocksz);
+    _count = bop::decompose(bop::from(msg, converter), _content, blocksz);
 	_strcontent = string(msg);
 	_encrypted = false;
 }

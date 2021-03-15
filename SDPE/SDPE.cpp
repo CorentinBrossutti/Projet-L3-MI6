@@ -17,6 +17,8 @@ int main(int argc, char** argv)
     cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
     delete k;
     delete temp;*/
+    /*Message m(bigint("129129029012901290121712719827981739892873"));
+    cout << m.value() << endl;*/
 
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;

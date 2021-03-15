@@ -6,8 +6,8 @@
 
 #include <string>
 
-#define PADSIZE 64
-#define BLOCK_SIZE 1024
+#define PADSIZE_BYTES 8
+#define BSIZE_BYTES 8
 
 
 class Engine;
@@ -19,9 +19,9 @@ class CAPI Message
 public:
 	Message();
     Message(const Message& source);
-    Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BLOCK_SIZE);
+    Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BSIZE_BYTES);
 	// Construit un message depuis du texte, avec une fonction de conversion optionnelle (défaut ASCII)
-    Message(const char* content, unsigned int blocksz = BLOCK_SIZE, uint8_t(*converter)(char) = ascii_convert_from);
+    Message(const char* content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
 
 	bool encrypted() const;
     unsigned int count() const;
@@ -34,7 +34,6 @@ public:
 
 	CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
-    unsigned int _blocksz;
     unsigned int _count;
 	bool _encrypted;
     bigint* _content;
@@ -53,20 +52,20 @@ public:
 	virtual bigint run(const bigint& source, Key* key) = 0;
 
 	// Ajoute un nonce au nombre donné
-	virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE);
+    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
 	// Retire le nonce du nombre donné
-	virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE);
+    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encode un nombre avec une clé donnée
-	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
+    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 	// Décode un nombre avec une clé donnée
-	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
+    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encrypte un message avec une clé donnée
-	void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE);
+    void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
 	// Décrypte une message avec une clé donnée
-	void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE);
+    void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	// Opération dynamique basée sur un argument textuel
-	bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE);
+    bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
 };
