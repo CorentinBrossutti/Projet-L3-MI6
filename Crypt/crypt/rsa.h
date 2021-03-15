@@ -36,6 +36,7 @@ public:
 };
 
 
+
 // Moteur de cryptage asymétrique RSA
 class CAPI Rsa : public Engine
 {
@@ -43,12 +44,6 @@ public:
 	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
 	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE);
 
-	virtual bigint random_integer();
-    virtual bool prime(const bigint& num);
-    virtual bigint euclide(const bigint& a, const bigint& b);
-    virtual bigint modpow(const bigint& base, const bigint& e, const bigint& m);
-	virtual bigint exposant_code(const bigint& m);
-	
 	virtual RsaKey* generate();
 
 	virtual bigint run(const bigint& source, Key* key);
