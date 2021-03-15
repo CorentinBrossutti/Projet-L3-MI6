@@ -36,7 +36,6 @@ public:
 };
 
 
-
 // Moteur de cryptage asymétrique RSA
 class CAPI Rsa : public Engine
 {

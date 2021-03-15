@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <iostream>
-
 using namespace std;
 
 
@@ -44,7 +42,6 @@ bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
 {
     return Engine::decode(source, ((RsaKey*)key)->publ, padsize);
 }
-
 
 RsaKey* Rsa::generate()
 {

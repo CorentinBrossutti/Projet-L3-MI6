@@ -102,6 +102,7 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     return bigint(temp.c_str(), 2);
 }
 
+
 bigint random_integer()
 {
     bigint res = 0;

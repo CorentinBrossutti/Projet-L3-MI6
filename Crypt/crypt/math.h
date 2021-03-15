@@ -29,11 +29,11 @@ namespace bop
 }
 
 
-virtual bigint random_integer();
-virtual bool prime(const bigint& num);
-virtual bigint euclide(const bigint& a, const bigint& b);
-virtual bigint modpow(const bigint& base, const bigint& e, const bigint& num);
-virtual bigint exposant_code(const bigint& num);
+bigint random_integer();
+bool prime(const bigint& num);
+bigint euclide(const bigint& a, const bigint& b);
+bigint modpow(const bigint& base, const bigint& e, const bigint& num);
+bigint exposant_code(const bigint& num);
 
 
 // Ensemble d'octets (et non de bits...) liés à un bigint
