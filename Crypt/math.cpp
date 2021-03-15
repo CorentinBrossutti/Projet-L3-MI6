@@ -102,6 +102,94 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     return bigint(temp.c_str(), 2);
 }
 
+bigint random_integer()
+{
+    bigint res = 0;
+    int x;
+    srand(time(NULL));
+
+    for (int i = 50; i > 1; i--)
+    {
+        x = rand() % 10;
+        res += x * pow(10, i);
+    }
+    res *= 10;
+
+    do
+    {
+        x = rand() % 10;
+    } while (x % 2 == 0 || x == 5);
+
+    res += x;
+    return res;
+}
+
+bool prime(const bigint& num)
+{
+    srand(time(NULL));
+    bigint x;
+    x = rand() % num;
+    bigint temp = num - 1;
+
+    return modpow(x, temp, num) == 1;
+}
+
+bigint euclide(const bigint& a, const bigint& b)
+{
+    bigint r1 = a;
+    bigint r2 = b;
+    bigint u1 = 1;
+    bigint u2 = 0;
+    bigint v1 = 0;
+    bigint v2 = 1;
+    bigint q, u3, v3, r3;
+
+    while (r2 != 0)
+    {
+        q = r1 / r2;
+        r3 = r1;
+        u3 = u1;
+        v3 = v1;
+        r1 = r2;
+        u1 = u2;
+        v1 = v2;
+        r2 = r3 - q * r2;
+        u2 = u3 - q * u2;
+        v2 = v3 - q * v2;
+    }
+    return u1;
+}
+
+bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
+{
+    bigint res = 1;
+    bigint exp_bin = bop::tobin(exp);
+    bigint temp = base;
+    while (exp_bin != 0)
+    {
+        bigint r = (exp_bin % 10);
+        if (r == 1)
+        {
+            res = (res * temp) % num;
+        }
+        exp_b /= 10;
+        temp = (temp * temp) % num;
+    }
+
+    return res;
+}
+
+bigint exposant_code(const bigint& num)
+{
+    bigint tab[35] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149 };
+    for (int i = 0; i < 25; i++)
+    {
+        if (num % tab[i] != 0)
+            return tab[i];
+    }
+    return -1;
+}
+
 
 byteset::byteset(const bigint& from)
 {
