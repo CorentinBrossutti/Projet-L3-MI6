@@ -40,31 +40,31 @@ QString XmlDoc::chargerPseudo(QString nomFichier) {
     while(!noeud.isNull()) {
         element = noeud.toElement();
         if(!element.isNull()) {
-            if(element.tagName() == "pseudo") {
-                return element.text();
+            if(element.tagName() == "pseudo" && (element.text()!="")) { //On trouve le noeud contenant le pseudo
+                return element.text(); //On retourne son contenu
             }
             noeud = noeud.nextSibling();
         }
     }
-    return "Pseudo par défaut";
+    return ("Pseudo par défaut"); //Si il n'y a pas de Pseudo on retourne un pseudo par défaut
 }
 
 //Méthode de sauvegarde du pseudo dans le fichier XML
 void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
     chargerFichierConfig(nomFichier);
 
-    QDomElement newPseudo = doc.createElement(QString("Pseudo"));
-    QDomText textPseudo = doc.createTextNode(QString(pseudo));
+    QDomElement newPseudo = doc.createElement(QString("Pseudo")); //On crée notre nouveau Noeud
+    QDomText textPseudo = doc.createTextNode(QString(pseudo)); //On y met le pseudo voulu
     newPseudo.appendChild(textPseudo);
 
-    docElement = doc.documentElement();
+    docElement = doc.documentElement(); //On récupère le document chargé
     noeud = docElement.firstChild();
 
-    while(!noeud.isNull()) {
+    while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
-            if (element.tagName() == "pseudo") {
-                docElement.replaceChild(newPseudo, noeud);
+            if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
+                docElement.replaceChild(newPseudo, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
             }
             noeud = noeud.nextSibling();
         }
@@ -72,10 +72,10 @@ void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
 
     QFile xmlDoc("config.txt");
     if(xmlDoc.open(QFile::WriteOnly)) {
-        xmlDoc.resize(0);
+        xmlDoc.resize(0); //On écrase notre fichier sans modifications
         QTextStream stream;
         stream.setDevice(&xmlDoc);
-        doc.save(stream, 4);
+        doc.save(stream, 4); //On le réécris avec les modifications
 
         xmlDoc.close();
     }
