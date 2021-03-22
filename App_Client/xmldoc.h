@@ -4,13 +4,28 @@
 #include <QWidget>
 #include <QtGui>
 #include <QtXml>
+#include <QTextStream>
+#include <QMessageBox>
 
 class XmlDoc : public QWidget
 {
+    Q_OBJECT
+
     public:
         XmlDoc();
         ~XmlDoc();
-        //variables et méthodes à implémenter
+        QString chargerPseudo(QString nomFichier);
+        void sauvegarderPseudo(QString nomFichier, QString pseudo);
+
+    private slots :
+        void chargerFichierConfig(QString nomFichier);
+
+    private :
+        QDomDocument doc;
+        QDomElement docElement;
+        QDomElement element;
+        QDomNode noeud;
+
 };
 
 #endif // XMLDOC_H

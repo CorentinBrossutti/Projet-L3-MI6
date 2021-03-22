@@ -6,6 +6,7 @@
 #include <QtNetwork>
 #include <QtXml>
 #include "ui_clienttcp.h" //La fenêtre générée
+#include "xmldoc.h" //Notre module de gestion des sauvegardes
 
 /*QT_BEGIN_NAMESPACE
 namespace Ui { class ClientTcp; }

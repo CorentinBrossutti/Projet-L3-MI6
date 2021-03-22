@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     ClientTcp fenetre;
     XmlDoc *Doc = new XmlDoc();
-    fenetre.show();
+    //fenetre.show();
     Doc->show();
 
     return app.exec();
