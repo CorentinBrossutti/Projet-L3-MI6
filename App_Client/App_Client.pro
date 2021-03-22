@@ -17,10 +17,12 @@ CONFIG += c++11
 #Input
 SOURCES += \
     main.cpp \
-    clienttcp.cpp
+    clienttcp.cpp \
+    xmldoc.cpp
 
 HEADERS += \
-    clienttcp.h
+    clienttcp.h \
+    xmldoc.h
 
 FORMS += \
     clienttcp.ui
