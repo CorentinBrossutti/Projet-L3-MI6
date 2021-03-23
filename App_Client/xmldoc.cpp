@@ -53,7 +53,7 @@ QString XmlDoc::chargerPseudo(QString nomFichier) {
 void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
     chargerFichierConfig(nomFichier);
 
-    QDomElement newPseudo = doc.createElement(QString("Pseudo")); //On crée notre nouveau Noeud
+    QDomElement newPseudo = doc.createElement(QString("pseudo")); //On crée notre nouveau Noeud
     QDomText textPseudo = doc.createTextNode(QString(pseudo)); //On y met le pseudo voulu
     newPseudo.appendChild(textPseudo);
 

@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../../../Pictures/bulle dialogue 2.jpg</normaloff>../../../../Pictures/bulle dialogue 2.jpg</iconset>
+    <normaloff>../build/win/chat/client/conversation_102940.png</normaloff>../build/win/chat/client/conversation_102940.png</iconset>
   </property>
   <widget class="QWidget" name="mainwindow1">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -27,7 +27,7 @@
       <property name="toolTipDuration">
        <number>-1</number>
       </property>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0">
        <item row="2" column="1">
         <widget class="QTextBrowser" name="displayMessage"/>
        </item>
@@ -40,54 +40,6 @@
           </size>
          </property>
          <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0,0,0">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_ip">
-            <property name="text">
-             <string>IP du serveur :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QSpinBox" name="boxPort">
-            <property name="maximum">
-             <number>100000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="boutonConnexion">
-            <property name="text">
-             <string>Connexion</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_port">
-            <property name="text">
-             <string>Port du serveur :</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="boxIp">
-            <property name="placeholderText">
-             <string>255.255.255.255</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>33</width>
-              <height>381</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="7">
            <widget class="QWidget" name="group_nom" native="true">
             <property name="maximumSize">
@@ -97,22 +49,6 @@
              </size>
             </property>
             <layout class="QGridLayout" name="gridLayout_3">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_image">
-               <property name="maximumSize">
-                <size>
-                 <width>300</width>
-                 <height>100</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="pixmap">
-                <pixmap>../../../../Pictures/discuter.jpg</pixmap>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0" alignment="Qt::AlignHCenter">
               <widget class="QLabel" name="label_nom">
                <property name="maximumSize">
@@ -132,26 +68,40 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_image">
+               <property name="maximumSize">
+                <size>
+                 <width>300</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap>conversation_102940.png</pixmap>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QWidget" name="group_message" native="true">
-         <layout class="QGridLayout" name="groupe_message" columnstretch="0,0,0,1,0,0">
-          <property name="bottomMargin">
-           <number>1</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_pseudo">
-            <property name="text">
-             <string>Pseudo :</string>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="boxPort">
+            <property name="maximum">
+             <number>100000</number>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="2" column="2">
+           <widget class="QPushButton" name="boutonPseudo">
+            <property name="text">
+             <string>Changer Pseudo</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
            <widget class="QLineEdit" name="boxPseudo">
             <property name="text">
              <string/>
@@ -164,6 +114,69 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_pseudo">
+            <property name="text">
+             <string>Pseudo :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>33</width>
+              <height>381</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_ip">
+            <property name="text">
+             <string>IP du serveur :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QPushButton" name="boutonConnexion">
+            <property name="text">
+             <string>Connexion</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="boxIp">
+            <property name="placeholderText">
+             <string>255.255.255.255</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_port">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Port du serveur :</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QWidget" name="group_message" native="true">
+         <layout class="QGridLayout" name="groupe_message" columnstretch="0,0,0,1,0,0">
+          <property name="bottomMargin">
+           <number>1</number>
+          </property>
           <item row="0" column="2">
            <widget class="QLabel" name="label_message">
             <property name="text">

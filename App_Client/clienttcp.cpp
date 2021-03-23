@@ -11,6 +11,8 @@ ClientTcp::ClientTcp()
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
 
     tailleMessage = 0;
+    pseudo = chargePseudo();
+    boxPseudo->setText(pseudo);
 }
 
 ClientTcp::~ClientTcp()
@@ -33,13 +35,13 @@ void ClientTcp::on_boutonConnexion_clicked() {
     socket->connectToHost(boxIp->text(), boxPort->value());
 }
 
-
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage() {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
     //On prépare le paquet à envoyer
-    QString messageAEnvoyer = tr("<strong>") + boxPseudo->text() +tr("</strong> : ") + boxMessage->text();
+
+    QString messageAEnvoyer = tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text();
 
     out << (quint16) 0;
     out << messageAEnvoyer;
@@ -124,8 +126,27 @@ void ClientTcp::erreurSocket(QAbstractSocket::SocketError erreur) {
     boutonConnexion->setEnabled(true);
 }
 
+//Méthode de changement de Pseudo
+void ClientTcp::sauvegardePseudo(QString nom) {
+    docXML.sauvegarderPseudo(fichierXML, nom);
+    pseudo = chargePseudo();
+    boxPseudo->clear();
+}
 
 
+void ClientTcp::on_boutonPseudo_clicked() {
+    sauvegardePseudo(boxPseudo->text());
+}
+
+void ClientTcp::on_boxPseudo_returnPressed() {
+    sauvegardePseudo(boxPseudo->text());
+}
+
+
+//Méthode de chargement du pseudo
+QString ClientTcp::chargePseudo() {
+    return docXML.chargerPseudo(fichierXML);
+}
 
 
 
