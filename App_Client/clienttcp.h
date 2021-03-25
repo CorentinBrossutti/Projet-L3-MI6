@@ -18,28 +18,29 @@ class ClientTcp : public QMainWindow, private Ui::ClientTcp
 
 public:
     //ClientTcp(QWidget *parent = nullptr);
-    ClientTcp();
+    ClientTcp(QTcpSocket *socket);
     ~ClientTcp();
+    QTcpSocket * getSocket() ;
+    void setSocket(QTcpSocket * socket);
 
 private slots:
-
-    ///////////////////////////////////////////
-    /// Methode
-    ///////////////////////////////////////////
-
-    void afficherMessage(QTextBrowser * afficheur, QString message);
-    void envoieMessage();
+    void on_boutonConnexion_clicked();
+    void on_boutonEnvoyer_clicked();
+    void on_boxMessage_returnPressed();
     void donneesRecues();
-    void tentativeConnexion();
     void connecte();
     void deconnecte();
     void erreurSocket(QAbstractSocket::SocketError erreur);
     void sauvegardePseudo(QString nom);
     QString chargePseudo();
 
-    ///////////////////////////////////////////
-    /// spécifique QT
-    ///////////////////////////////////////////
+signals:
+    void closed();
+protected:
+    void closeEvent(QCloseEvent *event) override {
+        emit closed(); // on émet le signal closed()
+        event->accept();
+    }
 
     void on_boutonConnexion_clicked();
     void on_boutonEnvoyer_clicked();

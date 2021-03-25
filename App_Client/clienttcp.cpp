@@ -1,14 +1,14 @@
 #include "clienttcp.h"
 
-ClientTcp::ClientTcp()
+ClientTcp::ClientTcp(QTcpSocket *socket)
 {
     setupUi(this);
 
-    socket = new QTcpSocket(this);
+    this->socket = socket;
     connect(socket, SIGNAL(readyRead()), this, SLOT(donneesRecues()));
     connect(socket, SIGNAL(connected()), this, SLOT(connecte()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+   // connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
+    //connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
 
     tailleMessage = 0;
     pseudo = chargePseudo();
@@ -20,14 +20,18 @@ ClientTcp::~ClientTcp()
     //delete ui;
 }
 
-void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
-    afficheur->append(message);
+QTcpSocket * ClientTcp::getSocket() {
+    return this->socket;
+}
+
+void ClientTcp::setSocket(QTcpSocket *socket) {
+    this->socket = socket;
 }
 
 //Tentative de Connexion au serveur
 void ClientTcp::on_boutonConnexion_clicked() {
     // On annonce sur la fenêtre qu'on est en train de se connecter
-    tentativeConnexion();
+    displayMessage->append(tr("<em>Tentative de connexion en cours...</em>"));
     boutonConnexion->setEnabled(false);
 
     socket->abort(); //On désactive les connexions précédentes s'il y en a
@@ -53,14 +57,9 @@ void ClientTcp::envoieMessage() {
     boxMessage->setFocus(); //On remet le curseur à l'intérieur
 }
 
-// appel de envoieMessage si on clique sur le bouton envoyer
-void ClientTcp::on_boutonEnvoyer_clicked() {
-    envoieMessage();
-}
-
-// appel de envoieMessage si on appuie sur 'Entree'
+//On va coder "Si on appuie sur la touche Entrée çà aura le même effet que cliquer sur "Envoyer"
 void ClientTcp::on_boxMessage_returnPressed() {
-    envoieMessage();
+    on_boutonEnvoyer_clicked();
 }
 
 
@@ -84,44 +83,40 @@ void ClientTcp::donneesRecues() {
     in >> messageRecu;
 
     //On affiche le message sur la zone de chat
-    afficherMessage(displayMessage, messageRecu);
+    displayMessage->append(messageRecu);
 
     //On remet la taille du message à  pour pouvoir recevoir de futurs messages
     tailleMessage = 0;
 }
 
-//Fonction appellé quand on essaie de se connecter
-void ClientTcp::tentativeConnexion() {
-    afficherMessage(displayMessage, tr("<em>Tentative de connexion en cours...</em>"));
-}
 
 //La fonction est appelé si on a réussi à se connecter au serveur
 void ClientTcp::connecte() {
-    afficherMessage(displayMessage, tr("<em>Connexion réussie !</em>"));
-    boutonConnexion->setEnabled(true);
+    displayMessage->append(tr("<em>Connexion réussie !</em>"));
+   // boutonConnexion->setEnabled(true);
 }
 
 
 //Cette fonction est appelé lorsqu'on est déconnecté du serveur
 void ClientTcp::deconnecte() {
-   afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
+    //displayMessage->append(tr("<em>Déconnecté du serveur </em>"));
 }
 
 
 void ClientTcp::erreurSocket(QAbstractSocket::SocketError erreur) {
     switch(erreur) { //On affiche un message différent selon l'erreur
         case QAbstractSocket::HostNotFoundError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur n'a pas pu être trouvé. Vérifiez l'IP et le port.</em>"));
+            displayMessage->append(tr("<em>ERREUR : le serveur n'a pas pu être trouvé. Vérifiez l'IP et le port.</em>"));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'IP et le port.</em>"));
+            displayMessage->append(tr("<em>ERREUR : le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'IP et le port.</em>"));
             break;
         case QAbstractSocket::RemoteHostClosedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a coupé la connexion.</em>"));
+            displayMessage->append(tr("<em>ERREUR : le serveur a coupé la connexion.</em>"));
             break;
         default:
             //Le cas default est appelés pour les erreurs non gérées
-            afficherMessage(displayMessage, tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
+            displayMessage->append(tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
     }
     boutonConnexion->setEnabled(true);
 }
