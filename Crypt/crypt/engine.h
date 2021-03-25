@@ -25,7 +25,10 @@ public:
 
 	bool encrypted() const;
     unsigned int count() const;
+    //Bigint unitaire représentatif des données
     bigint value() const;
+    //Obtenir une partie découpée
+    bigint part(unsigned int index) const;
 	// Permet d'obtenir la représentation textuelle (si pertinent) du message, utilisant une fonction de conversion optionelle (défaut ASCII)
 	// Noter que si le message n'est pas textuel, ou encrypté, cette représentation est inutile
 	std::string get(char (*converter)(uint8_t) = ascii_convert_to);

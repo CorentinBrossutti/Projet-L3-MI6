@@ -9,14 +9,18 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    /*Engine* temp = new Rsa();
+    Engine* temp = new Rsa();
     Key* k = temp->generate();
     cout << ((RealKey*)((RsaKey*)k)->publ->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->publ->b)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
+
+    bigint bi = temp->encode(121, k);
+    cout << bi << "   " << temp->decode(bi, k) << endl;
+
     delete k;
-    delete temp;*/
+    delete temp;
     /*Message m(bigint("129129029012901290121712719827981739892873"));
     cout << m.value() << endl;*/
 

@@ -46,6 +46,13 @@ bigint Message::value() const
     return bop::recompose(_content, _count);
 }
 
+bigint Message::part(unsigned int index) const
+{
+    if(index >= _count)
+        throw invalid_argument("Message::part, index invalide");
+    return _content[index];
+}
+
 string Message::get(char (*converter)(uint8_t))
 {
     return _strcontent.empty() ? (_strcontent = bop::to(value(), converter)) : _strcontent;
@@ -72,8 +79,7 @@ std::ostream& operator <<(std::ostream& output, Message& msg)
 
 bigint Engine::pad(const bigint& number, unsigned int padsize)
 {
-	// TODO
-	return bigint();
+    return number * pow(10, padsize) + random(padsize);
 }
 
 bigint Engine::unpad(const bigint& number, unsigned int padsize)
@@ -95,7 +101,7 @@ void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 {
     for(unsigned int i = 0;i < message.count();i++)
         encode(message._content[i], key, padsize);
-	message._encrypted = true;
+    message._encrypted = true;
 	message._strcontent = string();
 }
 
@@ -103,7 +109,7 @@ void Engine::decrypt(Message& message, Key* key, unsigned int padsize)
 {
     for(unsigned int i = 0;i < message.count();i++)
         decode(message._content[i], key, padsize);
-	message._encrypted = false;
+    message._encrypted = false;
 	message._strcontent = string();
 }
 

@@ -102,6 +102,16 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     return bigint(temp.c_str(), 2);
 }
 
+bigint random(unsigned int digits)
+{
+    srand(time(NULL));
+    bigint temp;
+
+    for(int i = 0;i < digits;i++)
+        temp = (temp * 10) + (rand() % 10);
+
+    return temp;
+}
 
 bigint random_integer()
 {
@@ -173,7 +183,7 @@ bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
         {
             res = (res * temp) % num;
         }
-        exp_b /= 10;
+        exp_bin /= 10;
         temp = (temp * temp) % num;
     }
 
