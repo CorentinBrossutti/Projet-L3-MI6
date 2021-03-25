@@ -15,14 +15,17 @@ CONFIG += c++11
 
 #Input
 SOURCES += \
+    fenetreConnexion.cpp \
     main.cpp \
     clienttcp.cpp
 
 HEADERS += \
-    clienttcp.h
+    clienttcp.h \
+    fenetreConnexion.h
 
 FORMS += \
-    clienttcp.ui
+    clienttcp.ui \
+    fenetreConnexion.ui
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin

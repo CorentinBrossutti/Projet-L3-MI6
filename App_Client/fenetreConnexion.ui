@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>fenetreConnexion</class>
+ <widget class="QDialog" name="fenetreConnexion">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>530</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>510</width>
+     <height>400</height>
+    </rect>
+   </property>
+   <widget class="QSpinBox" name="boxPort">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>50</y>
+      <width>111</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>100000</number>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxIp">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>50</y>
+      <width>120</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>255.255.255.255</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="boutonConnexion">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>115</y>
+      <width>89</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connexion</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>35</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>IP du serveur :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>35</y>
+      <width>120</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Port du serveur :</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Votre pseudo :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="boxPseudo">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>115</y>
+      <width>120</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Votre pseudo ici</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="displayMessage">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>490</width>
+      <height>150</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>490</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Logs :</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
