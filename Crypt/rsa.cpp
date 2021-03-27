@@ -62,6 +62,11 @@ RsaKey* Rsa::generate()
     bigint e = exposant_code(ind); 
     bigint d = euclide(e, ind);
 
+    if (d<0)
+    {
+        d+=n;
+    }
+
     return new RsaKey(n, e, d);
 }
 
