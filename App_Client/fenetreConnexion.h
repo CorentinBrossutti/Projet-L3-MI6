@@ -9,9 +9,9 @@
 #include "clienttcp.h"
 
 
-namespace Ui {
+/*namespace Ui {
 class fenetreConnexion;
-}
+}*/
 
 class fenetreConnexion : public QDialog , private Ui::fenetreConnexion
 {
@@ -29,6 +29,8 @@ private slots:
     void afficherFenetrePrincipale();
     void afficherMenuConnexion();
     void deconnecte();
+    void afficherMessage(QTextEdit * afficheur, QString message);
+    void tentativeConnexion();
 
 private:
     Ui::fenetreConnexion *ui;
