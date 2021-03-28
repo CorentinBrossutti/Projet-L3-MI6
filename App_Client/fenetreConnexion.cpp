@@ -20,31 +20,29 @@ fenetreConnexion::~fenetreConnexion()
     delete ui;
 }
 
+void fenetreConnexion::afficherMessage(QTextEdit * afficheur, QString message) {
+    afficheur->append(message);
+}
+
 void fenetreConnexion::on_boutonConnexion_clicked() {
-    ui->displayMessage->append(tr("<em>Tentative de connexion en cours...</em>"));
+    tentativeConnexion();
     ui->boutonConnexion->setEnabled(false);
     socket->abort(); //On désactive les connexions précédentes s'il y en a
     //On va se connecter au serveur demandé
     socket->connectToHost(ui->boxIp->text(), ui->boxPort->value());
 }
 
+//Fonction appellé quand on essaie de se connecter
+void fenetreConnexion::tentativeConnexion() {
+    afficherMessage(ui->displayMessage,tr("<em>Tentative de connexion en cours...</em>"));
+}
+
 void fenetreConnexion::connecte() {
     ui->boutonConnexion->setEnabled(true);
-    //ui->displayMessage->append(tr("<em>Connexion réussie !</em>"));
-   /* QByteArray paquet;
-    QDataStream out(&paquet, QIODevice::WriteOnly);
-    //On prépare le paquet à envoyer
-    QString messageAEnvoyer = tr("<strong>") + ui->boxPseudo->text() +tr("</strong> : ") + tr("<em>Connexion réussie !</em>");
-
-    out << (quint16) 0;
-    out << messageAEnvoyer;
-    out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
-
-    socket->write(paquet); //On envoie le paquet*/
     afficherFenetrePrincipale();
 }
 
+//Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
     fenetrePrincipale->setSocket(this->socket);
     fenetrePrincipale->show();
@@ -53,6 +51,7 @@ void fenetreConnexion::afficherFenetrePrincipale() {
 
 }
 
+// Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion
 void fenetreConnexion::afficherMenuConnexion() {
     this->socket = fenetrePrincipale->getSocket();
     this->show();

@@ -23,7 +23,7 @@ SOURCES += \
 
 HEADERS += \
     clienttcp.h \
-    xmldoc.h
+    xmldoc.h \
     fenetreConnexion.h
 
 FORMS += \
