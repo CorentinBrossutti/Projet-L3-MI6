@@ -10,14 +10,14 @@ using namespace std;
 int main(int argc, char** argv)
 {
     Engine* temp = new Rsa();
-    Key* k = temp->generate();
+    RsaKey* k = (RsaKey*)temp->generate();
     cout << ((RealKey*)((RsaKey*)k)->publ->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->publ->b)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
 
-    bigint bi = temp->encode(121, k);
-    cout << bi << "   " << temp->decode(bi, k) << endl;
+    bigint bi = temp->run(121, k->publ);
+    cout << bi << "   " << temp->run(bi, k->priv) << endl;
 
     delete k;
     delete temp;
