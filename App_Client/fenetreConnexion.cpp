@@ -20,6 +20,7 @@ fenetreConnexion::~fenetreConnexion()
     delete ui;
 }
 
+// Fonction qui récupere un message et un QtextEdit pour afficher le messages dedans
 void fenetreConnexion::afficherMessage(QTextEdit * afficheur, QString message) {
     afficheur->append(message);
 }
@@ -44,16 +45,17 @@ void fenetreConnexion::connecte() {
 
 //Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
-    fenetrePrincipale->setSocket(this->socket);
+    fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
     fenetrePrincipale->show();
-    this->hide();
+    this->hide(); // On cache la fenetre de connexion
     connect(fenetrePrincipale,SIGNAL(closed()), this, SLOT(afficherMenuConnexion()));
+    // Quand on récupere le signal de fermeture de la fenetre de chat on appelle la foncion afficheMenuConnexion
 }
 
 // Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion
 void fenetreConnexion::afficherMenuConnexion() {
-    this->socket = fenetrePrincipale->getSocket();
-    this->show();
+    this->socket = fenetrePrincipale->getSocket(); // On récupere le socket afin de récuperer les actions faites
+    this->show(); // On réaffiche la fenêtre de connexion
     deconnecte();
 }
 
