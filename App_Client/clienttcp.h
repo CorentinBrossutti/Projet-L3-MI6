@@ -36,12 +36,7 @@ private slots:
     void donneesRecues();
     void connecte();
     void deconnecte();
-<<<<<<< Updated upstream
-    void sauvegardePseudo(QString nom);
-    QString chargePseudo();
-=======
     void erreurSocket(QAbstractSocket::SocketError erreur);
->>>>>>> Stashed changes
 
     ///////////////////////////////////////////
     /// spécifique QT
