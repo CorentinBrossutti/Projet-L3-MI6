@@ -8,7 +8,6 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     connect(socket, SIGNAL(readyRead()), this, SLOT(donneesRecues()));
     connect(socket, SIGNAL(connected()), this, SLOT(connecte()));
     //connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
-    //connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
 
     tailleMessage = 0;
     pseudo = chargePseudo();
@@ -30,17 +29,6 @@ void ClientTcp::setSocket(QTcpSocket *socket) {
 
 void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
     afficheur->append(message);
-}
-
-//Tentative de Connexion au serveur
-void ClientTcp::on_boutonConnexion_clicked() {
-    // On annonce sur la fenêtre qu'on est en train de se connecter
-    tentativeConnexion();
-    boutonConnexion->setEnabled(false);
-
-    socket->abort(); //On désactive les connexions précédentes s'il y en a
-    //On va se connecter au serveur demandé
-    socket->connectToHost(boxIp->text(), boxPort->value());
 }
 
 //Methdode envoieMessage qui va envoyer un message
@@ -98,40 +86,15 @@ void ClientTcp::donneesRecues() {
     tailleMessage = 0;
 }
 
-//Fonction appellé quand on essaie de se connecter
-void ClientTcp::tentativeConnexion() {
-    afficherMessage(displayMessage, tr("<em>Tentative de connexion en cours...</em>"));
-}
-
 //La fonction est appelé si on a réussi à se connecter au serveur
 void ClientTcp::connecte() {
     afficherMessage(displayMessage, tr("<em>Connexion réussie !</em>"));
-    //boutonConnexion->setEnabled(true);
 }
 
 
 //Cette fonction est appelé lorsqu'on est déconnecté du serveur
 void ClientTcp::deconnecte() {
    //afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
-}
-
-
-void ClientTcp::erreurSocket(QAbstractSocket::SocketError erreur) {
-    switch(erreur) { //On affiche un message différent selon l'erreur
-        case QAbstractSocket::HostNotFoundError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur n'a pas pu être trouvé. Vérifiez l'IP et le port.</em>"));
-            break;
-        case QAbstractSocket::ConnectionRefusedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'IP et le port.</em>"));
-            break;
-        case QAbstractSocket::RemoteHostClosedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a coupé la connexion.</em>"));
-            break;
-        default:
-            //Le cas default est appelés pour les erreurs non gérées
-            afficherMessage(displayMessage, tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
-    }
-    boutonConnexion->setEnabled(true);
 }
 
 //Méthode de changement de Pseudo

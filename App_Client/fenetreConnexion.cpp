@@ -48,7 +48,6 @@ void fenetreConnexion::afficherFenetrePrincipale() {
     fenetrePrincipale->show();
     this->hide();
     connect(fenetrePrincipale,SIGNAL(closed()), this, SLOT(afficherMenuConnexion()));
-
 }
 
 // Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion

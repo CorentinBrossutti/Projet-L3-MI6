@@ -65,3 +65,6 @@ DEPENDPATH += $$PWD/../lib/unix/mpir/debug
 
 INCLUDEPATH += $$PWD/../Crypt
 DEPENDPATH += $$PWD/../Crypt
+
+RESOURCES += \
+    image.qrc

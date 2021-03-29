@@ -80,7 +80,7 @@
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap>conversation_102940.png</pixmap>
+                <pixmap resource="image.qrc">:/conversation_102940.png</pixmap>
                </property>
               </widget>
              </item>
@@ -207,6 +207,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="image.qrc"/>
+ </resources>
  <connections/>
 </ui>
