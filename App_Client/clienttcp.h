@@ -36,7 +36,6 @@ private slots:
     void donneesRecues();
     void connecte();
     void deconnecte();
-    void erreurSocket(QAbstractSocket::SocketError erreur);
 
     ///////////////////////////////////////////
     /// spécifique QT
