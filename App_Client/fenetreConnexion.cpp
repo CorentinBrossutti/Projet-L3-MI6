@@ -13,6 +13,9 @@ fenetreConnexion::fenetreConnexion(QWidget *parent) :
     connect(socket, SIGNAL(connected()), this, SLOT(connecte()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
     connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
+
+    pseudo = docXML.chargerPseudo(fichierXML);
+    ui->boxPseudo->setText(pseudo);
 }
 
 fenetreConnexion::~fenetreConnexion()
@@ -26,6 +29,7 @@ void fenetreConnexion::afficherMessage(QTextEdit * afficheur, QString message) {
 }
 
 void fenetreConnexion::on_boutonConnexion_clicked() {
+
     tentativeConnexion();
     ui->boutonConnexion->setEnabled(false);
     socket->abort(); //On désactive les connexions précédentes s'il y en a
@@ -45,6 +49,7 @@ void fenetreConnexion::connecte() {
 
 //Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
+    fenetrePrincipale->sauvegardePseudo(ui->boxPseudo->text());
     fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
     fenetrePrincipale->show();
     this->hide(); // On cache la fenetre de connexion
@@ -55,6 +60,9 @@ void fenetreConnexion::afficherFenetrePrincipale() {
 // Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion
 void fenetreConnexion::afficherMenuConnexion() {
     this->socket = fenetrePrincipale->getSocket(); // On récupere le socket afin de récuperer les actions faites
+    pseudo = docXML.chargerPseudo(fichierXML);
+    ui->boxPseudo->setText(pseudo);
+    ui->boxPseudo->setFocus();
     this->show(); // On réaffiche la fenêtre de connexion
     deconnecte();
 }

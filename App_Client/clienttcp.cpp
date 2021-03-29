@@ -102,8 +102,8 @@ void ClientTcp::sauvegardePseudo(QString nom) {
     docXML.sauvegarderPseudo(fichierXML, nom);
     pseudo = chargePseudo();
     boxPseudo->clear();
+    boxPseudo->setFocus();
 }
-
 
 void ClientTcp::on_boutonPseudo_clicked() {
     sauvegardePseudo(boxPseudo->text());

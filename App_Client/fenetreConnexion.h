@@ -23,7 +23,12 @@ public:
 
 
 private slots:
-    void on_boutonConnexion_clicked();
+
+////////////////////////////////////////////////////////////////////
+/// méthode
+///////////////////////////////////////////////////////////////////
+
+
     void connecte();
     void erreurSocket(QAbstractSocket::SocketError erreur);
     void afficherFenetrePrincipale();
@@ -32,10 +37,20 @@ private slots:
     void afficherMessage(QTextEdit * afficheur, QString message);
     void tentativeConnexion();
 
+//////////////////////////////////////////////////////////////////
+/// Spécifique QT
+/////////////////////////////////////////////////////////////////
+
+    void on_boutonConnexion_clicked();
+
 private:
     Ui::fenetreConnexion *ui;
     QTcpSocket *socket; //Représente le serveur
     ClientTcp *fenetrePrincipale;
+
+    QString fichierXML = "config.txt";
+    XmlDoc docXML;
+    QString pseudo;
 };
 
 #endif // FENETRECONNEXION_H

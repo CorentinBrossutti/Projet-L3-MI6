@@ -25,7 +25,6 @@ class XmlDoc : public QWidget
         QDomElement docElement;
         QDomElement element;
         QDomNode noeud;
-
 };
 
 #endif // XMLDOC_H
