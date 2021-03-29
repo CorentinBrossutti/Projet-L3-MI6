@@ -1,4 +1,3 @@
-#include "crypt/global.h"
 #include "crypt/std.h"
 
 #include <sstream>
@@ -12,6 +11,8 @@ Engine* engines::resolve(char* arg)
 {
 	if (!strcmp(arg, "rsa"))
 		return new Rsa();
+    else if(!strcmp(arg, "cesar"))
+        return new Cesar();
 	//AES ?
 	else
 		return nullptr;
@@ -89,5 +90,5 @@ Message* msgs::retrieve(const char* filepath, uint8_t(*converter)(char))
 	temp << reader.rdbuf();
 	reader.close();
 
-	return temp.str().empty() ? nullptr : new Message(temp.str().c_str());
+    return temp.str().empty() ? nullptr : new Message(temp.str().c_str(), BSIZE_BYTES, converter);
 }

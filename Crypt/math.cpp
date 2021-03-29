@@ -17,7 +17,7 @@ unsigned int bop::count_bytes(const bigint& number)
     return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
-string bop::padto(const bigint& from, const unsigned int padval)
+string bop::padto(const bigint& from)
 {
     string str = from.get_str(2);
     str.insert(0, bop::count_bytes(from) * 8 - bop::sizebin(from), '0');
@@ -107,7 +107,7 @@ bigint random(unsigned int digits)
     srand(time(NULL));
     bigint temp;
 
-    for(int i = 0;i < digits;i++)
+    for(unsigned int i = 0;i < digits;i++)
         temp = (temp * 10) + (rand() % 10);
 
     return temp;

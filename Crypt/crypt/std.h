@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "rsa.h"
+#include "cesar.h"
 
 
 namespace engines

@@ -11,6 +11,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    cesar.cpp \
     engine.cpp \
     global.cpp \
     key.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     std.cpp
 
 HEADERS += \
+    crypt/cesar.h \
     crypt/engine.h \
     crypt/global.h \
     crypt/key.h \
