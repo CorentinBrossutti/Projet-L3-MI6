@@ -64,7 +64,7 @@ RsaKey* Rsa::generate()
 
     if (d<0)
     {
-        d+=n;
+        d+=ind;
     }
 
     return new RsaKey(n, e, d);
