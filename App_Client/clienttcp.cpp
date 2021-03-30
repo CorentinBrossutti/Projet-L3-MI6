@@ -1,16 +1,17 @@
 #include "clienttcp.h"
 
-ClientTcp::ClientTcp()
+ClientTcp::ClientTcp(QTcpSocket *socket)
 {
     setupUi(this);
 
-    socket = new QTcpSocket(this);
+    this->socket = socket;
     connect(socket, SIGNAL(readyRead()), this, SLOT(donneesRecues()));
     connect(socket, SIGNAL(connected()), this, SLOT(connecte()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
+    //connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
 
     tailleMessage = 0;
+    pseudo = chargePseudo();
+    boxPseudo->setText(pseudo);
 }
 
 ClientTcp::~ClientTcp()
@@ -18,28 +19,25 @@ ClientTcp::~ClientTcp()
     //delete ui;
 }
 
+QTcpSocket * ClientTcp::getSocket() {
+    return this->socket;
+}
+
+void ClientTcp::setSocket(QTcpSocket *socket) {
+    this->socket = socket;
+}
+
 void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
     afficheur->append(message);
 }
-
-//Tentative de Connexion au serveur
-void ClientTcp::on_boutonConnexion_clicked() {
-    // On annonce sur la fenêtre qu'on est en train de se connecter
-    tentativeConnexion();
-    boutonConnexion->setEnabled(false);
-
-    socket->abort(); //On désactive les connexions précédentes s'il y en a
-    //On va se connecter au serveur demandé
-    socket->connectToHost(boxIp->text(), boxPort->value());
-}
-
 
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage() {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
     //On prépare le paquet à envoyer
-    QString messageAEnvoyer = tr("<strong>") + boxPseudo->text() +tr("</strong> : ") + boxMessage->text();
+
+    QString messageAEnvoyer = tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text();
 
     out << (quint16) 0;
     out << messageAEnvoyer;
@@ -88,44 +86,38 @@ void ClientTcp::donneesRecues() {
     tailleMessage = 0;
 }
 
-//Fonction appellé quand on essaie de se connecter
-void ClientTcp::tentativeConnexion() {
-    afficherMessage(displayMessage, tr("<em>Tentative de connexion en cours...</em>"));
-}
-
 //La fonction est appelé si on a réussi à se connecter au serveur
 void ClientTcp::connecte() {
     afficherMessage(displayMessage, tr("<em>Connexion réussie !</em>"));
-    boutonConnexion->setEnabled(true);
 }
 
 
 //Cette fonction est appelé lorsqu'on est déconnecté du serveur
 void ClientTcp::deconnecte() {
-   afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
+   //afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
+}
+
+//Méthode de changement de Pseudo
+void ClientTcp::sauvegardePseudo(QString nom) {
+    docXML.sauvegarderPseudo(fichierXML, nom);
+    pseudo = chargePseudo();
+    boxPseudo->clear();
+    boxPseudo->setFocus();
+}
+
+void ClientTcp::on_boutonPseudo_clicked() {
+    sauvegardePseudo(boxPseudo->text());
+}
+
+void ClientTcp::on_boxPseudo_returnPressed() {
+    sauvegardePseudo(boxPseudo->text());
 }
 
 
-void ClientTcp::erreurSocket(QAbstractSocket::SocketError erreur) {
-    switch(erreur) { //On affiche un message différent selon l'erreur
-        case QAbstractSocket::HostNotFoundError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur n'a pas pu être trouvé. Vérifiez l'IP et le port.</em>"));
-            break;
-        case QAbstractSocket::ConnectionRefusedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a refusé la connexion. Vérifiez si le programme \"serveur\" a bien été lancé. Vérifiez aussi l'IP et le port.</em>"));
-            break;
-        case QAbstractSocket::RemoteHostClosedError:
-            afficherMessage(displayMessage, tr("<em>ERREUR : le serveur a coupé la connexion.</em>"));
-            break;
-        default:
-            //Le cas default est appelés pour les erreurs non gérées
-            afficherMessage(displayMessage, tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
-    }
-    boutonConnexion->setEnabled(true);
+//Méthode de chargement du pseudo
+QString ClientTcp::chargePseudo() {
+    return docXML.chargerPseudo(fichierXML);
 }
-
-
-
 
 
 

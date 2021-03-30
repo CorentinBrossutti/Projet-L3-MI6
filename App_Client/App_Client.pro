@@ -3,6 +3,7 @@ TARGET = MI6.ChatClient
 QT += core gui
 QT += widgets network
 QT += widgets
+QT += xml
 DEPENDPATH += .
 INCLUDEPATH += .
 
@@ -15,14 +16,19 @@ CONFIG += c++11
 
 #Input
 SOURCES += \
+    fenetreConnexion.cpp \
     main.cpp \
-    clienttcp.cpp
+    clienttcp.cpp \
+    xmldoc.cpp
 
 HEADERS += \
-    clienttcp.h
+    clienttcp.h \
+    xmldoc.h \
+    fenetreConnexion.h
 
 FORMS += \
-    clienttcp.ui
+    clienttcp.ui \
+    fenetreConnexion.ui
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin
@@ -59,3 +65,6 @@ DEPENDPATH += $$PWD/../lib/unix/mpir/debug
 
 INCLUDEPATH += $$PWD/../Crypt
 DEPENDPATH += $$PWD/../Crypt
+
+RESOURCES += \
+    image.qrc
