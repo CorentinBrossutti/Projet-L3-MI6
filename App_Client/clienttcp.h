@@ -54,12 +54,6 @@ protected:
         event->accept();
     }
 
-    void on_boutonConnexion_clicked();
-    void on_boutonEnvoyer_clicked();
-    void on_boxMessage_returnPressed();
-    void on_boutonPseudo_clicked();
-    void on_boxPseudo_returnPressed();
-
 private:
     QTcpSocket *socket; //Représente le serveur
     quint16 tailleMessage;
