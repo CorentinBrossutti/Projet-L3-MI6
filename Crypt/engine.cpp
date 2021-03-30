@@ -100,7 +100,7 @@ bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
 void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 {
     for(unsigned int i = 0;i < message.count();i++)
-        encode(message._content[i], key, padsize);
+        message._content[i] = encode(message._content[i], key, padsize);
     message._encrypted = true;
 	message._strcontent = string();
 }
@@ -108,7 +108,7 @@ void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 void Engine::decrypt(Message& message, Key* key, unsigned int padsize)
 {
     for(unsigned int i = 0;i < message.count();i++)
-        decode(message._content[i], key, padsize);
+        message._content[i] = decode(message._content[i], key, padsize);
     message._encrypted = false;
 	message._strcontent = string();
 }

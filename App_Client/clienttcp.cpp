@@ -1,4 +1,11 @@
 #include "clienttcp.h"
+#include "crypt/cesar.h"
+#include "crypt/engine.h"
+#include "crypt/rsa.h"
+
+//PublicKey* server_key;
+//KeyPair* local_key;
+Rsa engine;
 
 ClientTcp::ClientTcp(QTcpSocket *socket)
 {
@@ -12,10 +19,15 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     tailleMessage = 0;
     pseudo = chargePseudo();
     boxPseudo->setText(pseudo);
+
+    // A stocker en local et a ne faire que si aucune sauvegarde existante
+    //server_key = engine.generate();
 }
 
 ClientTcp::~ClientTcp()
 {
+    //delete server_key;
+    //delete local_key;
     //delete ui;
 }
 
@@ -36,11 +48,14 @@ void ClientTcp::envoieMessage() {
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
     //On prépare le paquet à envoyer
-
     QString messageAEnvoyer = tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text();
+    Message m(messageAEnvoyer.toStdString().c_str());
+    Cesar engine;
+    engine.encrypt(m, nullptr);
+    //engine.encrypt(m, server_key);
 
     out << (quint16) 0;
-    out << messageAEnvoyer;
+    out << QString::fromStdString(m.get());
     out.device()->seek(0);
     out << (quint16) (paquet.size() - sizeof(quint16));
 
@@ -62,6 +77,7 @@ void ClientTcp::on_boxMessage_returnPressed() {
 
 //On a reçu un paquet (ou un sous-paquet)
 void ClientTcp::donneesRecues() {
+
     /*Même principe que lorsque le serveur reçoit un paquet :
      * On essaie de récupérer la taille du message
      * Une fois qu'on l'a, on attend d'avoir reçu le message entier
@@ -79,6 +95,18 @@ void ClientTcp::donneesRecues() {
     QString messageRecu;
     in >> messageRecu;
 
+    /*
+     * if(flag)
+     *  server_key = new PublicKey(messageRecu);
+     */
+
+    //Décryptage
+    Message m(messageRecu.toStdString().c_str());
+    Cesar decrypter;
+    decrypter.decrypt(m, nullptr);
+    //engine.decrypt(m, local_key);
+    messageRecu = QString::fromStdString(m.get());
+
     //On affiche le message sur la zone de chat
     afficherMessage(displayMessage, messageRecu);
 
@@ -89,6 +117,8 @@ void ClientTcp::donneesRecues() {
 //La fonction est appelé si on a réussi à se connecter au serveur
 void ClientTcp::connecte() {
     afficherMessage(displayMessage, tr("<em>Connexion réussie !</em>"));
+    // TODO envoyer clé publique au serveur
+    // local_key->publ->str()
 }
 
 

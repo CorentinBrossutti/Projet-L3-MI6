@@ -8,6 +8,11 @@
 class CAPI Cesar : public Engine
 {
 public:
+    // Ajoute un nonce au nombre donné
+    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+    // Retire le nonce du nombre donné
+    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+
     virtual Key* generate();
 
     virtual bigint run(const bigint& source, Key* key);
