@@ -2,11 +2,14 @@
 
 #include "global.h"
 
+#define STR_KEY_DELIMITER "::"
+#define STR_KEY_DELIMSIZE 2
 
 // Une clé de cryptage générique
 struct CAPI Key
 {
-	virtual void save(const char* filepath) = 0;
+    virtual std::string tostr() const = 0;
+    virtual void save(const char* filepath) const = 0;
 };
 
 // Clé de cryptage encapsulant un entier
@@ -15,12 +18,14 @@ struct CAPI RealKey : public Key
 public:
 	bigint value;
 
+    RealKey();
 	RealKey(const RealKey& source);
 	RealKey(const bigint& value);
 	RealKey(const char* textval, uint8_t(*converter)(char) = ascii_convert_from);
 
-	virtual void save(const char* filepath);
-	virtual void save(const char* filepath, char (*converter)(uint8_t));
+    virtual std::string tostr() const;
+    virtual void save(const char* filepath) const;
+    virtual void save(const char* filepath, char (*converter)(uint8_t)) const;
 };
 
 // Une paire de clés de cryptage. Permet le polymorphisme et un design composite
@@ -37,5 +42,9 @@ public:
 	KeyPair(Key* a, Key* b, bool autodelete = true);
 	~KeyPair();
 
-	virtual void save(const char* filepath);
+    virtual std::string tostr() const;
+    virtual void save(const char* filepath) const;
+
+    static KeyPair from_cptr(const char* stringrep);
+    static KeyPair from_str(const std::string& stringrep);
 };

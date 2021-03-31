@@ -51,8 +51,10 @@ public:
 	// Génère une clé de cryptage
 	virtual Key* generate() = 0;
 
-	// Applique l'algorithme de cryptage avec une clé donnée et un nombre à encoder / décoder
-	virtual bigint run(const bigint& source, Key* key) = 0;
+    // Applique l'algorithme de cryptage avec une clé donnée et un nombre à encoder
+    virtual bigint run_crypt(const bigint& source, Key* key) = 0;
+    // Applique l'algorithme de cryptage avec une clé donnée et un nombre à décoder
+    virtual bigint run_decrypt(const bigint& source, Key* key) = 0;
 
 	// Ajoute un nonce au nombre donné
     virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);

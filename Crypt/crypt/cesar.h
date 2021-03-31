@@ -15,5 +15,6 @@ public:
 
     virtual Key* generate();
 
-    virtual bigint run(const bigint& source, Key* key);
+    virtual bigint run_crypt(const bigint& source, Key* key);
+    virtual bigint run_decrypt(const bigint& source, Key* key);
 };

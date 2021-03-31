@@ -6,6 +6,10 @@
 
 using namespace std;
 
+RealKey::RealKey()
+{
+}
+
 RealKey::RealKey(const RealKey& source)
 {
 	value = source.value;
@@ -20,12 +24,17 @@ RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bop::
 {
 }
 
-void RealKey::save(const char* filepath)
+string RealKey::tostr() const
+{
+    return value.get_str();
+}
+
+void RealKey::save(const char* filepath) const
 {
 	save(filepath, ascii_convert_to);
 }
 
-void RealKey::save(const char* filepath, char(*converter)(uint8_t))
+void RealKey::save(const char* filepath, char(*converter)(uint8_t)) const
 {
 	ofstream ofs;
 	ofs.open(filepath, ios::out);
@@ -66,8 +75,28 @@ KeyPair::~KeyPair()
 	}
 }
 
-void KeyPair::save(const char* filepath)
+string KeyPair::tostr() const
 {
-	a->save(filepath);
-	b->save(filepath);
+    return a->tostr() + STR_KEY_DELIMITER + b->tostr();
+}
+
+void KeyPair::save(const char* filepath) const
+{
+    a->save(filepath);
+    b->save(filepath);
+}
+
+KeyPair KeyPair::from_cptr(const char *stringrep)
+{
+    return from_str(string(stringrep));
+}
+
+KeyPair KeyPair::from_str(const string &stringrep)
+{
+    int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
+    if(delimpos == -1)
+        throw invalid_argument("KeyPair::from_str : impossible d'analyser la chaîne");
+    string a = stringrep.substr(0, delimpos), b = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
+
+    return KeyPair(bigint(a), bigint(b));
 }

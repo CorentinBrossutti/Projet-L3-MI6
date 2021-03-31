@@ -89,12 +89,12 @@ bigint Engine::unpad(const bigint& number, unsigned int padsize)
 
 bigint Engine::encode(const bigint& source, Key* key, unsigned int padsize)
 {
-	return run(pad(source, padsize), key);
+    return run_crypt(pad(source, padsize), key);
 }
 
 bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
 {
-	return unpad(run(source, key), padsize);
+    return unpad(run_decrypt(source, key), padsize);
 }
 
 void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
