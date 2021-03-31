@@ -6,7 +6,7 @@
 
 #include <string>
 
-#define PADSIZE_BYTES 8
+#define PADSIZE_DIGITS 16
 #define BSIZE_BYTES 8
 
 
@@ -57,20 +57,20 @@ public:
     virtual bigint run_decrypt(const bigint& source, Key* key) = 0;
 
 	// Ajoute un nonce au nombre donné
-    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_DIGITS);
 	// Retire le nonce du nombre donné
-    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_DIGITS);
 
 	// Encode un nombre avec une clé donnée
-    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_DIGITS);
 	// Décode un nombre avec une clé donnée
-    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_DIGITS);
 
 	// Encrypte un message avec une clé donnée
-    void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_DIGITS);
 	// Décrypte une message avec une clé donnée
-    void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_DIGITS);
 
 	// Opération dynamique basée sur un argument textuel
-    bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_DIGITS);
 };

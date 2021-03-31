@@ -84,7 +84,7 @@ bigint Engine::pad(const bigint& number, unsigned int padsize)
 
 bigint Engine::unpad(const bigint& number, unsigned int padsize)
 {
-	return number >> padsize;
+    return number / pow(10, padsize);
 }
 
 bigint Engine::encode(const bigint& source, Key* key, unsigned int padsize)
