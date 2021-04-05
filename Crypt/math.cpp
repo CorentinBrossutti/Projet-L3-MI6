@@ -117,7 +117,6 @@ bigint random_integer()
 {
     bigint res = 0;
     int x;
-    srand(time(NULL));
 
     for (int i = 50; i > 1; i--)
     {
