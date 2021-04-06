@@ -72,7 +72,7 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
     }
 
     string temp;
-    for(unsigned int i = 0;i < digits;i++)
+    /*for(unsigned int i = 0;i < digits;i++)
     {
 
         if (i != 0 && i % 8 == 0)
@@ -84,7 +84,7 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
             v.push_back(bigint(temp + bset[i].to_string(), 2));
         else
             temp += bset[i].to_string();
-    }
+    }*/
     return v;
 }
 
@@ -114,7 +114,6 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 
 bigint random(unsigned int digits)
 {
-    srand(time(NULL));
     bigint temp;
 
     for(unsigned int i = 0;i < digits;i++)
@@ -146,7 +145,6 @@ bigint random_integer()
 
 bool prime(const bigint& num)
 {
-    srand(time(NULL));
     bigint x;
     x = rand() % num;
     bigint temp = num - 1;
@@ -183,16 +181,16 @@ bigint euclide(const bigint& a, const bigint& b)
 bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
 {
     bigint res = 1;
-    bigint exp_bin = bop::tobin(exp);
+    bigint exp_bin = exp;
     bigint temp = base;
     while (exp_bin != 0)
     {
-        bigint r = (exp_bin % 10);
+        bigint r = (exp_bin % 2);
         if (r == 1)
         {
             res = (res * temp) % num;
         }
-        exp_bin /= 10;
+        exp_bin /= 2;
         temp = (temp * temp) % num;
     }
 

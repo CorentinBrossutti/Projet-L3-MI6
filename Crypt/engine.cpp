@@ -145,4 +145,5 @@ bool Engine::operate(const char* arg, Message& message, Key* key, unsigned int p
 
 Message Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize, char (*converter)(uint8_t))
 {
+    return Message();
 }

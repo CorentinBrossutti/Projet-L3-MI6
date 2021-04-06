@@ -35,7 +35,7 @@ ServeurTCP::ServeurTCP()
     tailleMessage = 0;
     flag = 0;
 
-    _engine = new Cesar;
+    _engine = new Rsa;
     _key = _engine->generate();
 }
 
@@ -107,7 +107,7 @@ void ServeurTCP::donneesRecues() {
     Message m(message.toStdString());
     switch(flag)
     {
-    case NO_FLAG:
+    case NORMAL_MESSAGE:
         _engine->decrypt(m, _key);
         envoyerATous(QString::fromStdString(m.get()));
         break;

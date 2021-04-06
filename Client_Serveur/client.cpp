@@ -22,12 +22,12 @@ Client::~Client()
 {
 }
 
-void Client::send(const std::string& msg, Engine *engine, bool encrypt, unsigned short flag)
+void Client::send(const std::string& msg, Engine *engine, bool encrypt, unsigned short msgtype)
 {
-    send(QString::fromStdString(msg), engine, encrypt, flag);
+    send(QString::fromStdString(msg), engine, encrypt, msgtype);
 }
 
-void Client::send(const QString &msg, Engine* engine, bool encrypt, unsigned short flag)
+void Client::send(const QString &msg, Engine* engine, bool encrypt, unsigned short msgtype)
 {
     // Préparation du paquet
     QByteArray paquet;
@@ -35,7 +35,7 @@ void Client::send(const QString &msg, Engine* engine, bool encrypt, unsigned sho
 
     // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
     // Puis un deuxième quint16 pour le flag
-    out << (quint16) 0 << (quint16) flag;
+    out << (quint16) 0 << (quint16) msgtype;
     // Chiffrement et envoi
     if(key && encrypt)
     {

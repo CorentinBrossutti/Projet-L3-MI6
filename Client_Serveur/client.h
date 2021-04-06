@@ -4,7 +4,7 @@
 #include "crypt/key.h"
 #include "crypt/engine.h"
 
-#define NO_FLAG 1
+#define NORMAL_MESSAGE 1
 #define DISPATCH_PKEY 2
 
 class Client
@@ -20,6 +20,6 @@ public:
     Client(QTcpSocket* socket);
     ~Client();
 
-    void send(const std::string& msg, Engine *engine, bool encrypt = true, unsigned short flag = NO_FLAG);
-    void send(const QString& msg, Engine* engine, bool encrypt = true, unsigned short flag = NO_FLAG);
+    void send(const std::string& msg, Engine *engine, bool encrypt = true, unsigned short msgtype = NORMAL_MESSAGE);
+    void send(const QString& msg, Engine* engine, bool encrypt = true, unsigned short msgtype = NORMAL_MESSAGE);
 };
