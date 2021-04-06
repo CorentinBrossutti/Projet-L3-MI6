@@ -6,8 +6,8 @@
 
 #include <string>
 
-#define PADSIZE_DIGITS 16
-#define BSIZE_BYTES 8
+#define PADSIZE_DIGITS 8
+#define BSIZE_DIGITS 32
 
 
 class Engine;
@@ -19,9 +19,10 @@ class CAPI Message
 public:
 	Message();
     Message(const Message& source);
-    Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BSIZE_BYTES);
+    Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BSIZE_DIGITS);
 	// Construit un message depuis du texte, avec une fonction de conversion optionnelle (défaut ASCII)
-    Message(const char* content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
+    Message(const char* content, unsigned int blocksz = BSIZE_DIGITS, uint8_t(*converter)(char) = ascii_convert_from);
+    Message(std::string content, unsigned int blocksz = BSIZE_DIGITS, uint8_t(*converter)(char) = ascii_convert_from);
 
 	bool encrypted() const;
     unsigned int count() const;
@@ -73,4 +74,7 @@ public:
 
 	// Opération dynamique basée sur un argument textuel
     bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_DIGITS);
+
+    static Message msgprep(const bigint& stack, unsigned int blocksz = BSIZE_DIGITS, unsigned int padsize = PADSIZE_DIGITS, char (*converter)(uint8_t) = ascii_convert_to);
+    static Message msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_DIGITS, unsigned int padsize = PADSIZE_DIGITS, char (*converter)(uint8_t) = ascii_convert_to);
 };

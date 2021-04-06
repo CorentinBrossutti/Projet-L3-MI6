@@ -17,6 +17,15 @@ unsigned int bop::count_bytes(const bigint& number)
     return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
+unsigned int bop::count_digits(const bigint& num, unsigned int base)
+{
+    int i = 0;
+    for(bigint temp = num;temp >= base;i++)
+        temp /= base;
+
+    return i + 1;
+}
+
 string bop::padto(const bigint& from)
 {
     string str = from.get_str(2);
@@ -53,19 +62,20 @@ bigint bop::tobin(const bigint& from)
 
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
 {
-    byteset bset(val);
     vector<bigint> v;
-    //check
-    if(bset.size() <= blocksz)
+    unsigned int digits = count_digits(val);
+
+    if(digits <= blocksz)
     {
         v.push_back(val);
         return v;
     }
 
     string temp;
-    for(unsigned int i = 0;i < bset.size();i++)
+    for(unsigned int i = 0;i < digits;i++)
     {
-        if ((i != 0 && i % 8 == 0))
+
+        if (i != 0 && i % 8 == 0)
         {
             v.push_back(bigint(temp, 2));
             temp = bset[i].to_string();

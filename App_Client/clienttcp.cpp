@@ -1,11 +1,5 @@
 #include "clienttcp.h"
 #include "crypt/cesar.h"
-#include "crypt/engine.h"
-#include "crypt/rsa.h"
-
-//PublicKey* server_key;
-//KeyPair* local_key;
-Rsa engine;
 
 ClientTcp::ClientTcp(QTcpSocket *socket)
 {
@@ -17,11 +11,12 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     //connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
 
     tailleMessage = 0;
+    flag = 0;
     pseudo = chargePseudo();
     boxPseudo->setText(pseudo);
 
-    // A stocker en local et a ne faire que si aucune sauvegarde existante
-    //server_key = engine.generate();
+    _engine = new Cesar;
+    _lkey = _engine->generate();
 }
 
 ClientTcp::~ClientTcp()
@@ -29,6 +24,9 @@ ClientTcp::~ClientTcp()
     //delete server_key;
     //delete local_key;
     //delete ui;
+    delete _engine;
+    delete _lkey;
+    delete _skey;
 }
 
 QTcpSocket * ClientTcp::getSocket() {
@@ -44,24 +42,38 @@ void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
 }
 
 //Methdode envoieMessage qui va envoyer un message
-void ClientTcp::envoieMessage() {
+void ClientTcp::envoieMessage()
+{
+    send(tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text());
+    boxMessage->clear();
+    boxMessage->setFocus();
+}
+
+void ClientTcp::send(const QString& val, unsigned short flag, bool encrypt)
+{
+    // Préparation du paquet
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
-    //On prépare le paquet à envoyer
-    QString messageAEnvoyer = tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text();
-    Message m(messageAEnvoyer.toStdString().c_str());
-    Cesar engine;
-    engine.encrypt(m, nullptr);
-    //engine.encrypt(m, server_key);
 
-    out << (quint16) 0;
-    out << QString::fromStdString(m.get());
-    out.device()->seek(0);
-    out << (quint16) (paquet.size() - sizeof(quint16));
+    // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
+    // Puis un deuxième quint16 pour le flag
+    out << (quint16) 0 << (quint16) flag;
+    // Chiffrement et envoi
+    if(_skey && encrypt)
+    {
+        Message encrypted(val.toStdString());
+        _engine->encrypt(encrypted, _skey);
+        out << QString::fromStdString(encrypted.get()); // On ajoute le message à la suite
+    }
+    else
+        out << val;
 
-    socket->write(paquet); //On envoie le paquet
-    boxMessage->clear(); //On vide la zone d'écriture du message
-    boxMessage->setFocus(); //On remet le curseur à l'intérieur
+    out.device()->seek(0); // On se replace au début du paquet
+
+    // On écrase le 0 qu'on avait réservé par la longueur du message
+    out << (quint16) (paquet.size() - sizeof(quint16) * 2);
+
+    socket->write(paquet);
 }
 
 // appel de envoieMessage si on clique sur le bouton envoyer
@@ -88,6 +100,11 @@ void ClientTcp::donneesRecues() {
         if (socket->bytesAvailable() < (int)sizeof(quint16)) return;
         in >> tailleMessage;
     }
+    if(flag == 0)
+    {
+        if (socket->bytesAvailable() < (int)sizeof(quint16)) return;
+        in >> flag;
+    }
 
     if (socket->bytesAvailable() < tailleMessage) return;
 
@@ -95,23 +112,27 @@ void ClientTcp::donneesRecues() {
     QString messageRecu;
     in >> messageRecu;
 
-    /*
-     * if(flag)
-     *  server_key = new PublicKey(messageRecu);
-     */
-
     //Décryptage
-    Message m(messageRecu.toStdString().c_str());
-    Cesar decrypter;
-    decrypter.decrypt(m, nullptr);
-    //engine.decrypt(m, local_key);
-    messageRecu = QString::fromStdString(m.get());
-
-    //On affiche le message sur la zone de chat
-    afficherMessage(displayMessage, messageRecu);
+    Message m(messageRecu.toStdString());
+    switch(flag)
+    {
+    case NO_FLAG:
+        //engine.decrypt(m, local_key);
+        _engine->decrypt(m, _lkey);
+        messageRecu = QString::fromStdString(m.get());
+        //On affiche le message sur la zone de chat
+        afficherMessage(displayMessage, messageRecu);
+        break;
+    case DISPATCH_PKEY:
+        //_key = RsaKey::from_str(message.toStdString());
+        _skey = RealKey::from_str(m.get());
+        send(QString::fromStdString(_lkey->tostr()), DISPATCH_PKEY, false);
+        break;
+    }
 
     //On remet la taille du message à  pour pouvoir recevoir de futurs messages
     tailleMessage = 0;
+    flag = 0;
 }
 
 //La fonction est appelé si on a réussi à se connecter au serveur

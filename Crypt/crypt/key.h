@@ -26,6 +26,9 @@ public:
     virtual std::string tostr() const;
     virtual void save(const char* filepath) const;
     virtual void save(const char* filepath, char (*converter)(uint8_t)) const;
+
+    static RealKey* from_cptr(const char* stringrep);
+    static RealKey* from_str(const std::string& stringrep);
 };
 
 // Une paire de clés de cryptage. Permet le polymorphisme et un design composite
@@ -45,6 +48,6 @@ public:
     virtual std::string tostr() const;
     virtual void save(const char* filepath) const;
 
-    static KeyPair from_cptr(const char* stringrep);
-    static KeyPair from_str(const std::string& stringrep);
+    static KeyPair* from_cptr(const char* stringrep);
+    static KeyPair* from_str(const std::string& stringrep);
 };

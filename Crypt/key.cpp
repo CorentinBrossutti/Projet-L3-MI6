@@ -45,6 +45,16 @@ void RealKey::save(const char* filepath, char(*converter)(uint8_t)) const
 	ofs.close();
 }
 
+RealKey* RealKey::from_cptr(const char *stringrep)
+{
+    return from_str(string(stringrep));
+}
+
+RealKey* RealKey::from_str(const string &stringrep)
+{
+    return new RealKey(bigint(stringrep));
+}
+
 
 KeyPair::KeyPair()
 {
@@ -86,17 +96,17 @@ void KeyPair::save(const char* filepath) const
     b->save(filepath);
 }
 
-KeyPair KeyPair::from_cptr(const char *stringrep)
+KeyPair* KeyPair::from_cptr(const char *stringrep)
 {
     return from_str(string(stringrep));
 }
 
-KeyPair KeyPair::from_str(const string &stringrep)
+KeyPair* KeyPair::from_str(const string &stringrep)
 {
     int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
     if(delimpos == -1)
         throw invalid_argument("KeyPair::from_str : impossible d'analyser la chaîne");
     string a = stringrep.substr(0, delimpos), b = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return KeyPair(bigint(a), bigint(b));
+    return new KeyPair(bigint(a), bigint(b));
 }

@@ -16,10 +16,12 @@ CONFIG += c++11
 # Input
 
 SOURCES += \
+    client.cpp \
     main.cpp \
     serveurtcp.cpp
 
 HEADERS += \
+    client.h \
     serveurtcp.h
 
 FORMS +=
