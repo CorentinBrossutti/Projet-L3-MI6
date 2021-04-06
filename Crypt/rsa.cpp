@@ -117,6 +117,7 @@ bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
 RsaKey* Rsa::generate()
 {
     bigint p, q;
+    srand(time(NULL));
 
     do
     {
