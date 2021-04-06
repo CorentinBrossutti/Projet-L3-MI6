@@ -8,12 +8,17 @@
 #include <QLabel>
 #include <QPushButton>
 
+#include "client.h"
+#include "crypt/key.h"
+
+
 class ServeurTCP : public QWidget
 {
     Q_OBJECT
 
 public:
     ServeurTCP();
+    ~ServeurTCP();
     void envoyerATous(const QString &message);
 
 private slots :
@@ -26,8 +31,12 @@ private :
     QPushButton *boutonQuitter;
 
     QTcpServer *serveur;
-    QList<QTcpSocket *> clients;
+    QMap<QTcpSocket*, Client> clients;
     quint16 tailleMessage;
+    quint16 flag;
+
+    Key* _key;
+    Engine* _engine;
 };
 
 #endif // SERVEURTCP_H

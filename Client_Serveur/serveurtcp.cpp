@@ -2,6 +2,9 @@
 
 #include <QVBoxLayout>
 
+#include "crypt/cesar.h"
+#include "crypt/rsa.h"
+
 ServeurTCP::ServeurTCP()
 {
     //Création et disposition des widgets de la fenêtre
@@ -30,16 +33,30 @@ ServeurTCP::ServeurTCP()
     }
 
     tailleMessage = 0;
+    flag = 0;
+
+    _engine = new Rsa;
+    _key = _engine->generate();
+}
+
+ServeurTCP::~ServeurTCP()
+{
+    delete _engine;
+    delete _key;
 }
 
 void ServeurTCP::nouvelleConnexion() {
     envoyerATous(tr("<em>Un nouveau client vient de se connecter</em>"));
 
     QTcpSocket *nouveauClient = serveur->nextPendingConnection();
-    clients << nouveauClient;
+    Client client(nouveauClient);
+    clients.insert(nouveauClient, client);
 
     connect(nouveauClient, SIGNAL(readyRead()), this, SLOT(donneesRecues()));
     connect(nouveauClient, SIGNAL(disconnected()), this, SLOT(deconnexionClient()));
+
+    // On envoie la clé publique du serveur au client
+    client.send(_key->tostr(), _engine, false, DISPATCH_PKEY);
 }
 
 
@@ -64,6 +81,13 @@ void ServeurTCP::donneesRecues() {
         in >> tailleMessage;
     }
 
+    if (flag == 0) {
+        if(socket->bytesAvailable() < (int)sizeof(quint16))
+            return;
+
+        in >> flag;
+    }
+
     // Si on connaît la taille du message, on vérifie si on a reçu le message en entier
     if (socket->bytesAvailable() < tailleMessage)
         // Si on a pas encore tout reçu, on arrête la méthode
@@ -73,11 +97,29 @@ void ServeurTCP::donneesRecues() {
     QString message;
     in >> message;
 
-    // 2 : on renvoie le message à tous les clients
-    envoyerATous(message);
+    Client client = clients.value(socket);
+    if(client.dummy)
+    {
+        tailleMessage = 0;
+        flag = 0;
+        return;
+    }
+    Message m(message.toStdString());
+    switch(flag)
+    {
+    case NORMAL_MESSAGE:
+        _engine->decrypt(m, _key);
+        envoyerATous(QString::fromStdString(m.get()));
+        break;
+    case DISPATCH_PKEY:
+        //client.key = RsaKey::from_str(message.toStdString());
+        client.key = RealKey::from_str(m.get());
+        break;
+    }
 
     //3 : remise de la taille du message à 0 pour la réception des futurs messages
     tailleMessage = 0;
+    flag = 0;
 }
 
 
@@ -90,29 +132,15 @@ void ServeurTCP::deconnexionClient() {
         // Si on n'a pas trouvé le client à l'orgine du signal, on arrête la méthode
         return;
 
-    clients.removeOne(socket);
+    clients.remove(socket);
 
     socket->deleteLater();
 }
 
 
 void ServeurTCP::envoyerATous(const QString &message) {
-    // Préparation du paquet
-    QByteArray paquet;
-    QDataStream out(&paquet, QIODevice::WriteOnly);
-
-    // On écrit 0 au début du paquet pour réserver la place pour écrire la taille
-    out << (quint16) 0;
-    out << message; // On ajoute le message à la suite
-    out.device()->seek(0); // On se replace au début du paquet
-
-    // On écrase le 0 qu'on avait réservé par la longueur du message
-    out << (quint16) (paquet.size() - sizeof(quint16));
-
-    // Envoi du paquet préparé à tous les clients connectés du serveur
-    for (int i = 0; i < clients.size(); i++) {
-        clients[i]->write(paquet);
-    }
+    for(auto client : clients.toStdMap())
+        client.second.send(message, _engine);
 }
 
 

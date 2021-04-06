@@ -19,19 +19,19 @@ PublicKey::PublicKey(const bigint& n, const bigint& e) : KeyPair(n, e)
     this->e = (RealKey*)b;
 }
 
-PublicKey PublicKey::from_cptr(const char *stringrep)
+PublicKey* PublicKey::from_cptr(const char *stringrep)
 {
     return from_str(string(stringrep));
 }
 
-PublicKey PublicKey::from_str(const string &stringrep)
+PublicKey* PublicKey::from_str(const string &stringrep)
 {
     int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
     if(delimpos == -1)
         throw invalid_argument("PublicKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), e = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return PublicKey(bigint(n), bigint(e));
+    return new PublicKey(bigint(n), bigint(e));
 }
 
 
@@ -45,19 +45,19 @@ PrivateKey::PrivateKey(const bigint& n, const bigint& d) : KeyPair(n, d)
     this->d = (RealKey*)b;
 }
 
-PrivateKey PrivateKey::from_cptr(const char *stringrep)
+PrivateKey* PrivateKey::from_cptr(const char *stringrep)
 {
     return from_str(string(stringrep));
 }
 
-PrivateKey PrivateKey::from_str(const string &stringrep)
+PrivateKey* PrivateKey::from_str(const string &stringrep)
 {
     int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
     if(delimpos == -1)
         throw invalid_argument("PrivateKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return PrivateKey(bigint(n), bigint(d));
+    return new PrivateKey(bigint(n), bigint(d));
 }
 
 
@@ -79,12 +79,12 @@ string RsaKey::tostr() const
     return publ->n->tostr() + STR_KEY_DELIMITER + publ->e->tostr() + STR_KEY_DELIMITER + priv->d->tostr();
 }
 
-RsaKey RsaKey::from_cptr(const char *stringrep)
+RsaKey* RsaKey::from_cptr(const char *stringrep)
 {
     return from_str(string(stringrep));
 }
 
-RsaKey RsaKey::from_str(const string &stringrep)
+RsaKey* RsaKey::from_str(const string &stringrep)
 {
     string temp = stringrep;
 
@@ -100,7 +100,7 @@ RsaKey RsaKey::from_str(const string &stringrep)
 
     string e = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return RsaKey(bigint(n), bigint(e), bigint(d));
+    return new RsaKey(bigint(n), bigint(e), bigint(d));
 }
 
 
@@ -138,6 +138,8 @@ RsaKey* Rsa::generate()
     {
         d+=ind;
     }
+
+    std::string ps = p.get_str(), qs = q.get_str();
 
     return new RsaKey(n, e, d);
 }

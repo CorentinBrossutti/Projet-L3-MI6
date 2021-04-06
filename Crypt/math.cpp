@@ -17,6 +17,15 @@ unsigned int bop::count_bytes(const bigint& number)
     return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
+unsigned int bop::count_digits(const bigint& num, unsigned int base)
+{
+    int i = 0;
+    for(bigint temp = num;temp >= base;i++)
+        temp /= base;
+
+    return i + 1;
+}
+
 string bop::padto(const bigint& from)
 {
     string str = from.get_str(2);
@@ -53,19 +62,20 @@ bigint bop::tobin(const bigint& from)
 
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
 {
-    byteset bset(val);
     vector<bigint> v;
-    //check
-    if(bset.size() <= blocksz)
+    unsigned int digits = count_digits(val);
+
+    if(digits <= blocksz)
     {
         v.push_back(val);
         return v;
     }
 
     string temp;
-    for(unsigned int i = 0;i < bset.size();i++)
+    /*for(unsigned int i = 0;i < digits;i++)
     {
-        if ((i != 0 && i % 8 == 0))
+
+        if (i != 0 && i % 8 == 0)
         {
             v.push_back(bigint(temp, 2));
             temp = bset[i].to_string();
@@ -74,7 +84,7 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
             v.push_back(bigint(temp + bset[i].to_string(), 2));
         else
             temp += bset[i].to_string();
-    }
+    }*/
     return v;
 }
 
@@ -104,7 +114,6 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 
 bigint random(unsigned int digits)
 {
-    srand(time(NULL));
     bigint temp;
 
     for(unsigned int i = 0;i < digits;i++)
@@ -136,7 +145,6 @@ bigint random_integer()
 
 bool prime(const bigint& num)
 {
-    srand(time(NULL));
     bigint x;
     x = rand() % num;
     bigint temp = num - 1;
@@ -173,16 +181,16 @@ bigint euclide(const bigint& a, const bigint& b)
 bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
 {
     bigint res = 1;
-    bigint exp_bin = bop::tobin(exp);
+    bigint exp_bin = exp;
     bigint temp = base;
     while (exp_bin != 0)
     {
-        bigint r = (exp_bin % 10);
+        bigint r = (exp_bin % 2);
         if (r == 1)
         {
             res = (res * temp) % num;
         }
-        exp_bin /= 10;
+        exp_bin /= 2;
         temp = (temp * temp) % num;
     }
 

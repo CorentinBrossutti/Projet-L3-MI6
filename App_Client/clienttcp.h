@@ -5,12 +5,13 @@
 #include <QtWidgets>
 #include <QtNetwork>
 #include <QtXml>
+
 #include "ui_clienttcp.h" //La fenêtre générée
 #include "xmldoc.h" //Notre module de gestion des sauvegardes
+#include "crypt/engine.h"
 
-/*QT_BEGIN_NAMESPACE
-namespace Ui { class ClientTcp; }
-QT_END_NAMESPACE*/
+#define NO_FLAG 1
+#define DISPATCH_PKEY 2
 
 class ClientTcp : public QMainWindow, private Ui::ClientTcp
 {
@@ -37,6 +38,8 @@ private slots:
     void connecte();
     void deconnecte();
 
+    void send(const QString& val, unsigned short flag = NO_FLAG, bool encrypt = true);
+
     ///////////////////////////////////////////
     /// spécifique QT
     ///////////////////////////////////////////
@@ -57,8 +60,13 @@ protected:
 private:
     QTcpSocket *socket; //Représente le serveur
     quint16 tailleMessage;
+    quint16 flag;
     QString fichierXML = "config.txt";
     XmlDoc docXML;
     QString pseudo;
+
+    Engine* _engine;
+    Key* _skey;
+    Key* _lkey;
 };
 #endif // CLIENTTCP_H

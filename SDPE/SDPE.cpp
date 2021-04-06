@@ -9,23 +9,18 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    /*Engine* temp = new Rsa();
+    Engine* temp = new Rsa();
     RsaKey* k = (RsaKey*)temp->generate();
     cout << ((RealKey*)((RsaKey*)k)->publ->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->publ->b)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->a)->value << endl;
     cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
 
-    bigint bi = temp->run(121, k->publ);
-    cout << bi << "   " << temp->run(bi, k->priv) << endl;
+    bigint bi = temp->run_crypt(121, k->publ);
+    cout << bi << "   " << temp->run_decrypt(bi, k->priv) << endl;
 
     delete k;
-    delete temp;*/
-    Rsa temp;
-    bigint j(12);
-    bigint i = temp.pad(j);
-    bigint k = temp.unpad(i);
-    cout << i.get_str() << endl << k.get_str() << endl;
+    delete temp;
     /*Message m(bigint("129129029012901290121712719827981739892873"));
     cout << m.value() << endl;*/
 

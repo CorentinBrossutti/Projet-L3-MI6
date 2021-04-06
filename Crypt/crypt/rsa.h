@@ -15,8 +15,8 @@ public:
     PublicKey();
 	PublicKey(const bigint& n, const bigint& e);
 
-    static PublicKey from_cptr(const char* stringrep);
-    static PublicKey from_str(const std::string& stringrep);
+    static PublicKey* from_cptr(const char* stringrep);
+    static PublicKey* from_str(const std::string& stringrep);
 };
 
 // Clé privée RSA, une paire composée de deux clés numériques
@@ -29,8 +29,8 @@ public:
     PrivateKey();
 	PrivateKey(const bigint& n, const bigint& d);
 
-    static PrivateKey from_cptr(const char* stringrep);
-    static PrivateKey from_str(const std::string& stringrep);
+    static PrivateKey* from_cptr(const char* stringrep);
+    static PrivateKey* from_str(const std::string& stringrep);
 };
 
 // Clé "trousseau" RSA, composée d'une clé publique et d'une clé privée (design composite donc)
@@ -45,8 +45,8 @@ public:
 
     virtual std::string tostr() const;
 
-    static RsaKey from_cptr(const char* stringrep);
-    static RsaKey from_str(const std::string& stringrep);
+    static RsaKey* from_cptr(const char* stringrep);
+    static RsaKey* from_str(const std::string& stringrep);
 };
 
 

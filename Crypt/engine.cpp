@@ -31,6 +31,13 @@ Message::Message(const char* msg, unsigned int blocksz, uint8_t (*converter)(cha
 	_encrypted = false;
 }
 
+Message::Message(string content, unsigned int blocksz, uint8_t (*converter)(char))
+{
+    _count = bop::decompose(bop::from(content.c_str(), converter), _content, blocksz);
+    _strcontent = content;
+    _encrypted = false;
+}
+
 bool Message::encrypted() const
 {
 	return _encrypted;
@@ -99,6 +106,7 @@ bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
 
 void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 {
+    string s = message._content->get_str();
     for(unsigned int i = 0;i < message.count();i++)
         message._content[i] = encode(message._content[i], key, padsize);
     message._encrypted = true;
@@ -107,6 +115,7 @@ void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 
 void Engine::decrypt(Message& message, Key* key, unsigned int padsize)
 {
+    string s = message._content->get_str();
     for(unsigned int i = 0;i < message.count();i++)
         message._content[i] = decode(message._content[i], key, padsize);
     message._encrypted = false;
@@ -132,4 +141,9 @@ bool Engine::operate(const char* arg, Message& message, Key* key, unsigned int p
 
 	return false;
 	//todo sign verify
+}
+
+Message Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize, char (*converter)(uint8_t))
+{
+    return Message();
 }
