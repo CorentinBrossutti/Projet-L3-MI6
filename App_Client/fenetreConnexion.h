@@ -36,6 +36,9 @@ private slots:
     void deconnecte();
     void afficherMessage(QTextEdit * afficheur, QString message);
     void tentativeConnexion();
+    void sauvegardePseudo(QString nom);
+    QString chargePseudo();
+    void afficherPseudo();
 
 //////////////////////////////////////////////////////////////////
 /// Spécifique QT

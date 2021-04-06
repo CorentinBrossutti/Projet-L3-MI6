@@ -10,8 +10,6 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     //connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
 
     tailleMessage = 0;
-    pseudo = chargePseudo();
-    boxPseudo->setText(pseudo);
 }
 
 ClientTcp::~ClientTcp()
@@ -33,6 +31,7 @@ void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
 
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage() {
+    pseudo = chargePseudo();
     QByteArray paquet;
     QDataStream out(&paquet, QIODevice::WriteOnly);
     //On prépare le paquet à envoyer
@@ -96,23 +95,6 @@ void ClientTcp::connecte() {
 void ClientTcp::deconnecte() {
    //afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
 }
-
-//Méthode de changement de Pseudo
-void ClientTcp::sauvegardePseudo(QString nom) {
-    docXML.sauvegarderPseudo(fichierXML, nom);
-    pseudo = chargePseudo();
-    boxPseudo->clear();
-    boxPseudo->setFocus();
-}
-
-void ClientTcp::on_boutonPseudo_clicked() {
-    sauvegardePseudo(boxPseudo->text());
-}
-
-void ClientTcp::on_boxPseudo_returnPressed() {
-    sauvegardePseudo(boxPseudo->text());
-}
-
 
 //Méthode de chargement du pseudo
 QString ClientTcp::chargePseudo() {

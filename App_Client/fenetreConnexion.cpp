@@ -49,7 +49,7 @@ void fenetreConnexion::connecte() {
 
 //Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
-    fenetrePrincipale->sauvegardePseudo(ui->boxPseudo->text());
+    sauvegardePseudo(ui->boxPseudo->text());
     fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
     fenetrePrincipale->show();
     this->hide(); // On cache la fenetre de connexion
@@ -60,9 +60,7 @@ void fenetreConnexion::afficherFenetrePrincipale() {
 // Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion
 void fenetreConnexion::afficherMenuConnexion() {
     this->socket = fenetrePrincipale->getSocket(); // On récupere le socket afin de récuperer les actions faites
-    pseudo = docXML.chargerPseudo(fichierXML);
-    ui->boxPseudo->setText(pseudo);
-    ui->boxPseudo->setFocus();
+    afficherPseudo();
     this->show(); // On réaffiche la fenêtre de connexion
     deconnecte();
 }
@@ -88,4 +86,20 @@ void fenetreConnexion::erreurSocket(QAbstractSocket::SocketError erreur) {
             ui->displayMessage->append(tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
     }
     ui->boutonConnexion->setEnabled(true);
+}
+
+void fenetreConnexion::sauvegardePseudo(QString nom) {
+    docXML.sauvegarderPseudo(fichierXML, nom);
+    afficherPseudo();
+}
+
+void fenetreConnexion::afficherPseudo() {
+    pseudo = chargePseudo();
+    ui->boxPseudo->clear();
+    ui->boxPseudo->setText(pseudo);
+}
+
+//Méthode de chargement du pseudo
+QString fenetreConnexion::chargePseudo() {
+    return docXML.chargerPseudo(fichierXML);
 }
