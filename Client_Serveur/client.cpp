@@ -10,6 +10,7 @@ Client::Client(QTcpSocket* socket)
     this->socket = socket;
     this->cid = idcounter++;
     this->key = nullptr;
+    this->dummy = false;
 }
 
 Client::Client()
@@ -20,6 +21,8 @@ Client::Client()
 
 Client::~Client()
 {
+    if(key)
+        delete key;
 }
 
 void Client::send(const std::string& msg, Engine *engine, bool encrypt, unsigned short msgtype)

@@ -54,8 +54,8 @@ public:
 class CAPI Rsa : public Engine
 {
 public:
-	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_DIGITS);
-	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_DIGITS);
+	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	virtual RsaKey* generate();
 

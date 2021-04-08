@@ -5,7 +5,7 @@ using namespace std;
 
 Key* Cesar::generate()
 {
-    return new RealKey(5);
+    return new RealKey();
 }
 
 bigint Cesar::run_crypt(const bigint &source, Key *key)

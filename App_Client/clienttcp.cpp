@@ -113,7 +113,7 @@ void ClientTcp::donneesRecues() {
     in >> messageRecu;
 
     //Décryptage
-    Message m(messageRecu.toStdString());
+    Message m = _engine->msgprep(messageRecu.toStdString());
     switch(flag)
     {
     case NO_FLAG:
@@ -125,7 +125,7 @@ void ClientTcp::donneesRecues() {
         break;
     case DISPATCH_PKEY:
         //_key = RsaKey::from_str(message.toStdString());
-        _skey = RealKey::from_str(m.get());
+        _skey = RealKey::from_str(messageRecu.toStdString());
         send(QString::fromStdString(_lkey->tostr()), DISPATCH_PKEY, false);
         break;
     }

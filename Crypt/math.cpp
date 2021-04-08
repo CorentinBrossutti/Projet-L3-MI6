@@ -17,15 +17,6 @@ unsigned int bop::count_bytes(const bigint& number)
     return (unsigned int)(ceil(sizebin(number) / 8.0));
 }
 
-unsigned int bop::count_digits(const bigint& num, unsigned int base)
-{
-    int i = 0;
-    for(bigint temp = num;temp >= base;i++)
-        temp /= base;
-
-    return i + 1;
-}
-
 string bop::padto(const bigint& from)
 {
     string str = from.get_str(2);
@@ -38,10 +29,10 @@ bigint bop::from(const char* val, uint8_t(*converter)(char))
 {
 	stringstream sstream;
 	// On transforme le message en entier, pour ça on itère sur les caractères...
-	for (unsigned int i = 0; val[i] != '\0'; i++)
-		sstream << bitset<8>(converter(val[i])).to_string();
+    for (unsigned int i = 0; val[i] != '\0'; i++)
+        sstream << bitset<8>(converter(val[i])).to_string();
 
-	return bigint(sstream.str(), 2);
+    return bigint(sstream.str(), 2);
 }
 
 std::string bop::to(const bigint& val, char(*converter)(uint8_t))
@@ -55,36 +46,20 @@ std::string bop::to(const bigint& val, char(*converter)(uint8_t))
 	return sstream.str();
 }
 
-bigint bop::tobin(const bigint& from)
-{
-    return bigint(from.get_str(2));
-}
-
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
 {
     vector<bigint> v;
-    unsigned int digits = count_digits(val);
+    bigint b = val, mask;
+    mpz_ui_pow_ui(mask.get_mpz_t(), 2, blocksz * 8);
+    mask -= 1;
 
-    if(digits <= blocksz)
-    {
-        v.push_back(val);
-        return v;
+    unsigned long long int bcount = count_bytes(val);
+
+    for(unsigned long long int i = 0;i < bcount;i+=blocksz){
+        v.push_back((bcount - i) >= blocksz ? b & mask : b);
+        b >>= blocksz * 8;
     }
 
-    string temp;
-    /*for(unsigned int i = 0;i < digits;i++)
-    {
-
-        if (i != 0 && i % 8 == 0)
-        {
-            v.push_back(bigint(temp, 2));
-            temp = bset[i].to_string();
-        }
-        else if (i == bset.size() - 1)
-            v.push_back(bigint(temp + bset[i].to_string(), 2));
-        else
-            temp += bset[i].to_string();
-    }*/
     return v;
 }
 
@@ -93,9 +68,9 @@ unsigned int bop::decompose(const bigint& val, bigint*& recp, unsigned int block
     vector<bigint> temp = decompose_vec(val, blocksz);
 
     recp = new bigint[temp.size()];
-    unsigned int idx = 0;
+    unsigned int idx = temp.size();
     for(bigint bi : temp)
-        recp[idx++] = bi;
+        recp[--idx] = bi;
 
     return temp.size();
 }
@@ -107,17 +82,17 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 
     string temp;
     for(unsigned int i = 0;i < count;i++)
-        temp += bop::padto(from[i]);
+        temp += padto(from[i]);
 
     return bigint(temp.c_str(), 2);
 }
 
-bigint random(unsigned int digits)
+bigint random_bytes_pad(unsigned int bytes)
 {
-    bigint temp;
+    bigint temp = 0;
 
-    for(unsigned int i = 0;i < digits;i++)
-        temp = (temp * 10) + (rand() % 10);
+    for(unsigned int i = 1;i < bytes * 8;i++)
+        temp = temp * 2 + (rand() % 2);
 
     return temp;
 }

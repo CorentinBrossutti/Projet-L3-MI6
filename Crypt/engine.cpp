@@ -3,6 +3,8 @@
 
 #include <sstream>
 #include <fstream>
+#include <iostream>
+#include <cstdio>
 
 using namespace std;
 
@@ -86,12 +88,20 @@ std::ostream& operator <<(std::ostream& output, Message& msg)
 
 bigint Engine::pad(const bigint& number, unsigned int padsize)
 {
-    return number * pow(10, padsize) + random(padsize);
+    bigint p;
+    mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
+
+    return number * p + random_bytes_pad(padsize);
 }
 
 bigint Engine::unpad(const bigint& number, unsigned int padsize)
 {
-    return number / pow(10, padsize);
+    bigint p;
+    bigint num;
+    mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
+    mpz_fdiv_q(num.get_mpz_t(), number.get_mpz_t(), p.get_mpz_t());
+
+    return num;
 }
 
 bigint Engine::encode(const bigint& source, Key* key, unsigned int padsize)
@@ -106,7 +116,6 @@ bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
 
 void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 {
-    string s = message._content->get_str();
     for(unsigned int i = 0;i < message.count();i++)
         message._content[i] = encode(message._content[i], key, padsize);
     message._encrypted = true;
@@ -115,7 +124,6 @@ void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
 
 void Engine::decrypt(Message& message, Key* key, unsigned int padsize)
 {
-    string s = message._content->get_str();
     for(unsigned int i = 0;i < message.count();i++)
         message._content[i] = decode(message._content[i], key, padsize);
     message._encrypted = false;
@@ -143,7 +151,12 @@ bool Engine::operate(const char* arg, Message& message, Key* key, unsigned int p
 	//todo sign verify
 }
 
-Message Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize, char (*converter)(uint8_t))
+Message Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize)
 {
-    return Message();
+    return Message(stack, true, blocksz + padsize);
+}
+
+Message Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned int padsize, uint8_t (*converter)(char))
+{
+    return msgprep(bop::from(stack_str.c_str(), converter), blocksz, padsize);
 }

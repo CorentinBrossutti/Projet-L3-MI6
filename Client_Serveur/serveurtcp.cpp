@@ -35,7 +35,7 @@ ServeurTCP::ServeurTCP()
     tailleMessage = 0;
     flag = 0;
 
-    _engine = new Rsa;
+    _engine = new Cesar;
     _key = _engine->generate();
 }
 
@@ -43,20 +43,22 @@ ServeurTCP::~ServeurTCP()
 {
     delete _engine;
     delete _key;
+    for(auto client : clients.toStdMap())
+        delete client.second;
 }
 
 void ServeurTCP::nouvelleConnexion() {
     envoyerATous(tr("<em>Un nouveau client vient de se connecter</em>"));
 
     QTcpSocket *nouveauClient = serveur->nextPendingConnection();
-    Client client(nouveauClient);
+    Client* client = new Client(nouveauClient);
     clients.insert(nouveauClient, client);
 
     connect(nouveauClient, SIGNAL(readyRead()), this, SLOT(donneesRecues()));
     connect(nouveauClient, SIGNAL(disconnected()), this, SLOT(deconnexionClient()));
 
     // On envoie la clé publique du serveur au client
-    client.send(_key->tostr(), _engine, false, DISPATCH_PKEY);
+    client->send(_key->tostr(), _engine, false, DISPATCH_PKEY);
 }
 
 
@@ -97,14 +99,14 @@ void ServeurTCP::donneesRecues() {
     QString message;
     in >> message;
 
-    Client client = clients.value(socket);
-    if(client.dummy)
+    Client* client = clients.value(socket);
+    if(client == nullptr || client->dummy)
     {
         tailleMessage = 0;
         flag = 0;
         return;
     }
-    Message m(message.toStdString());
+    Message m = _engine->msgprep(message.toStdString());
     switch(flag)
     {
     case NORMAL_MESSAGE:
@@ -112,8 +114,8 @@ void ServeurTCP::donneesRecues() {
         envoyerATous(QString::fromStdString(m.get()));
         break;
     case DISPATCH_PKEY:
-        //client.key = RsaKey::from_str(message.toStdString());
-        client.key = RealKey::from_str(m.get());
+        //client->key = RsaKey::from_str(message.toStdString());
+        client->key = RealKey::from_str(message.toStdString());
         break;
     }
 
@@ -140,7 +142,7 @@ void ServeurTCP::deconnexionClient() {
 
 void ServeurTCP::envoyerATous(const QString &message) {
     for(auto client : clients.toStdMap())
-        client.second.send(message, _engine);
+        client.second->send(message, _engine);
 }
 
 

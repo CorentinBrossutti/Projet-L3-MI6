@@ -31,7 +31,7 @@ private :
     QPushButton *boutonQuitter;
 
     QTcpServer *serveur;
-    QMap<QTcpSocket*, Client> clients;
+    QMap<QTcpSocket*, Client*> clients;
     quint16 tailleMessage;
     quint16 flag;
 

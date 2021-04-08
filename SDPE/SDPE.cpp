@@ -9,20 +9,22 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Engine* temp = new Rsa();
-    RsaKey* k = (RsaKey*)temp->generate();
-    cout << ((RealKey*)((RsaKey*)k)->publ->a)->value << endl;
-    cout << ((RealKey*)((RsaKey*)k)->publ->b)->value << endl;
-    cout << ((RealKey*)((RsaKey*)k)->priv->a)->value << endl;
-    cout << ((RealKey*)((RsaKey*)k)->priv->b)->value << endl;
+    Engine* temp = new Cesar;
+    Key* k = new RealKey(5);
+    Message m("<strong>Pseudo par défaut</strong> : salut");
+    temp->encrypt(m, k);
+    for(int i = 0;i < m.count();i++)
+        cout << m.part(i).get_str(2) << endl;
+    cout << m << endl << endl;
 
-    bigint bi = temp->run_crypt(121, k->publ);
-    cout << bi << "   " << temp->run_decrypt(bi, k->priv) << endl;
+    Message mo = temp->msgprep(m.value());
+    temp->decrypt(m, k);
+    for(int i = 0;i < m.count();i++)
+        cout << m.part(i).get_str(2) << endl;
+    cout << m << endl << endl;
 
-    delete k;
     delete temp;
-    /*Message m(bigint("129129029012901290121712719827981739892873"));
-    cout << m.value() << endl;*/
+    delete k;
 
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;

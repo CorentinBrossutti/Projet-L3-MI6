@@ -90,5 +90,5 @@ Message* msgs::retrieve(const char* filepath, uint8_t(*converter)(char))
 	temp << reader.rdbuf();
 	reader.close();
 
-    return temp.str().empty() ? nullptr : new Message(temp.str().c_str(), BSIZE_DIGITS, converter);
+    return temp.str().empty() ? nullptr : new Message(temp.str().c_str(), BSIZE_BYTES, converter);
 }
