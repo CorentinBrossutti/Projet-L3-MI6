@@ -139,10 +139,6 @@ RsaKey* Rsa::generate()
         d+=ind;
     }
 
-    std::string ps = p.get_str(), qs = q.get_str();
-
-    cout << "p " << ps << endl << " q " << qs << endl;
-
     return new RsaKey(n, e, d);
 }
 

@@ -188,3 +188,15 @@ Message Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned 
 {
     return msgprep(bop::from(stack_str.c_str(), converter), blocksz, padsize);
 }
+
+Message Engine::msgprep(const vector<bigint>& parts)
+{
+    Message m;
+    m._encrypted = true;
+    m._count = parts.size();
+
+    m._content = new bigint[parts.size()];
+    unsigned int idx = 0;
+    for(bigint bi : parts)
+        m._content[idx++] = bi;
+}

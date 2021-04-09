@@ -12,13 +12,6 @@ int main(int argc, char** argv)
     Engine* temp = new Rsa;
     Key* k = temp->generate();
 
-    bigint n = 121;
-    bigint e = temp->run_crypt(n, ((RsaKey*)k)->publ);
-    bigint o = temp->run_decrypt(n, ((RsaKey*)k)->priv);
-
-    cout << e.get_str() << endl;
-    cout << o.get_str() << endl << endl;
-
     Message m("tg");
     cout << m.value() << endl;
     temp->encrypt(m, k);
