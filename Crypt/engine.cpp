@@ -199,4 +199,6 @@ Message Engine::msgprep(const vector<bigint>& parts)
     unsigned int idx = 0;
     for(bigint bi : parts)
         m._content[idx++] = bi;
+
+    return m;
 }
