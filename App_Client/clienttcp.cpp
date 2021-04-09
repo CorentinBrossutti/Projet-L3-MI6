@@ -1,5 +1,6 @@
 #include "clienttcp.h"
 #include "crypt/cesar.h"
+#include "crypt/rsa.h"
 
 ClientTcp::ClientTcp(QTcpSocket *socket)
 {
@@ -14,9 +15,13 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     flag = 0;
     pseudo = chargePseudo();
     boxPseudo->setText(pseudo);
-
+#ifdef CESAR
     _engine = new Cesar;
+#else
+    _engine = new Rsa;
+#endif
     _lkey = _engine->generate();
+    _skey = nullptr;
 }
 
 ClientTcp::~ClientTcp()
@@ -117,16 +122,22 @@ void ClientTcp::donneesRecues() {
     switch(flag)
     {
     case NO_FLAG:
-        //engine.decrypt(m, local_key);
         _engine->decrypt(m, _lkey);
         messageRecu = QString::fromStdString(m.get());
         //On affiche le message sur la zone de chat
         afficherMessage(displayMessage, messageRecu);
         break;
     case DISPATCH_PKEY:
-        //_key = RsaKey::from_str(message.toStdString());
+        if(_skey)
+            delete _skey;
+#ifdef CESAR
         _skey = RealKey::from_str(messageRecu.toStdString());
         send(QString::fromStdString(_lkey->tostr()), DISPATCH_PKEY, false);
+#else
+        _skey = new RsaKey;
+        ((RsaKey*)_skey)->publ = PublicKey::from_str(messageRecu.toStdString());
+        send(QString::fromStdString(((RsaKey*)_lkey)->publ->tostr()), DISPATCH_PKEY, false);
+#endif
         break;
     }
 

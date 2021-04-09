@@ -35,7 +35,12 @@ ServeurTCP::ServeurTCP()
     tailleMessage = 0;
     flag = 0;
 
+#ifdef CESAR
     _engine = new Cesar;
+#else
+
+    _engine = new Rsa;
+#endif
     _key = _engine->generate();
 }
 
@@ -58,7 +63,11 @@ void ServeurTCP::nouvelleConnexion() {
     connect(nouveauClient, SIGNAL(disconnected()), this, SLOT(deconnexionClient()));
 
     // On envoie la clé publique du serveur au client
+#ifdef CESAR
     client->send(_key->tostr(), _engine, false, DISPATCH_PKEY);
+#else
+    client->send(((RsaKey*)_key)->publ->tostr(), _engine, false, DISPATCH_PKEY);
+#endif
 }
 
 
@@ -114,8 +123,14 @@ void ServeurTCP::donneesRecues() {
         envoyerATous(QString::fromStdString(m.get()));
         break;
     case DISPATCH_PKEY:
-        //client->key = RsaKey::from_str(message.toStdString());
+        if(client->key)
+            delete client->key;
+#ifdef CESAR
         client->key = RealKey::from_str(message.toStdString());
+#else
+        client->key = new RsaKey;
+        ((RsaKey*)client->key)->publ = PublicKey::from_str(message.toStdString());
+#endif
         break;
     }
 
@@ -129,7 +144,7 @@ void ServeurTCP::deconnexionClient() {
     envoyerATous(tr("<em>Un client vient de se déconnecter</em>"));
 
     // On détermine quel client se déconnecte
-    QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
+    QTcpSocket *socket = qobject_cast<QTcpSocket*>(sender());
     if (socket == 0)
         // Si on n'a pas trouvé le client à l'orgine du signal, on arrête la méthode
         return;

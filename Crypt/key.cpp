@@ -103,8 +103,8 @@ KeyPair* KeyPair::from_cptr(const char *stringrep)
 
 KeyPair* KeyPair::from_str(const string &stringrep)
 {
-    int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
-    if(delimpos == -1)
+    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    if(delimpos == string::npos)
         throw invalid_argument("KeyPair::from_str : impossible d'analyser la chaîne");
     string a = stringrep.substr(0, delimpos), b = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 

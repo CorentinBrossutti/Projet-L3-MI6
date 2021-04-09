@@ -13,6 +13,9 @@
 #define NO_FLAG 1
 #define DISPATCH_PKEY 2
 
+#define CESAR
+
+
 class ClientTcp : public QMainWindow, private Ui::ClientTcp
 {
     Q_OBJECT

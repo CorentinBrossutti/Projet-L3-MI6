@@ -26,8 +26,8 @@ PublicKey* PublicKey::from_cptr(const char *stringrep)
 
 PublicKey* PublicKey::from_str(const string &stringrep)
 {
-    int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
-    if(delimpos == -1)
+    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    if(delimpos == string::npos)
         throw invalid_argument("PublicKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), e = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
@@ -52,8 +52,8 @@ PrivateKey* PrivateKey::from_cptr(const char *stringrep)
 
 PrivateKey* PrivateKey::from_str(const string &stringrep)
 {
-    int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
-    if(delimpos == -1)
+    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    if(delimpos == string::npos)
         throw invalid_argument("PrivateKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
@@ -88,14 +88,14 @@ RsaKey* RsaKey::from_str(const string &stringrep)
 {
     string temp = stringrep;
 
-    int delimpos = stringrep.find(STR_KEY_DELIMITER, -1);
-    if(delimpos == -1)
+    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    if(delimpos == string::npos)
         throw invalid_argument("RsaKey::from_str : impossible d'analyser la chaîne");
 
     string n = temp.substr(0, delimpos);
     temp.erase(delimpos + STR_KEY_DELIMSIZE);
-    delimpos = temp.find(STR_KEY_DELIMITER, -1);
-    if(delimpos == -1)
+    delimpos = temp.find(STR_KEY_DELIMITER);
+    if(delimpos == string::npos)
         throw invalid_argument("RsaKey::from_str : impossible d'analyser la chaîne");
 
     string e = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
@@ -140,6 +140,8 @@ RsaKey* Rsa::generate()
     }
 
     std::string ps = p.get_str(), qs = q.get_str();
+
+    cout << "p " << ps << endl << " q " << qs << endl;
 
     return new RsaKey(n, e, d);
 }

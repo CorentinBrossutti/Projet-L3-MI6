@@ -2,6 +2,8 @@
 
 // Le fichier global.h contient des constantes globales
 #include "mpirxx.h"
+#include <iostream>
+#include <cstdio>
 
 // Définit les constantes d'import/export DLL/SO (librairie)
 #if defined(_MSC_VER)

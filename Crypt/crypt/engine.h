@@ -8,6 +8,7 @@
 
 #define PADSIZE_BYTES 1
 #define BSIZE_BYTES 8
+#define INVALID_VALUE -1
 
 
 class Engine;
@@ -23,6 +24,7 @@ public:
 	// Construit un message depuis du texte, avec une fonction de conversion optionnelle (défaut ASCII)
     Message(const char* content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
     Message(std::string content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
+    ~Message();
 
 	bool encrypted() const;
     unsigned int count() const;
@@ -41,6 +43,7 @@ protected:
     unsigned int _count;
 	bool _encrypted;
     bigint* _content;
+    bigint _value;
 	std::string _strcontent;
 };
 
@@ -68,9 +71,9 @@ public:
     virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encrypte un message avec une clé donnée
-    void encrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    void encrypt(Message& message, Key* key, bool parts = false, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 	// Décrypte une message avec une clé donnée
-    void decrypt(Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    void decrypt(Message& message, Key* key, bool parts = false, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 
 	// Opération dynamique basée sur un argument textuel
     bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);

@@ -3,13 +3,11 @@
 
 #include <sstream>
 #include <fstream>
-#include <iostream>
-#include <cstdio>
 
 using namespace std;
 
 
-Message::Message() : Message(0)
+Message::Message() : Message(INVALID_VALUE)
 {
 }
 
@@ -23,21 +21,29 @@ Message::Message(const Message& source)
 Message::Message(const bigint& number, bool encrypted, unsigned int blocksz)
 {
     _count = bop::decompose(number, _content, blocksz);
+    _value = number;
 	_encrypted = encrypted;
 }
 
 Message::Message(const char* msg, unsigned int blocksz, uint8_t (*converter)(char))
 {
-    _count = bop::decompose(bop::from(msg, converter), _content, blocksz);
+    _value = bop::from(msg, converter);
+    _count = bop::decompose(_value, _content, blocksz);
 	_strcontent = string(msg);
 	_encrypted = false;
 }
 
 Message::Message(string content, unsigned int blocksz, uint8_t (*converter)(char))
 {
-    _count = bop::decompose(bop::from(content.c_str(), converter), _content, blocksz);
+    _value = bop::from(content.c_str(), converter);
+    _count = bop::decompose(_value, _content, blocksz);
     _strcontent = content;
     _encrypted = false;
+}
+
+Message::~Message()
+{
+    delete[] _content;
 }
 
 bool Message::encrypted() const
@@ -52,7 +58,7 @@ unsigned int Message::count() const
 
 bigint Message::value() const
 {
-    return bop::recompose(_content, _count);
+    return _value == INVALID_VALUE ? bop::recompose(_content, _count) : _value;
 }
 
 bigint Message::part(unsigned int index) const
@@ -92,6 +98,7 @@ bigint Engine::pad(const bigint& number, unsigned int padsize)
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
 
     return number * p + random_bytes_pad(padsize);
+    //return number;
 }
 
 bigint Engine::unpad(const bigint& number, unsigned int padsize)
@@ -101,6 +108,7 @@ bigint Engine::unpad(const bigint& number, unsigned int padsize)
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
     mpz_fdiv_q(num.get_mpz_t(), number.get_mpz_t(), p.get_mpz_t());
 
+    //return number;
     return num;
 }
 
@@ -114,18 +122,38 @@ bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
     return unpad(run_decrypt(source, key), padsize);
 }
 
-void Engine::encrypt(Message& message, Key* key, unsigned int padsize)
+void Engine::encrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize)
 {
-    for(unsigned int i = 0;i < message.count();i++)
-        message._content[i] = encode(message._content[i], key, padsize);
+    if(parts)
+    {
+        for(unsigned int i = 0;i < message.count();i++)
+            message._content[i] = encode(message._content[i], key, padsize);
+        message._value = INVALID_VALUE;
+    }
+    else
+    {
+        message._value = encode(message._value, key, padsize);
+        delete[] message._content;
+        message._count = bop::decompose(message._value, message._content, blocksz);
+    }
     message._encrypted = true;
 	message._strcontent = string();
 }
 
-void Engine::decrypt(Message& message, Key* key, unsigned int padsize)
+void Engine::decrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize)
 {
-    for(unsigned int i = 0;i < message.count();i++)
-        message._content[i] = decode(message._content[i], key, padsize);
+    if(parts)
+    {
+        for(unsigned int i = 0;i < message.count();i++)
+            message._content[i] = decode(message._content[i], key, padsize);
+        message._value = INVALID_VALUE;
+    }
+    else
+    {
+        message._value = decode(message._value, key, padsize);
+        delete[] message._content;
+        message._count = bop::decompose(message._value, message._content, blocksz);
+    }
     message._encrypted = false;
 	message._strcontent = string();
 }

@@ -11,6 +11,8 @@
 #include "client.h"
 #include "crypt/key.h"
 
+#define CESAR
+
 
 class ServeurTCP : public QWidget
 {
