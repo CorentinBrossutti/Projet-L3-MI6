@@ -45,6 +45,8 @@ private slots:
 
     void send(const QString& val, unsigned short flag = NO_FLAG, bool encrypt = true);
 
+    void sendPartie(const QString& val, bool part = false, unsigned short flag = NO_FLAG, bool encrypt = true);
+
     ///////////////////////////////////////////
     /// spécifique QT
     ///////////////////////////////////////////

@@ -21,14 +21,14 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
         _lkey = _engine->generate();
         sauvegardeCle(QString::fromStdString(_lkey->tostr()));
     }
-    else _lkey = RealKey::from_str(chargeCle().toUtf8().constData());
+    else _lkey = RealKey::from_str(chargeCle().toStdString());
 #else
     _engine = new Rsa;
     if (chargeCle() == "") {
         _lkey = _engine->generate();
         sauvegardeCle(QString::fromStdString(_lkey->tostr()));
     }
-    else _lkey = RSAKey::from_str(chargeCle().toUtf8().constData());
+    else _lkey = RSAKey::from_str(chargeCle().toStdString());
 #endif
 
     _skey = nullptr;
@@ -59,7 +59,7 @@ void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage()
 {
-    send(tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text());
+    sendPartie(tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text());
     boxMessage->clear();
     boxMessage->setFocus();
 }
@@ -90,6 +90,38 @@ void ClientTcp::send(const QString& val, unsigned short flag, bool encrypt)
 
     socket->write(paquet);
 }
+
+//Méthode d'envoie par partie
+void ClientTcp::sendPartie(const QString& val, bool part, unsigned short flag, bool encrypt) {
+    if (!part){
+        send(val);
+    }
+    else {
+        //Préparation du paquet
+        QByteArray paquet;
+        QDataStream out(&paquet, QIODevice::WriteOnly);
+
+        if(_skey && encrypt) {
+            Message encrypted(val.toStdString());
+
+            //On place le flag, puis le nombre de part de notre message
+            out << (quint16) flag << (quint16) encrypted.count();
+            _engine->encrypt(encrypted, _skey, true);
+
+            for (unsigned int i = 0; i < encrypted.count(); i++) {
+                out << (quint16) mpz_sizeinbase(encrypted.part(i).get_mpz_t(), 16);
+            }
+
+            for (unsigned int i = 0; i < encrypted.count(); i++) {
+                out << QString::fromStdString(encrypted.part(i).get_str(16));
+            }
+        }
+        else out << val;
+
+        socket->write(paquet); //On envoie le message
+    }
+}
+
 
 // appel de envoieMessage si on clique sur le bouton envoyer
 void ClientTcp::on_boutonEnvoyer_clicked() {
