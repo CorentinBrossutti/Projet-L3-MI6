@@ -23,6 +23,9 @@
     </rect>
    </property>
    <widget class="QSpinBox" name="boxPort">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>390</x>
@@ -30,6 +33,15 @@
       <width>111</width>
       <height>26</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
+    <property name="keyboardTracking">
+     <bool>true</bool>
     </property>
     <property name="maximum">
      <number>100000</number>
@@ -43,6 +55,9 @@
       <width>120</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
     </property>
     <property name="inputMask">
      <string/>
@@ -65,6 +80,12 @@
       <width>89</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
     </property>
     <property name="text">
      <string>Connexion</string>
@@ -114,9 +135,15 @@
      <rect>
       <x>130</x>
       <y>115</y>
-      <width>120</width>
+      <width>181</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
     </property>
     <property name="placeholderText">
      <string>Votre pseudo ici</string>
@@ -130,6 +157,12 @@
       <width>490</width>
       <height>150</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -156,6 +189,12 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>boxIp</tabstop>
+  <tabstop>boxPort</tabstop>
+  <tabstop>boxPseudo</tabstop>
+  <tabstop>boutonConnexion</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
