@@ -34,65 +34,6 @@
        <item row="2" column="1">
         <widget class="QTextBrowser" name="displayMessage"/>
        </item>
-       <item row="1" column="1">
-        <widget class="QWidget" name="group_connexion" native="true">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>150</height>
-          </size>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0">
-          <item row="0" column="1">
-           <widget class="QWidget" name="group_nom" native="true">
-            <property name="maximumSize">
-             <size>
-              <width>900</width>
-              <height>150</height>
-             </size>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <item row="2" column="0" alignment="Qt::AlignHCenter">
-              <widget class="QLabel" name="label_nom">
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Arial</family>
-                 <pointsize>14</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>MI6 Chat</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_image">
-               <property name="maximumSize">
-                <size>
-                 <width>150</width>
-                 <height>100</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="pixmap">
-                <pixmap resource="image.qrc">:/conversation_102940.png</pixmap>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="3" column="1">
         <widget class="QWidget" name="group_message" native="true">
          <layout class="QGridLayout" name="groupe_message" columnstretch="0,0,0,1,0,0">
@@ -117,6 +58,93 @@
            <widget class="QLineEdit" name="boxMessage">
             <property name="placeholderText">
              <string>Votre message ici</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QWidget" name="group_titre_image" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>150</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0">
+          <property name="leftMargin">
+           <number>9</number>
+          </property>
+          <item row="0" column="2">
+           <widget class="QWidget" name="group_nom" native="true">
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <property name="leftMargin">
+              <number>9</number>
+             </property>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_nom">
+               <property name="maximumSize">
+                <size>
+                 <width>500</width>
+                 <height>200</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>14</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:48pt;&quot;&gt;MI6 Chat&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_image">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="image.qrc">:/conversation_102940.png</pixmap>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_image2">
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="image.qrc">:/conversation_102940.png</pixmap>
             </property>
            </widget>
           </item>
