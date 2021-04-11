@@ -28,6 +28,8 @@ public:
     void setSocket(QTcpSocket * socket);
     void sauvegardePseudo(QString nom);
     QString chargePseudo();
+    void sauvegardeCle(QString cle);
+    QString chargeCle();
 
 private slots:
 

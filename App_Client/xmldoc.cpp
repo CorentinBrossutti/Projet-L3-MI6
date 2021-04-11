@@ -30,6 +30,7 @@ void XmlDoc::chargerFichierConfig(QString nomFichier) {
     xmlDoc.close(); //On en a finis avec le document XML, on peut le fermer
 }
 
+
 //Méthode de chargement du pseudo contenu dans le fichier XML
 QString XmlDoc::chargerPseudo(QString nomFichier) {
     chargerFichierConfig(nomFichier);
@@ -83,6 +84,59 @@ void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
 
 
 
+//Méthode de chargement de la Clé
+QString XmlDoc::chargerCle(QString nomFichier) {
+    chargerFichierConfig(nomFichier);
+
+    docElement = doc.documentElement();
+    noeud = docElement.firstChild();
+
+    while(!noeud.isNull()) {
+        element = noeud.toElement();
+        if(!element.isNull()) {
+            if(element.tagName() == "cle" && (element.text()!="")) { //On trouve le noeud contenant la clé
+                return element.text(); //On retourne son contenu
+            }
+            noeud = noeud.nextSibling();
+        }
+    }
+
+
+    return (""); //Si il n'y a pas de Clé on retourne une clé vide par défaut
+}
+
+
+//Méthode de sauvegarde de la clé
+void XmlDoc::sauvegarderCle(QString nomFichier, QString cle) {
+    chargerFichierConfig(nomFichier);
+
+    QDomElement newCle = doc.createElement(QString("cle")); //On crée notre nouveau Noeud
+    QDomText textPseudo = doc.createTextNode(QString(cle)); //On y met la clé voulu
+    newCle.appendChild(textPseudo);
+
+    docElement = doc.documentElement(); //On récupère le document chargé
+    noeud = docElement.firstChild();
+
+    while(!noeud.isNull()) { //On parcourt notre Noeud
+        element = noeud.toElement();
+        if (!element.isNull()) {
+            if (element.tagName() == "cle") { //Si on trouve notre noeud qui contient la clé
+                docElement.replaceChild(newCle, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouvelle Clé
+            }
+            noeud = noeud.nextSibling();
+        }
+    }
+
+    QFile xmlDoc(nomFichier);
+    if(xmlDoc.open(QFile::WriteOnly)) {
+        xmlDoc.resize(0); //On écrase notre fichier sans modifications
+        QTextStream stream;
+        stream.setDevice(&xmlDoc);
+        doc.save(stream, 4); //On le réécris avec les modifications
+
+        xmlDoc.close();
+    }
+}
 
 
 

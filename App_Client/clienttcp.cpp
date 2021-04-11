@@ -17,10 +17,20 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     boxPseudo->setText(pseudo);
 #ifdef CESAR
     _engine = new Cesar;
+    if (chargeCle() == "") {
+        _lkey = _engine->generate();
+        sauvegardeCle(QString::fromStdString(_lkey->tostr()));
+    }
+    else _lkey = RealKey::from_str(chargeCle().toUtf8().constData());
 #else
     _engine = new Rsa;
+    if (chargeCle() == "") {
+        _lkey = _engine->generate();
+        sauvegardeCle(QString::fromStdString(_lkey->tostr()));
+    }
+    else _lkey = RSAKey::from_str(chargeCle().toUtf8().constData());
 #endif
-    _lkey = _engine->generate();
+
     _skey = nullptr;
 }
 
@@ -163,7 +173,6 @@ void ClientTcp::deconnecte() {
 void ClientTcp::sauvegardePseudo(QString nom) {
     docXML.sauvegarderPseudo(fichierXML, nom);
     pseudo = chargePseudo();
-    boxPseudo->clear();
     boxPseudo->setFocus();
 }
 
@@ -182,6 +191,16 @@ QString ClientTcp::chargePseudo() {
 }
 
 
+//Méthode de sauvegarde de la Clé
+void ClientTcp::sauvegardeCle(QString cle) {
+    docXML.sauvegarderCle(fichierXML, cle);
+}
+
+
+//Méthode de chargement de la Clé
+QString ClientTcp::chargeCle() {
+    return docXML.chargerCle(fichierXML);
+}
 
 
 

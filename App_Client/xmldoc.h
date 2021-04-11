@@ -16,6 +16,8 @@ class XmlDoc : public QWidget
         ~XmlDoc();
         QString chargerPseudo(QString nomFichier);
         void sauvegarderPseudo(QString nomFichier, QString pseudo);
+        QString chargerCle(QString nomFichier);
+        void sauvegarderCle(QString nomFichier, QString cle);
 
     private slots :
         void chargerFichierConfig(QString nomFichier);
