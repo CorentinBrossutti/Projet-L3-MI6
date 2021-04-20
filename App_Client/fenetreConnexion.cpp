@@ -14,8 +14,7 @@ fenetreConnexion::fenetreConnexion(QWidget *parent) :
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(erreurSocket(QAbstractSocket::SocketError)));
     connect(socket, SIGNAL(disconnected()), this, SLOT(deconnecte()));
 
-    pseudo = docXML.chargerPseudo(fichierXML);
-    ui->boxPseudo->setText(pseudo);
+    afficherDonne();
 }
 
 fenetreConnexion::~fenetreConnexion()
@@ -49,7 +48,7 @@ void fenetreConnexion::connecte() {
 
 //Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
-    fenetrePrincipale->sauvegardePseudo(ui->boxPseudo->text());
+    sauvegardePseudo(ui->boxPseudo->text(),ui->boxIp->text(),ui->boxPort->text());
     fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
     fenetrePrincipale->show();
     this->hide(); // On cache la fenetre de connexion
@@ -60,9 +59,7 @@ void fenetreConnexion::afficherFenetrePrincipale() {
 // Si la fenetre de chat est fermée alors on réaffiche la fenêtre de connexion
 void fenetreConnexion::afficherMenuConnexion() {
     this->socket = fenetrePrincipale->getSocket(); // On récupere le socket afin de récuperer les actions faites
-    pseudo = docXML.chargerPseudo(fichierXML);
-    ui->boxPseudo->setText(pseudo);
-    ui->boxPseudo->setFocus();
+    afficherDonne();
     this->show(); // On réaffiche la fenêtre de connexion
     deconnecte();
 }
@@ -88,4 +85,34 @@ void fenetreConnexion::erreurSocket(QAbstractSocket::SocketError erreur) {
             ui->displayMessage->append(tr("<em>ERREUR : ") + socket->errorString() + tr("</em>"));
     }
     ui->boutonConnexion->setEnabled(true);
+}
+
+void fenetreConnexion::sauvegardePseudo(QString nom, QString ip, QString port) {
+    docXML.sauvegarderPseudo(fichierXML, nom,ip ,port);
+    afficherDonne();
+}
+
+void fenetreConnexion::afficherDonne() {
+    pseudo = chargePseudo();
+    ui->boxPseudo->clear();
+    ui->boxPseudo->setText(pseudo);
+    ip = chargeIp();
+    ui->boxIp->clear();
+    ui->boxIp->setText(ip);
+    port = chargePort();
+    ui->boxPort->clear();
+    ui->boxPort->setValue(port.toInt());
+}
+
+//Méthode de chargement du pseudo
+QString fenetreConnexion::chargePseudo() {
+    return docXML.chargerPseudo(fichierXML);
+}
+
+QString fenetreConnexion::chargeIp() {
+    return docXML.chargerIp(fichierXML);
+}
+
+QString fenetreConnexion::chargePort() {
+    return docXML.chargerPort(fichierXML);
 }

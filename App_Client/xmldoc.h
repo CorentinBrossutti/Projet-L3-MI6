@@ -15,10 +15,13 @@ class XmlDoc : public QWidget
         XmlDoc();
         ~XmlDoc();
         QString chargerPseudo(QString nomFichier);
-        void sauvegarderPseudo(QString nomFichier, QString pseudo);
+        QString chargerIp(QString nomFichier);
+        QString chargerPort(QString nomFichier);
+        void sauvegarderPseudo(QString nomFichier, QString pseudo, QString ip, QString port);
 
     private slots :
         void chargerFichierConfig(QString nomFichier);
+        void creerFichier(QString nomFichier);
 
     private :
         QDomDocument doc;

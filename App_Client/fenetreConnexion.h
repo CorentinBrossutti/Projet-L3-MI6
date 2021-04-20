@@ -36,6 +36,12 @@ private slots:
     void deconnecte();
     void afficherMessage(QTextEdit * afficheur, QString message);
     void tentativeConnexion();
+    void sauvegardePseudo(QString nom, QString ip, QString port);
+    QString chargePseudo();
+    QString chargeIp();
+    QString chargePort();
+    void afficherDonne();
+
 
 //////////////////////////////////////////////////////////////////
 /// Spécifique QT
@@ -51,6 +57,8 @@ private:
     QString fichierXML = "config.txt";
     XmlDoc docXML;
     QString pseudo;
+    QString ip;
+    QString port;
 };
 
 #endif // FENETRECONNEXION_H

@@ -26,8 +26,6 @@ public:
     ~ClientTcp();
     QTcpSocket * getSocket() ;
     void setSocket(QTcpSocket * socket);
-    void sauvegardePseudo(QString nom);
-    QString chargePseudo();
 
 private slots:
 
@@ -40,7 +38,7 @@ private slots:
     void donneesRecues();
     void connecte();
     void deconnecte();
-
+    QString chargePseudo();
     void send(const QString& val, unsigned short flag = NO_FLAG, bool encrypt = true);
 
     ///////////////////////////////////////////
@@ -49,8 +47,6 @@ private slots:
 
     void on_boutonEnvoyer_clicked();
     void on_boxMessage_returnPressed();
-    void on_boutonPseudo_clicked();
-    void on_boxPseudo_returnPressed();
 
 signals:
     void closed();

@@ -13,8 +13,6 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
 
     tailleMessage = 0;
     flag = 0;
-    pseudo = chargePseudo();
-    boxPseudo->setText(pseudo);
 #ifdef CESAR
     _engine = new Cesar;
 #else
@@ -49,6 +47,7 @@ void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage()
 {
+    pseudo = chargePseudo();
     send(tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text());
     boxMessage->clear();
     boxMessage->setFocus();
@@ -158,23 +157,6 @@ void ClientTcp::connecte() {
 void ClientTcp::deconnecte() {
    //afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
 }
-
-//Méthode de changement de Pseudo
-void ClientTcp::sauvegardePseudo(QString nom) {
-    docXML.sauvegarderPseudo(fichierXML, nom);
-    pseudo = chargePseudo();
-    boxPseudo->clear();
-    boxPseudo->setFocus();
-}
-
-void ClientTcp::on_boutonPseudo_clicked() {
-    sauvegardePseudo(boxPseudo->text());
-}
-
-void ClientTcp::on_boxPseudo_returnPressed() {
-    sauvegardePseudo(boxPseudo->text());
-}
-
 
 //Méthode de chargement du pseudo
 QString ClientTcp::chargePseudo() {
