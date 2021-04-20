@@ -97,7 +97,7 @@ bigint Engine::pad(const bigint& number, unsigned int padsize)
     bigint p;
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
 
-    return number * p + random_bytes_pad(padsize);
+    return number * p + _rand.rand(padsize);
     //return number;
 }
 

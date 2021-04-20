@@ -1,9 +1,7 @@
 #include "crypt/global.h"
 #include "crypt/rsa.h"
 #include "crypt/math.h"
-#include <math.h>
-#include <string>
-#include <stdio.h>
+
 #include <time.h>
 
 using namespace std;

@@ -3,6 +3,7 @@
 #include "math.h"
 #include "global.h"
 #include "key.h"
+#include "random.h"
 
 #include <string>
 
@@ -81,4 +82,7 @@ public:
     virtual Message msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
     virtual Message msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
     virtual Message msgprep(const std::vector<bigint>& parts);
+
+protected:
+    Randomizer _rand;
 };

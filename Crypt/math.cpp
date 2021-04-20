@@ -2,7 +2,6 @@
 #include "crypt/math.h"
 
 #include <sstream>
-#include <string>
 
 using namespace std;
 
@@ -85,16 +84,6 @@ bigint bop::recompose(const bigint* from, unsigned int count)
         temp += padto(from[i]);
 
     return bigint(temp.c_str(), 2);
-}
-
-bigint random_bytes_pad(unsigned int bytes)
-{
-    bigint temp = 0;
-
-    for(unsigned int i = 1;i < bytes * 8;i++)
-        temp = temp * 2 + (rand() % 2);
-
-    return temp;
 }
 
 bigint random_integer()

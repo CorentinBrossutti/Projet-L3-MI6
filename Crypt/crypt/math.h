@@ -2,7 +2,6 @@
 
 #include "global.h"
 
-#include <cstdint>
 #include <math.h>
 #include <bitset>
 #include <vector>
