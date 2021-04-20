@@ -16,6 +16,7 @@ SOURCES += \
     global.cpp \
     key.cpp \
     math.cpp \
+    random.cpp \
     rsa.cpp \
     std.cpp
 
@@ -25,6 +26,7 @@ HEADERS += \
     crypt/global.h \
     crypt/key.h \
     crypt/math.h \
+    crypt/random.h \
     crypt/rsa.h \
     crypt/std.h
 

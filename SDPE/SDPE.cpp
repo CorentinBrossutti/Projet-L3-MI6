@@ -1,4 +1,5 @@
 #include "crypt/std.h"
+#include "crypt/random.h"
 
 #include <iostream>
 #include <cstdio>
@@ -9,7 +10,11 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Engine* temp = new Rsa;
+    Randomizer r;
+    cout << r.rand(1) << endl;
+    cout << r.rand(5) << endl;
+
+    /*Engine* temp = new Rsa;
     Key* k = temp->generate();
 
     Message m("tg");
@@ -20,7 +25,7 @@ int main(int argc, char** argv)
     cout << m.value() << endl;
 
     delete temp;
-    delete k;
+    delete k;*/
 
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;

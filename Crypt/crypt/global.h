@@ -10,10 +10,12 @@
 //  Compilateur Windows
 #define EXPORT __declspec(dllexport)
 #define IMPORT __declspec(dllimport)
+#define WIN
 #elif defined(__GNUC__)
 //  GCC
 #define EXPORT __attribute__((visibility("default")))
 #define IMPORT
+#define UNIX
 #else
 //  Inconnu
 #define EXPORT
