@@ -37,6 +37,13 @@ private :
     quint16 tailleMessage;
     quint16 flag;
 
+
+    quint16 pcount;
+    std::vector<quint16> plengths;
+    unsigned int prtidx;
+    QString buffer;
+    QString* parts;
+
     Key* _key;
     Engine* _engine;
 };

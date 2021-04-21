@@ -72,16 +72,17 @@ public:
     virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encrypte un message avec une clé donnée
-    void encrypt(Message& message, Key* key, bool parts = false, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    void encrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 	// Décrypte une message avec une clé donnée
-    void decrypt(Message& message, Key* key, bool parts = false, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    void decrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 
 	// Opération dynamique basée sur un argument textuel
     bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
-    virtual Message msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
-    virtual Message msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
-    virtual Message msgprep(const std::vector<bigint>& parts);
+    virtual Message* msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    virtual Message* msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
+    virtual Message* msgprep(const std::vector<bigint>& parts);
+    virtual Message* msgprep(const bigint* parts, unsigned int length);
 
 protected:
     Randomizer _rand;

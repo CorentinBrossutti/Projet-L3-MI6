@@ -10,8 +10,9 @@
 #include "xmldoc.h" //Notre module de gestion des sauvegardes
 #include "crypt/engine.h"
 
-#define NO_FLAG 1
-#define DISPATCH_PKEY 2
+#define NORMAL_MESSAGE 1
+#define PARTED_MESSAGE 2
+#define DISPATCH_PKEY 3
 
 #define CESAR
 
@@ -26,6 +27,10 @@ public:
     ~ClientTcp();
     QTcpSocket * getSocket() ;
     void setSocket(QTcpSocket * socket);
+    void sauvegardePseudo(QString nom);
+    QString chargePseudo();
+    void sauvegardeCle(QString cle);
+    QString chargeCle();
 
 private slots:
 
@@ -38,8 +43,8 @@ private slots:
     void donneesRecues();
     void connecte();
     void deconnecte();
-    QString chargePseudo();
-    void send(const QString& val, unsigned short flag = NO_FLAG, bool encrypt = true);
+
+    void send(const QString& val, bool part = true, unsigned short flag = PARTED_MESSAGE, bool encrypt = true);
 
     ///////////////////////////////////////////
     /// spécifique QT
@@ -67,5 +72,12 @@ private:
     Engine* _engine;
     Key* _skey;
     Key* _lkey;
+
+    quint16 pcount;
+    std::vector<quint16> plengths;
+    unsigned int prtidx;
+    QString buffer;
+    QString* parts;
+
 };
 #endif // CLIENTTCP_H
