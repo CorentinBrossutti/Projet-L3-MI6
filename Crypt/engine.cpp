@@ -23,6 +23,7 @@ Message::Message(const bigint& number, bool encrypted, unsigned int blocksz)
     _count = bop::decompose(number, _content, blocksz);
     _value = number;
 	_encrypted = encrypted;
+    _content = nullptr;
 }
 
 Message::Message(const char* msg, unsigned int blocksz, uint8_t (*converter)(char))
@@ -43,7 +44,8 @@ Message::Message(string content, unsigned int blocksz, uint8_t (*converter)(char
 
 Message::~Message()
 {
-    delete[] _content;
+    if(_content)
+        delete[] _content;
 }
 
 bool Message::encrypted() const
@@ -98,7 +100,6 @@ bigint Engine::pad(const bigint& number, unsigned int padsize)
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
 
     return number * p + random_bytes_pad(padsize);
-    //return number;
 }
 
 bigint Engine::unpad(const bigint& number, unsigned int padsize)
@@ -108,7 +109,6 @@ bigint Engine::unpad(const bigint& number, unsigned int padsize)
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
     mpz_fdiv_q(num.get_mpz_t(), number.get_mpz_t(), p.get_mpz_t());
 
-    //return number;
     return num;
 }
 
@@ -179,26 +179,39 @@ bool Engine::operate(const char* arg, Message& message, Key* key, unsigned int p
 	//todo sign verify
 }
 
-Message Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize)
+Message* Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize)
 {
-    return Message(stack, true, blocksz + padsize);
+    return new Message(stack, true, blocksz + padsize);
 }
 
-Message Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned int padsize, uint8_t (*converter)(char))
+Message* Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned int padsize, uint8_t (*converter)(char))
 {
     return msgprep(bop::from(stack_str.c_str(), converter), blocksz, padsize);
 }
 
-Message Engine::msgprep(const vector<bigint>& parts)
+Message* Engine::msgprep(const vector<bigint>& parts)
 {
-    Message m;
-    m._encrypted = true;
-    m._count = parts.size();
+    Message* m = new Message;
+    m->_encrypted = true;
+    m->_count = parts.size();
 
-    m._content = new bigint[parts.size()];
+    m->_content = new bigint[parts.size()];
     unsigned int idx = 0;
     for(bigint bi : parts)
-        m._content[idx++] = bi;
+        m->_content[idx++] = bi;
+
+    return m;
+}
+
+Message* Engine::msgprep(const bigint *parts, unsigned int length)
+{
+    Message* m = new Message;
+    m->_encrypted = true;
+    m->_count = length;
+
+    m->_content = new bigint[length];
+    for(unsigned int i = 0;i < length;i++)
+        m->_content[i] = parts[i];
 
     return m;
 }

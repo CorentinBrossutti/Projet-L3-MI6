@@ -34,6 +34,9 @@ ServeurTCP::ServeurTCP()
 
     tailleMessage = 0;
     flag = 0;
+    prtidx = 0;
+    pcount = 0;
+    parts = nullptr;
 
 #ifdef CESAR
     _engine = new Cesar;
@@ -42,6 +45,8 @@ ServeurTCP::ServeurTCP()
     _engine = new Rsa;
 #endif
     _key = _engine->generate();
+
+    parts = nullptr;
 }
 
 ServeurTCP::~ServeurTCP()
@@ -50,6 +55,8 @@ ServeurTCP::~ServeurTCP()
     delete _key;
     for(auto client : clients.toStdMap())
         delete client.second;
+    if(parts)
+        delete[] parts;
 }
 
 void ServeurTCP::nouvelleConnexion() {
@@ -64,9 +71,9 @@ void ServeurTCP::nouvelleConnexion() {
 
     // On envoie la clé publique du serveur au client
 #ifdef CESAR
-    client->send(_key->tostr(), _engine, false, DISPATCH_PKEY);
+    client->send(_key->tostr(), _engine, false, false, DISPATCH_PKEY);
 #else
-    client->send(((RsaKey*)_key)->publ->tostr(), _engine, false, DISPATCH_PKEY);
+    client->send(((RsaKey*)_key)->publ->tostr(), _engine, false, false, DISPATCH_PKEY);
 #endif
 }
 
@@ -83,13 +90,12 @@ void ServeurTCP::donneesRecues() {
     // Si tout va bien, on continue : on récupère le message
     QDataStream in(socket);
 
-    // Si on ne connait pas encore la taille du message, on essaie de la récupérer
-    if (tailleMessage == 0) {
-        // On n'a pas reçu la taille du message en entier
-        if ( socket->bytesAvailable() < (int)sizeof(quint16)) return;
-
-        // Si on a reçu la taille du message en entier, on la récupère
-        in >> tailleMessage;
+    Client* client = clients.value(socket);
+    if(client == nullptr || client->dummy)
+    {
+        tailleMessage = 0;
+        flag = 0;
+        return;
     }
 
     if (flag == 0) {
@@ -99,30 +105,83 @@ void ServeurTCP::donneesRecues() {
         in >> flag;
     }
 
-    // Si on connaît la taille du message, on vérifie si on a reçu le message en entier
-    if (socket->bytesAvailable() < tailleMessage)
-        // Si on a pas encore tout reçu, on arrête la méthode
-        return;
-
-    // Si on a reçu tout le message : on le récupère
+    Message* m;
     QString message;
-    in >> message;
-
-    Client* client = clients.value(socket);
-    if(client == nullptr || client->dummy)
-    {
-        tailleMessage = 0;
-        flag = 0;
-        return;
-    }
-    Message m = _engine->msgprep(message.toStdString());
     switch(flag)
     {
-    case NORMAL_MESSAGE:
-        _engine->decrypt(m, _key);
-        envoyerATous(QString::fromStdString(m.get()));
-        break;
     case DISPATCH_PKEY:
+    case NORMAL_MESSAGE:
+        // Si on ne connait pas encore la taille du message, on essaie de la récupérer
+        if (tailleMessage == 0) {
+            // On n'a pas reçu la taille du message en entier
+            if ( socket->bytesAvailable() < (int)sizeof(quint16)) return;
+
+            // Si on a reçu la taille du message en entier, on la récupère
+            in >> tailleMessage;
+        }
+
+        // Si on connaît la taille du message, on vérifie si on a reçu le message en entier
+        if (socket->bytesAvailable() < tailleMessage)
+            // Si on a pas encore tout reçu, on arrête la méthode
+            return;
+
+        // Si on a reçu tout le message : on le récupère
+        in >> message;
+        m = _engine->msgprep(message.toStdString());
+        break;
+    case PARTED_MESSAGE:
+        if (pcount == 0) {
+            // On n'a pas reçu la taille du message en entier
+            if ( socket->bytesAvailable() < (int)sizeof(quint16)) return;
+
+            // Si on a reçu la taille du message en entier, on la récupère
+            in >> pcount;
+        }
+
+        while(plengths.size() < pcount)
+        {
+            // On n'a pas reçu la taille du message en entier
+            if ( socket->bytesAvailable() < (int)sizeof(quint16)) return;
+
+            // Si on a reçu la taille du message en entier, on la récupère
+            quint16 temp;
+            in >> temp;
+            plengths.push_back(temp);
+        }
+
+        parts = new QString[pcount];
+
+        do
+        {
+            unsigned int cursize = 0;
+            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString()).get_mpz_t(), 10)) < plengths[prtidx])
+            {
+                uint tr = plengths[prtidx] - cursize;
+                if(socket->bytesAvailable() + buffer.size() < tr)
+                    return;
+
+                QString tbuf;
+                in >> tbuf;
+                buffer.append(tbuf);
+
+                parts[prtidx].append(buffer.left(tr));
+                buffer.remove(0, tr);
+            }
+        }while(++prtidx < pcount);
+
+        std::vector<bigint> stack;
+        for(unsigned int i = 0;i < pcount;i++)
+            stack.push_back(bigint(parts[i].toStdString()));
+
+        m = _engine->msgprep(stack);
+        if(parts){
+            delete[] parts;
+            parts = nullptr;
+        }
+    }
+
+    if(flag == DISPATCH_PKEY)
+    {
         if(client->key)
             delete client->key;
 #ifdef CESAR
@@ -131,12 +190,21 @@ void ServeurTCP::donneesRecues() {
         client->key = new RsaKey;
         ((RsaKey*)client->key)->publ = PublicKey::from_str(message.toStdString());
 #endif
-        break;
+    }
+    else
+    {
+        _engine->decrypt(*m, _key);
+        envoyerATous(QString::fromStdString(m->get()));
     }
 
     //3 : remise de la taille du message à 0 pour la réception des futurs messages
+    delete m;
     tailleMessage = 0;
     flag = 0;
+    pcount = 0;
+    prtidx = 0;
+    buffer = QString();
+    plengths = std::vector<quint16>();
 }
 
 
