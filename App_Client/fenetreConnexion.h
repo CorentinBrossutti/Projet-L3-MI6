@@ -36,7 +36,7 @@ private slots:
     void deconnecte();
     void afficherMessage(QTextEdit * afficheur, QString message);
     void tentativeConnexion();
-    void sauvegardePseudo(QString nom, QString ip, QString port);
+    void sauvegardeDonnee(QString nom, QString ip, QString port);
     QString chargePseudo();
     QString chargeIp();
     QString chargePort();

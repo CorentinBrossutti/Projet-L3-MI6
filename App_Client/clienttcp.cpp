@@ -17,7 +17,7 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     pcount = 0;
     parts = nullptr;
     pseudo = chargePseudo();
-    boxpseudo->setText(pseudo);
+    boxPseudo->setText(pseudo);
 #ifdef CESAR
     _engine = new Cesar;
     QString cle = chargeCle();

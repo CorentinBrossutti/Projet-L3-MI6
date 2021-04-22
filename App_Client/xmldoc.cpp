@@ -40,11 +40,13 @@ void XmlDoc::creerFichier(QString monFichier) {
     QDomElement age = doc.createElement("age");
     QDomElement ip = doc.createElement("ip");
     QDomElement port = doc.createElement("port");
+    QDomElement cle = doc.createElement("cle");
     QDomText valeurAge = doc.createTextNode("25 ans");
     age.appendChild(valeurAge);
     infoClient.appendChild(age);
     infoClient.appendChild(ip);
     infoClient.appendChild(port);
+    infoClient.appendChild(cle);
 
     QFile file(monFichier);
     if(file.open(QIODevice::ReadWrite)) {
@@ -114,43 +116,87 @@ QString XmlDoc::chargerPort(QString nomFichier) {
 }
 
 //Méthode de sauvegarde du pseudo dans le fichier XML
-void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo, QString ip, QString port) {
+void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
     chargerFichierConfig(nomFichier);
 
     QDomElement newPseudo = doc.createElement(QString("pseudo")); //On crée notre nouveau Noeud
     QDomText textPseudo = doc.createTextNode(QString(pseudo)); //On y met le pseudo voulu
     newPseudo.appendChild(textPseudo);
-    QDomElement newIp = doc.createElement(QString("ip")); //On crée notre nouveau Noeud
-    QDomText textIp = doc.createTextNode(QString(ip)); //On y met l'ip voulu
-    newIp.appendChild(textIp);
-    QDomElement newPort = doc.createElement(QString("port")); //On crée notre nouveau Noeud
-    QDomText textPort = doc.createTextNode(QString(port)); //On y met le port voulu
-    newPort.appendChild(textPort);
 
     docElement = doc.documentElement(); //On récupère le document chargé
-    noeud = docElement.firstChildElement("pseudo");
-    docElement.replaceChild(newPseudo,noeud);
-    noeud = docElement.firstChildElement("ip");
-    docElement.replaceChild(newIp,noeud);
-    noeud = docElement.firstChildElement("port");
-    docElement.replaceChild(newPort,noeud);
+    noeud = docElement.firstChild();
 
-    /*while(!noeud.isNull()) { //On parcourt notre Noeud
+    while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
             if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
                 docElement.replaceChild(newPseudo, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
             }
-            if (element.tagName() == "ip") {
-                docElement.replaceChild(newIp, noeud);
-            }
-            if (element.tagName() == "port") {
-                docElement.replaceChild(newPort, noeud);
+            noeud = noeud.nextSibling();
+        }
+    }
 
+    QFile xmlDoc("config.txt");
+    if(xmlDoc.open(QFile::WriteOnly)) {
+        xmlDoc.resize(0); //On écrase notre fichier sans modifications
+        QTextStream stream;
+        stream.setDevice(&xmlDoc);
+        doc.save(stream, 4); //On le réécris avec les modifications
+
+        xmlDoc.close();
+    }
+}
+
+void XmlDoc::sauvegarderIp(QString nomFichier, QString ip) {
+    chargerFichierConfig(nomFichier);
+
+    QDomElement newIp = doc.createElement(QString("ip")); //On crée notre nouveau Noeud
+    QDomText textIp = doc.createTextNode(QString(ip)); //On y met le pseudo voulu
+    newIp.appendChild(textIp);
+
+    docElement = doc.documentElement(); //On récupère le document chargé
+    noeud = docElement.firstChild();
+
+    while(!noeud.isNull()) { //On parcourt notre Noeud
+        element = noeud.toElement();
+        if (!element.isNull()) {
+            if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
+                docElement.replaceChild(newIp, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
             }
             noeud = noeud.nextSibling();
         }
-    }*/
+    }
+
+    QFile xmlDoc("config.txt");
+    if(xmlDoc.open(QFile::WriteOnly)) {
+        xmlDoc.resize(0); //On écrase notre fichier sans modifications
+        QTextStream stream;
+        stream.setDevice(&xmlDoc);
+        doc.save(stream, 4); //On le réécris avec les modifications
+
+        xmlDoc.close();
+    }
+}
+
+void XmlDoc::sauvegarderPort(QString nomFichier, QString port) {
+    chargerFichierConfig(nomFichier);
+
+    QDomElement newPort = doc.createElement(QString("port")); //On crée notre nouveau Noeud
+    QDomText textPort = doc.createTextNode(QString(port)); //On y met le pseudo voulu
+    newPort.appendChild(textPort);
+
+    docElement = doc.documentElement(); //On récupère le document chargé
+    noeud = docElement.firstChild();
+
+    while(!noeud.isNull()) { //On parcourt notre Noeud
+        element = noeud.toElement();
+        if (!element.isNull()) {
+            if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
+                docElement.replaceChild(newPort, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
+            }
+            noeud = noeud.nextSibling();
+        }
+    }
 
     QFile xmlDoc("config.txt");
     if(xmlDoc.open(QFile::WriteOnly)) {

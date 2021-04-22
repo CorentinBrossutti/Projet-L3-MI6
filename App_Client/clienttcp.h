@@ -52,6 +52,8 @@ private slots:
 
     void on_boutonEnvoyer_clicked();
     void on_boxMessage_returnPressed();
+    void on_boutonPseudo_clicked();
+    void on_boxPseudo_returnPressed();
 
 signals:
     void closed();

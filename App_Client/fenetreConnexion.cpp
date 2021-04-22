@@ -48,7 +48,7 @@ void fenetreConnexion::connecte() {
 
 //Si la connexion est réussi alors on afficher la fenetre de chat et cache la fenetre de connexion
 void fenetreConnexion::afficherFenetrePrincipale() {
-    sauvegardePseudo(ui->boxPseudo->text(),ui->boxIp->text(),ui->boxPort->text());
+    sauvegardeDonnee(ui->boxPseudo->text(),ui->boxIp->text(),ui->boxPort->text());
     fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
     fenetrePrincipale->show();
     this->hide(); // On cache la fenetre de connexion
@@ -87,8 +87,10 @@ void fenetreConnexion::erreurSocket(QAbstractSocket::SocketError erreur) {
     ui->boutonConnexion->setEnabled(true);
 }
 
-void fenetreConnexion::sauvegardePseudo(QString nom, QString ip, QString port) {
-    docXML.sauvegarderPseudo(fichierXML, nom,ip ,port);
+void fenetreConnexion::sauvegardeDonnee(QString nom, QString ip, QString port) {
+    docXML.sauvegarderPseudo(fichierXML, nom);
+    docXML.sauvegarderIp(fichierXML, ip);
+    docXML.sauvegarderPort(fichierXML, port);
     afficherDonne();
 }
 
