@@ -37,13 +37,9 @@ void XmlDoc::creerFichier(QString monFichier) {
     doc.appendChild(infoClient);
     QDomElement pseudo = doc.createElement("pseudo");
     infoClient.appendChild(pseudo);
-    QDomElement age = doc.createElement("age");
     QDomElement ip = doc.createElement("ip");
     QDomElement port = doc.createElement("port");
     QDomElement cle = doc.createElement("cle");
-    QDomText valeurAge = doc.createTextNode("25 ans");
-    age.appendChild(valeurAge);
-    infoClient.appendChild(age);
     infoClient.appendChild(ip);
     infoClient.appendChild(port);
     infoClient.appendChild(cle);
@@ -160,7 +156,7 @@ void XmlDoc::sauvegarderIp(QString nomFichier, QString ip) {
     while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
-            if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
+            if (element.tagName() == "ip") { //Si on trouve notre noeud qui contient le pseudo
                 docElement.replaceChild(newIp, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
             }
             noeud = noeud.nextSibling();
@@ -191,7 +187,7 @@ void XmlDoc::sauvegarderPort(QString nomFichier, QString port) {
     while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
-            if (element.tagName() == "pseudo") { //Si on trouve notre noeud qui contient le pseudo
+            if (element.tagName() == "port") { //Si on trouve notre noeud qui contient le pseudo
                 docElement.replaceChild(newPort, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
             }
             noeud = noeud.nextSibling();
