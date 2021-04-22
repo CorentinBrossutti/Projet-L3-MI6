@@ -47,6 +47,8 @@ public:
 
     // Renvoie un bigint aléatoire composé du nombre d'octets passé en paramètre
     bigint rand(unsigned int bytes) const;
+
+    static bool init_rand_other;
 protected:
     RandImpl* _impl;
 };

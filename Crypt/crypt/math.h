@@ -25,7 +25,6 @@ namespace bop
 }
 
 
-bigint random_bytes_pad(unsigned int digits);
 bigint random_integer();
 bool prime(const bigint& num);
 bigint euclide(const bigint& a, const bigint& b);

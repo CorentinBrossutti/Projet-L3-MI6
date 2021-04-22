@@ -17,7 +17,7 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     pcount = 0;
     parts = nullptr;
     pseudo = chargePseudo();
-    boxPseudo->setText(pseudo);
+    boxpseudo->setText(pseudo);
 #ifdef CESAR
     _engine = new Cesar;
     QString cle = chargeCle();
@@ -32,7 +32,7 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
         _lkey = _engine->generate();
         sauvegardeCle(QString::fromStdString(_lkey->tostr()));
     }
-    else _lkey = RSAKey::from_str(chargeCle().toStdString());
+    else _lkey = RsaKey::from_str(chargeCle().toStdString());
 #endif
 
     _skey = nullptr;
@@ -219,7 +219,7 @@ void ClientTcp::donneesRecues() {
         send(QString::fromStdString(_lkey->tostr()), false, DISPATCH_PKEY, false);
 #else
         _skey = new RsaKey;
-        ((RsaKey*)client->key)->publ = PublicKey::from_str(message.toStdString());
+        ((RsaKey*)_skey)->publ = PublicKey::from_str(message.toStdString());
         send(QString::fromStdString(((RsaKey*)_lkey)->publ->tostr()), false, DISPATCH_PKEY, false);
 #endif
     }

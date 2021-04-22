@@ -63,7 +63,10 @@ Randomizer::Randomizer()
 #elif defined (UNIX)
     _impl = new RandUnix;
 #else
-    srand(time(NULL));
+    if(!init_rand_other){
+        init_rand_other = true;
+        srand(time(NULL));
+    }
     _impl = new RandOther;
 #endif
 }

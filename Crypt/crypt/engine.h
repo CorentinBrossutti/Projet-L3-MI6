@@ -83,7 +83,6 @@ public:
     virtual Message* msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
     virtual Message* msgprep(const std::vector<bigint>& parts);
     virtual Message* msgprep(const bigint* parts, unsigned int length);
-
 protected:
     Randomizer _rand;
 };
