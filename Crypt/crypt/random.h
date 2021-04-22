@@ -30,7 +30,7 @@ public:
     virtual int randb(uint8_t*& buf, const size_t& blen) const;
 };
 #elif defined (UNIX)
-#include <fctl.h>
+#include <fcntl.h>
 class RandUnix : public RandImpl
 {
 public:
