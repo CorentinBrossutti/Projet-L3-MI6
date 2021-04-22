@@ -1,5 +1,6 @@
 #include "crypt/std.h"
 #include "crypt/random.h"
+#include "crypt/engine.h"
 
 #include <iostream>
 #include <cstdio>

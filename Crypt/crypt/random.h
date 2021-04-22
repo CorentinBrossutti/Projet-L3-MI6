@@ -31,6 +31,9 @@ public:
 };
 #elif defined (UNIX)
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 class RandUnix : public RandImpl
 {
 public:
