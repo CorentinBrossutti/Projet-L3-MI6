@@ -14,7 +14,7 @@
 #define PARTED_MESSAGE 2
 #define DISPATCH_PKEY 3
 
-#define CESAR
+#define RSA
 
 
 class ClientTcp : public QMainWindow, private Ui::ClientTcp

@@ -79,9 +79,11 @@ void ClientTcp::send(const QString& val, bool part, unsigned short flag, bool en
     QDataStream out(&paquet, QIODevice::WriteOnly);
 
     Message msg(val.toStdString());
+    std::string s2 = msg.value().get_str(), s3 = msg.get();
     if(_skey && encrypt)
         _engine->encrypt(msg, _skey);
 
+    std::string s = msg.value().get_str(), s4 = msg.get();
     // Envoi du flag
     out << (quint16) flag;
     if(part)

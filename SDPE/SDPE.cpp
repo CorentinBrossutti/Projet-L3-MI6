@@ -15,19 +15,6 @@ int main(int argc, char** argv)
     cout << r.rand(1) << endl;
     cout << r.rand(5) << endl;
 
-    /*Engine* temp = new Rsa;
-    Key* k = temp->generate();
-
-    Message m("tg");
-    cout << m.value() << endl;
-    temp->encrypt(m, k);
-    cout << m.value() << endl;
-    temp->decrypt(m, k);
-    cout << m.value() << endl;
-
-    delete temp;
-    delete k;*/
-
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;
