@@ -38,8 +38,10 @@ int RandUnix::randb(uint8_t*& buf, const size_t& blen) const
     int fd = open("/dev/urandom", O_RDONLY);
     if (fd < 0)
         return GEN_ERR_UNKNOWN;
-
     int rd_len = 0;
+    if(!buf)
+        buf = new uint8_t[blen];
+
     while(rd_len < blen) {
         int n = read(fd, buf, blen);
         if (n < 0){
