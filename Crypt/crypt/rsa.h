@@ -4,6 +4,8 @@
 #include "key.h"
 #include "engine.h"
 
+#define KSIZE 32
+
 
 // Clé publique RSA, une paire composée de deux clés numériques
 class CAPI PublicKey : public KeyPair

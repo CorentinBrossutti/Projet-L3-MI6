@@ -135,12 +135,12 @@ RsaKey* Rsa::generate()
 
     do
     {
-        p = random_integer();
+        p = random_plike_int(_rand, KSIZE);
     } while (prime(p) != true);
 
     do
     {
-        q = random_integer();
+        q = random_plike_int(_rand, KSIZE);
     } while (prime(q) != true);
 
     bigint n = p * q;
