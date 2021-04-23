@@ -86,25 +86,18 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     return bigint(temp.c_str(), 2);
 }
 
-bigint random_integer()
+bigint random_plike_int(const Randomizer& rand, unsigned int bytes)
 {
-    bigint res = 0;
-    int x;
+    bigint b = rand.rand(bytes) * 10;
 
-    for (int i = 50; i > 1; i--)
-    {
-        x = rand() % 10;
-        res += x * pow(10, i);
-    }
-    res *= 10;
-
+    bigint x;
     do
     {
-        x = rand() % 10;
+        x = rand.rand(1, 10);
     } while (x % 2 == 0 || x == 5);
 
-    res += x;
-    return res;
+    b += x;
+    return b;
 }
 
 bool prime(const bigint& num)

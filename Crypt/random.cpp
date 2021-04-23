@@ -100,3 +100,14 @@ bigint Randomizer::rand(unsigned int bytes) const
 
     return out;
 }
+
+bigint Randomizer::rand(unsigned int digits, unsigned int base) const
+{
+    bigint found;
+    mpz_ui_pow_ui(found.get_mpz_t(), base, digits);
+    bigint temp = mpz_sizeinbase(bigint(found - 1).get_mpz_t(), 2);
+    mpz_cdiv_q_ui(temp.get_mpz_t(), temp.get_mpz_t(), 8);
+    temp = rand(temp.get_ui());
+
+    return temp % found;
+}

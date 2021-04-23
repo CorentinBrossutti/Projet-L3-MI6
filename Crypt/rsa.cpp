@@ -91,12 +91,12 @@ RsaKey* RsaKey::from_str(const string &stringrep)
         throw invalid_argument("RsaKey::from_str : impossible d'analyser la chaîne");
 
     string n = temp.substr(0, delimpos);
-    temp.erase(delimpos + STR_KEY_DELIMSIZE);
+    temp.erase(0, delimpos + STR_KEY_DELIMSIZE);
     delimpos = temp.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("RsaKey::from_str : impossible d'analyser la chaîne");
 
-    string e = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
+    string e = temp.substr(0, delimpos), d = temp.substr(delimpos + STR_KEY_DELIMSIZE);
 
     return new RsaKey(bigint(n), bigint(e), bigint(d));
 }
@@ -104,12 +104,28 @@ RsaKey* RsaKey::from_str(const string &stringrep)
 
 bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize)
 {
-    return Engine::encode(source, ((RsaKey*)key)->publ, padsize);
+    Key* encoder;
+    if(dynamic_cast<RsaKey*>(key))
+        encoder = ((RsaKey*)key)->publ;
+    else if(dynamic_cast<PublicKey*>(key))
+        encoder = key;
+    else
+        throw invalid_argument("Rsa::encode : invalid key");
+
+    return Engine::encode(source, encoder, padsize);
 }
 
 bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
 {
-    return Engine::decode(source, ((RsaKey*)key)->publ, padsize);
+    Key* decoder;
+    if(dynamic_cast<RsaKey*>(key))
+        decoder = ((RsaKey*)key)->priv;
+    else if(dynamic_cast<PrivateKey*>(key))
+        decoder = key;
+    else
+        throw invalid_argument("Rsa::decode : invalid key");
+
+    return Engine::decode(source, decoder, padsize);
 }
 
 RsaKey* Rsa::generate()
@@ -119,12 +135,12 @@ RsaKey* Rsa::generate()
 
     do
     {
-        p = random_integer();
+        p = random_plike_int(_rand, KSIZE);
     } while (prime(p) != true);
 
     do
     {
-        q = random_integer();
+        q = random_plike_int(_rand, KSIZE);
     } while (prime(q) != true);
 
     bigint n = p * q;

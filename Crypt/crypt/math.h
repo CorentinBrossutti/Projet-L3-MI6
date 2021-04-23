@@ -1,6 +1,7 @@
 #pragma once
 
 #include "global.h"
+#include "random.h"
 
 #include <math.h>
 #include <bitset>
@@ -25,7 +26,7 @@ namespace bop
 }
 
 
-bigint random_integer();
+bigint random_plike_int(const Randomizer& rand, unsigned int bytes);
 bool prime(const bigint& num);
 bigint euclide(const bigint& a, const bigint& b);
 bigint modpow(const bigint& base, const bigint& e, const bigint& num);

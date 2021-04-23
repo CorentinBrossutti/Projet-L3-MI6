@@ -50,6 +50,7 @@ public:
 
     // Renvoie un bigint aléatoire composé du nombre d'octets passé en paramètre
     bigint rand(unsigned int bytes) const;
+    bigint rand(unsigned int digits, unsigned int base) const;
 
     static bool init_rand_other;
 protected:
