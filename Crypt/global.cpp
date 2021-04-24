@@ -1,5 +1,6 @@
 #include "crypt/global.h"
 
+
 char ascii_convert_to(uint8_t val)
 {
 	return char(val);

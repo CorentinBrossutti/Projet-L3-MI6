@@ -15,31 +15,36 @@
 class Engine;
 
 // Un message à transmettre, contient un bigint encrypté ou non correspondant au message
-class CAPI Message
+class MI6_CRYPT_API Message
 {
 	friend class Engine;
 public:
 	Message();
+    // Constructeur de copie
     Message(const Message& source);
+    // Construit un message depuis un bigint quelconque, utilie pour transmettre des données numériques
     Message(const bigint& content, bool encrypted = false, unsigned int blocksz = BSIZE_BYTES);
 	// Construit un message depuis du texte, avec une fonction de conversion optionnelle (défaut ASCII)
     Message(const char* content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
     Message(std::string content, unsigned int blocksz = BSIZE_BYTES, uint8_t(*converter)(char) = ascii_convert_from);
     ~Message();
 
+    // Le message est-il encrypté ?
 	bool encrypted() const;
+    // Nombre de parties du message
     unsigned int count() const;
-    //Bigint unitaire représentatif des données
-    bigint value() const;
-    //Obtenir une partie découpée
+    // Bigint unitaire représentatif des données
+    bigint value();
+    // Obtenir une partie découpée
     bigint part(unsigned int index) const;
 	// Permet d'obtenir la représentation textuelle (si pertinent) du message, utilisant une fonction de conversion optionelle (défaut ASCII)
 	// Noter que si le message n'est pas textuel, ou encrypté, cette représentation est inutile
 	std::string get(char (*converter)(uint8_t) = ascii_convert_to);
 
+    // Ecrit le contenu textuel du message dans un fichier
 	void write(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
 
-	CAPI friend std::ostream& operator <<(std::ostream& output, Message& msg);
+    MI6_CRYPT_API friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
     unsigned int _count;
 	bool _encrypted;
@@ -50,9 +55,11 @@ protected:
 
 
 // Un moteur de cryptage générique
-class CAPI Engine
+class MI6_CRYPT_API Engine
 {
 public:
+    virtual ~Engine();
+
 	// Génère une clé de cryptage
 	virtual Key* generate() = 0;
 
@@ -61,9 +68,9 @@ public:
     // Applique l'algorithme de cryptage avec une clé donnée et un nombre à décoder
     virtual bigint run_decrypt(const bigint& source, Key* key) = 0;
 
-	// Ajoute un nonce au nombre donné
+    // Ajoute un nonce au nombre donné (padsize est le nombre d'octets à ajouter)
     virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
-	// Retire le nonce du nombre donné
+    // Retire le nonce du nombre donné (padsize est le nombre d'octets à retirer)
     virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encode un nombre avec une clé donnée
@@ -77,11 +84,15 @@ public:
     void decrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 
 	// Opération dynamique basée sur un argument textuel
-    bool operate(const char* arg, Message& message, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    bool operate(const std::string& arg, Message& message, Key*& key, unsigned int padsize = PADSIZE_BYTES);
 
+    // Construit un message reçu chiffré depuis un nombre
     virtual Message* msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    // Construit un message reçu chiffré depuis une représentation textuelle
     virtual Message* msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
+    // Construit un message reçu chiffré depuis ses parties numériques (vector)
     virtual Message* msgprep(const std::vector<bigint>& parts);
+    // Construit un message reçu chiffré depuis ses parties numériques (tableau)
     virtual Message* msgprep(const bigint* parts, unsigned int length);
 protected:
     Randomizer _rand;

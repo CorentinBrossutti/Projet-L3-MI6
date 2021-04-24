@@ -42,7 +42,7 @@ public:
 #endif
 
 // Classe interface pour l'aléatoire véritable
-class CAPI Randomizer
+class MI6_CRYPT_API Randomizer
 {
 public:
     Randomizer();

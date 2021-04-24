@@ -8,6 +8,8 @@
 #define PARTED_MESSAGE 2
 #define DISPATCH_PKEY 3
 
+#define MSG_REP_BASE 62
+
 class Client
 {
     static unsigned long long int idcounter;

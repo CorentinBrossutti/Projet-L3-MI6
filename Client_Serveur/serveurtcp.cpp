@@ -154,7 +154,7 @@ void ServeurTCP::donneesRecues() {
         do
         {
             unsigned int cursize = 0;
-            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString()).get_mpz_t(), 10)) < plengths[prtidx])
+            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString(), MSG_REP_BASE).get_mpz_t(), MSG_REP_BASE)) < plengths[prtidx])
             {
                 uint tr = plengths[prtidx] - cursize;
                 if(socket->bytesAvailable() + buffer.size() < tr)
@@ -171,7 +171,7 @@ void ServeurTCP::donneesRecues() {
 
         std::vector<bigint> stack;
         for(unsigned int i = 0;i < pcount;i++)
-            stack.push_back(bigint(parts[i].toStdString()));
+            stack.push_back(bigint(parts[i].toStdString(), MSG_REP_BASE));
 
         m = _engine->msgprep(stack);
         if(parts){

@@ -11,6 +11,17 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+    Engine* eng = new Cesar;
+    Key* k = eng->generate();
+    Message m("tg william le gros pd");
+
+    eng->encrypt(m, k, true);
+    eng->decrypt(m, k, true);
+    cout << m.get() << endl;
+
+    delete k;
+    delete eng;
+
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;
@@ -29,7 +40,7 @@ int main(int argc, char** argv)
         cout << "La clé ne peut être lue." << endl;
     else if (!(msg = msgs::retrieve(argv[4])))
         cout << "Aucun message n'a pu être extrait du fichier donné (ou le message est vide)." << endl;
-    else if (engine->operate(argv[2], *msg, key))
+    else if (engine->operate(string(argv[2]), *msg, key))
     {
         msg->write(argv[5]);
         cout << "Message traité et écrit dans le fichier cible." << endl;

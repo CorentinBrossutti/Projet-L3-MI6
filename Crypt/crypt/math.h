@@ -11,16 +11,14 @@
 // BIGINT operations
 namespace bop
 {
-	// Retourne le nombre de bits d'un big int
-	unsigned int sizebin(const bigint& number);
 	// Retourne le nombre d'octets d'un big int
     unsigned int count_bytes(const bigint& number);
 
-    CAPI std::string padto(const bigint& from);
-	CAPI bigint from(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
-    CAPI std::string to(const bigint& val, char(*converter)(uint8_t) = ascii_convert_to);
+    MI6_CRYPT_API bigint from_cptr(const char* val, uint8_t(*converter)(char) = ascii_convert_from);
+    MI6_CRYPT_API bigint from_str(const std::string& str, uint8_t(*converter)(char) = ascii_convert_from);
+    MI6_CRYPT_API std::string to_str(const bigint& val, char(*converter)(uint8_t) = ascii_convert_to);
 
-    std::vector<bigint> decompose_vec(const bigint& val, unsigned int blocksz);
+    std::vector<bigint> decompose_vec(const bigint& val, unsigned int blocksz, bool inverted = false);
     unsigned int decompose(const bigint& val, bigint*& recp, unsigned int blocksz);
     bigint recompose(const bigint* from, unsigned int count);
 }
@@ -34,7 +32,7 @@ bigint exposant_code(const bigint& num);
 
 
 // Ensemble d'octets (et non de bits...) liés à un bigint
-struct CAPI byteset
+struct MI6_CRYPT_API byteset
 {
 public:
 	byteset(const bigint& from);
@@ -45,7 +43,7 @@ public:
 	std::bitset<8> get(unsigned int index) const;
 
 	std::bitset<8> operator [](int index) const;
-	CAPI friend std::ostream& operator <<(std::ostream& output, const byteset& bytes);
+    MI6_CRYPT_API friend std::ostream& operator <<(std::ostream& output, const byteset& bytes);
 protected:
 	unsigned int _size;
 	std::bitset<8>* _bytes;

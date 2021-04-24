@@ -16,6 +16,8 @@
 
 #define RSA
 
+#define MSG_REP_BASE 62
+
 
 class ClientTcp : public QMainWindow, private Ui::ClientTcp
 {

@@ -3,8 +3,13 @@
 #include "crypt/math.h"
 
 #include <fstream>
+#include <cstdio>
+#include <iostream>
 
 using namespace std;
+
+
+Key::~Key() {}
 
 RealKey::RealKey()
 {
@@ -20,39 +25,36 @@ RealKey::RealKey(const bigint& value)
 	this->value = value;
 }
 
-RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bop::from(textval, converter))
+RealKey::RealKey(const char* textval, uint8_t(*converter)(char)) : RealKey(bop::from_cptr(textval, converter))
 {
 }
 
+RealKey::~RealKey(){}
+
 string RealKey::tostr() const
 {
-    return value.get_str();
+    return value.get_str(KEY_STR_BASE);
 }
 
 void RealKey::save(const char* filepath) const
 {
-	save(filepath, ascii_convert_to);
+    ofstream ofs;
+    ofs.open(filepath, ios::out);
+    if (ofs.fail())
+        return;
+
+    ofs << tostr();
+    ofs.close();
 }
 
-void RealKey::save(const char* filepath, char(*converter)(uint8_t)) const
+RealKey* RealKey::from_cptr(const char *stringrep, unsigned int base)
 {
-	ofstream ofs;
-	ofs.open(filepath, ios::out);
-	if (ofs.fail())
-		return;
-
-	ofs << bop::to(value, converter);
-	ofs.close();
+    return from_str(string(stringrep), base);
 }
 
-RealKey* RealKey::from_cptr(const char *stringrep)
+RealKey* RealKey::from_str(const string &stringrep, unsigned int base)
 {
-    return from_str(string(stringrep));
-}
-
-RealKey* RealKey::from_str(const string &stringrep)
-{
-    return new RealKey(bigint(stringrep));
+    return new RealKey(bigint(stringrep, base));
 }
 
 
@@ -96,17 +98,17 @@ void KeyPair::save(const char* filepath) const
     b->save(filepath);
 }
 
-KeyPair* KeyPair::from_cptr(const char *stringrep)
+KeyPair* KeyPair::from_cptr(const char *stringrep, unsigned int base)
 {
-    return from_str(string(stringrep));
+    return from_str(string(stringrep), base);
 }
 
-KeyPair* KeyPair::from_str(const string &stringrep)
+KeyPair* KeyPair::from_str(const string &stringrep, unsigned int base)
 {
     unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("KeyPair::from_str : impossible d'analyser la chaîne");
     string a = stringrep.substr(0, delimpos), b = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return new KeyPair(bigint(a), bigint(b));
+    return new KeyPair(bigint(a, base), bigint(b, base));
 }

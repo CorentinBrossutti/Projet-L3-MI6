@@ -3,6 +3,8 @@
 #include "crypt/math.h"
 
 #include <time.h>
+#include <cstdio>
+#include <iostream>
 
 using namespace std;
 
@@ -17,19 +19,19 @@ PublicKey::PublicKey(const bigint& n, const bigint& e) : KeyPair(n, e)
     this->e = (RealKey*)b;
 }
 
-PublicKey* PublicKey::from_cptr(const char *stringrep)
+PublicKey* PublicKey::from_cptr(const char *stringrep, unsigned int base)
 {
-    return from_str(string(stringrep));
+    return from_str(string(stringrep), base);
 }
 
-PublicKey* PublicKey::from_str(const string &stringrep)
+PublicKey* PublicKey::from_str(const string &stringrep, unsigned int base)
 {
     unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("PublicKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), e = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return new PublicKey(bigint(n), bigint(e));
+    return new PublicKey(bigint(n, base), bigint(e, base));
 }
 
 
@@ -43,19 +45,19 @@ PrivateKey::PrivateKey(const bigint& n, const bigint& d) : KeyPair(n, d)
     this->d = (RealKey*)b;
 }
 
-PrivateKey* PrivateKey::from_cptr(const char *stringrep)
+PrivateKey* PrivateKey::from_cptr(const char *stringrep, unsigned int base)
 {
-    return from_str(string(stringrep));
+    return from_str(string(stringrep), base);
 }
 
-PrivateKey* PrivateKey::from_str(const string &stringrep)
+PrivateKey* PrivateKey::from_str(const string &stringrep, unsigned int base)
 {
     unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("PrivateKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return new PrivateKey(bigint(n), bigint(d));
+    return new PrivateKey(bigint(n, base), bigint(d, base));
 }
 
 
@@ -77,12 +79,12 @@ string RsaKey::tostr() const
     return publ->n->tostr() + STR_KEY_DELIMITER + publ->e->tostr() + STR_KEY_DELIMITER + priv->d->tostr();
 }
 
-RsaKey* RsaKey::from_cptr(const char *stringrep)
+RsaKey* RsaKey::from_cptr(const char *stringrep, unsigned int base)
 {
-    return from_str(string(stringrep));
+    return from_str(string(stringrep), base);
 }
 
-RsaKey* RsaKey::from_str(const string &stringrep)
+RsaKey* RsaKey::from_str(const string &stringrep, unsigned int base)
 {
     string temp = stringrep;
 
@@ -98,7 +100,7 @@ RsaKey* RsaKey::from_str(const string &stringrep)
 
     string e = temp.substr(0, delimpos), d = temp.substr(delimpos + STR_KEY_DELIMSIZE);
 
-    return new RsaKey(bigint(n), bigint(e), bigint(d));
+    return new RsaKey(bigint(n, base), bigint(e, base), bigint(d, base));
 }
 
 

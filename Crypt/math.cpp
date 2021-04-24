@@ -2,50 +2,50 @@
 #include "crypt/math.h"
 
 #include <sstream>
+#include <iostream>
+#include <cstdio>
 
 using namespace std;
 
 
-unsigned int bop::sizebin(const bigint& number)
-{
-	return mpz_sizeinbase(number.get_mpz_t(), 2);
-}
-
 unsigned int bop::count_bytes(const bigint& number)
 {
-    return (unsigned int)(ceil(sizebin(number) / 8.0));
+    return (unsigned int)(ceil(mpz_sizeinbase(number.get_mpz_t(), 2) / 8.0));
 }
 
-string bop::padto(const bigint& from)
+bigint bop::from_cptr(const char* val, uint8_t(*converter)(char))
 {
-    string str = from.get_str(2);
-    str.insert(0, bop::count_bytes(from) * 8 - bop::sizebin(from), '0');
-
-    return str;
-}
-
-bigint bop::from(const char* val, uint8_t(*converter)(char))
-{
-	stringstream sstream;
+    bigint b;
 	// On transforme le message en entier, pour ça on itère sur les caractères...
     for (unsigned int i = 0; val[i] != '\0'; i++)
-        sstream << bitset<8>(converter(val[i])).to_string();
+        b = b * 256 + converter(val[i]);
 
-    return bigint(sstream.str(), 2);
+    return b;
 }
 
-std::string bop::to(const bigint& val, char(*converter)(uint8_t))
+bigint bop::from_str(const string& str, uint8_t(*converter)(char))
+{
+    return from_cptr(str.c_str(), converter);
+}
+
+std::string bop::to_str(const bigint& val, char(*converter)(uint8_t))
 {
 	stringstream sstream;
+    bigint temp = val;
+    bigint modt;
+    for (unsigned int i = 0; i < count_bytes(val); i++){
+        mpz_mod_ui(modt.get_mpz_t(), temp.get_mpz_t(), 256);
+        sstream << converter(modt.get_ui());
+        mpz_fdiv_q_ui(temp.get_mpz_t(), temp.get_mpz_t(), 256);
+    }
 
-	byteset bytes(val);
-	for (unsigned int i = 0; i < bytes.size(); i++)
-		sstream << converter(bytes[i].to_ulong());
+    string out = sstream.str();
+    reverse(out.begin(), out.end());
 
-	return sstream.str();
+    return out;
 }
 
-vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
+vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz, bool inverted)
 {
     vector<bigint> v;
     bigint b = val, mask;
@@ -59,12 +59,15 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz)
         b >>= blocksz * 8;
     }
 
+    if(!inverted)
+        reverse(v.begin(), v.end());
+
     return v;
 }
 
 unsigned int bop::decompose(const bigint& val, bigint*& recp, unsigned int blocksz)
 {
-    vector<bigint> temp = decompose_vec(val, blocksz);
+    vector<bigint> temp = decompose_vec(val, blocksz, true);
 
     recp = new bigint[temp.size()];
     unsigned int idx = temp.size();
@@ -79,12 +82,16 @@ bigint bop::recompose(const bigint* from, unsigned int count)
     if(count == 0)
         return 0;
 
-    string temp;
-    for(unsigned int i = 0;i < count;i++)
-        temp += padto(from[i]);
+    bigint temp;
+    bigint mult;
+    for(unsigned int i = 0;i < count;i++){
+        mpz_ui_pow_ui(mult.get_mpz_t(), 16, mpz_sizeinbase(from[i].get_mpz_t(), 16));
+        temp = temp * mult + from[i];
+    }
 
-    return bigint(temp.c_str(), 2);
+    return temp;
 }
+
 
 bigint random_plike_int(const Randomizer& rand, unsigned int bytes)
 {
@@ -180,7 +187,7 @@ byteset::byteset(const bigint& from)
 		from >>= 8;
 	}*/
 	string str = from.get_str(2);
-	str.insert(0, count * 8 - bop::sizebin(from), '0');
+    str.insert(0, count * 8 - mpz_sizeinbase(from.get_mpz_t(), 2), '0');
     for (unsigned int i = 0; i < count; i++)
         _bytes[i] = bitset<8>(str.substr(i * 8, 8));
 

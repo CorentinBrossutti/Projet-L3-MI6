@@ -8,7 +8,7 @@
 
 
 // Clé publique RSA, une paire composée de deux clés numériques
-class CAPI PublicKey : public KeyPair
+class MI6_CRYPT_API PublicKey : public KeyPair
 {
 public:
 	RealKey* n;
@@ -17,12 +17,12 @@ public:
     PublicKey();
 	PublicKey(const bigint& n, const bigint& e);
 
-    static PublicKey* from_cptr(const char* stringrep);
-    static PublicKey* from_str(const std::string& stringrep);
+    static PublicKey* from_cptr(const char* stringrep, unsigned int base = KEY_STR_BASE);
+    static PublicKey* from_str(const std::string& stringrep, unsigned int base = KEY_STR_BASE);
 };
 
 // Clé privée RSA, une paire composée de deux clés numériques
-class CAPI PrivateKey : public KeyPair
+class MI6_CRYPT_API PrivateKey : public KeyPair
 {
 public:
 	RealKey* n;
@@ -31,12 +31,12 @@ public:
     PrivateKey();
 	PrivateKey(const bigint& n, const bigint& d);
 
-    static PrivateKey* from_cptr(const char* stringrep);
-    static PrivateKey* from_str(const std::string& stringrep);
+    static PrivateKey* from_cptr(const char* stringrep, unsigned int base = KEY_STR_BASE);
+    static PrivateKey* from_str(const std::string& stringrep, unsigned int base = KEY_STR_BASE);
 };
 
 // Clé "trousseau" RSA, composée d'une clé publique et d'une clé privée (design composite donc)
-class CAPI RsaKey : public KeyPair
+class MI6_CRYPT_API RsaKey : public KeyPair
 {
 public:
 	PublicKey* publ;
@@ -47,13 +47,13 @@ public:
 
     virtual std::string tostr() const;
 
-    static RsaKey* from_cptr(const char* stringrep);
-    static RsaKey* from_str(const std::string& stringrep);
+    static RsaKey* from_cptr(const char* stringrep, unsigned int base = KEY_STR_BASE);
+    static RsaKey* from_str(const std::string& stringrep, unsigned int base = KEY_STR_BASE);
 };
 
 
 // Moteur de cryptage asymétrique RSA
-class CAPI Rsa : public Engine
+class MI6_CRYPT_API Rsa : public Engine
 {
 public:
 	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);

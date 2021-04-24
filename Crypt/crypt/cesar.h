@@ -6,7 +6,7 @@
 
 
 // Moteur de cryptage César
-class CAPI Cesar : public Engine
+class MI6_CRYPT_API Cesar : public Engine
 {
 public:
     virtual Key* generate();

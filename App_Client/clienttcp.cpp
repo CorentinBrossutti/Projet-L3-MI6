@@ -79,11 +79,9 @@ void ClientTcp::send(const QString& val, bool part, unsigned short flag, bool en
     QDataStream out(&paquet, QIODevice::WriteOnly);
 
     Message msg(val.toStdString());
-    std::string s2 = msg.value().get_str(), s3 = msg.get();
     if(_skey && encrypt)
         _engine->encrypt(msg, _skey);
 
-    std::string s = msg.value().get_str(), s4 = msg.get();
     // Envoi du flag
     out << (quint16) flag;
     if(part)
@@ -92,10 +90,10 @@ void ClientTcp::send(const QString& val, bool part, unsigned short flag, bool en
         out << (quint16) msg.count();
 
         for (unsigned int i = 0; i < msg.count(); i++)
-            out << (quint16) mpz_sizeinbase(msg.part(i).get_mpz_t(), 10);
+            out << (quint16) mpz_sizeinbase(msg.part(i).get_mpz_t(), MSG_REP_BASE);
 
         for (unsigned int i = 0; i < msg.count(); i++)
-            out << QString::fromStdString(msg.part(i).get_str());
+            out << QString::fromStdString(msg.part(i).get_str(MSG_REP_BASE));
     }
     else
     {
@@ -188,7 +186,7 @@ void ClientTcp::donneesRecues() {
         do
         {
             unsigned int cursize = 0;
-            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString()).get_mpz_t(), 10)) < plengths[prtidx])
+            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString(), MSG_REP_BASE).get_mpz_t(), MSG_REP_BASE)) < plengths[prtidx])
             {
                 uint tr = plengths[prtidx] - cursize;
                 if(socket->bytesAvailable() < tr)
@@ -205,7 +203,7 @@ void ClientTcp::donneesRecues() {
 
         std::vector<bigint> stack;
         for(unsigned int i = 0;i < pcount;i++)
-            stack.push_back(bigint(parts[i].toStdString()));
+            stack.push_back(bigint(parts[i].toStdString(), MSG_REP_BASE));
 
         m = _engine->msgprep(stack);
         if(parts){
