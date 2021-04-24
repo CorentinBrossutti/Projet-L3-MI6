@@ -149,9 +149,7 @@ RsaKey* Rsa::generate()
     bigint d = euclide(e, ind);
 
     if (d<0)
-    {
         d+=ind;
-    }
 
     return new RsaKey(n, e, d);
 }

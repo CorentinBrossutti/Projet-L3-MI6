@@ -11,10 +11,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Randomizer r;
-    cout << r.rand(1) << endl;
-    cout << r.rand(5) << endl;
-
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;

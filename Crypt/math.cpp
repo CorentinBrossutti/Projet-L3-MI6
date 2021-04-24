@@ -88,7 +88,8 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 
 bigint random_plike_int(const Randomizer& rand, unsigned int bytes)
 {
-    bigint b = rand.rand(bytes) * 10;
+    bigint b = rand.rand(bytes);
+    b -= b % 10;
 
     bigint x;
     do
@@ -96,8 +97,7 @@ bigint random_plike_int(const Randomizer& rand, unsigned int bytes)
         x = rand.rand(1, 10);
     } while (x % 2 == 0 || x == 5);
 
-    b += x;
-    return b;
+    return b + x;
 }
 
 bool prime(const bigint& num)
