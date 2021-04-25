@@ -3,8 +3,6 @@
 #include "crypt/math.h"
 
 #include <fstream>
-#include <cstdio>
-#include <iostream>
 
 using namespace std;
 
@@ -33,7 +31,7 @@ RealKey::~RealKey(){}
 
 string RealKey::tostr() const
 {
-    return value.get_str(KEY_STR_BASE);
+    return value.get_str(STR_KEY_BASE);
 }
 
 void RealKey::save(const char* filepath) const

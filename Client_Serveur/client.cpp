@@ -50,7 +50,7 @@ void Client::send(const QString &msg, Engine* engine, bool part, bool encrypt, u
         out << (quint16) ifmsg.count();
 
         for (unsigned int i = 0; i < ifmsg.count(); i++)
-            out << (quint16) mpz_sizeinbase(ifmsg.part(i).get_mpz_t(), MSG_REP_BASE);
+            out << (quint16) bop::getsize(ifmsg.part(i), MSG_REP_BASE, true);
 
         for (unsigned int i = 0; i < ifmsg.count(); i++)
             out << QString::fromStdString(ifmsg.part(i).get_str(MSG_REP_BASE));

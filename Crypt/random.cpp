@@ -6,7 +6,10 @@
 using namespace std;
 
 
-int RandOther::randb(uint8_t*& buf, const size_t& blen) const
+RandImpl::~RandImpl() {}
+
+
+int RandPseudo::randb(uint8_t*& buf, const size_t& blen) const
 {
     if(!buf)
         buf = new uint8_t[blen];
@@ -16,6 +19,7 @@ int RandOther::randb(uint8_t*& buf, const size_t& blen) const
 
     return GEN_SUCCESS;
 }
+
 
 #if defined (WIN)
 int RandWin::randb(uint8_t*& buf, const size_t& blen) const
@@ -65,10 +69,8 @@ Randomizer::Randomizer()
 #elif defined (UNIX)
     _impl = new RandUnix;
 #else
-    if(!init_rand_other){
-        init_rand_other = true;
-        srand(time(NULL));
-    }
+    // Initialisation (si nécessaire) du pseudo-aléatoire
+    Randomizer::pseudo();
     _impl = new RandOther;
 #endif
 }
@@ -89,6 +91,7 @@ bigint Randomizer::rand(unsigned int bytes) const
 
     if(out == GEN_SUCCESS)
     {
+        // On concatène les octets pour obtenir le nombre de la taille désirée
         for(unsigned int i = 0;i < bytes;i++)
             out = (out * 256) + buf[i];
     }
@@ -101,13 +104,79 @@ bigint Randomizer::rand(unsigned int bytes) const
     return out;
 }
 
+bigint Randomizer::rand() const
+{
+    if(dynamic_cast<RandPseudo*>(_impl))
+        return std::rand();
+
+    // Complètement arbitraire, on fait juste des multiplications statiques sur un octet aléatoire
+    bigint b = rand(1);
+    mpz_pow_ui(b.get_mpz_t(), rand(1).get_mpz_t(), 4);
+
+    return 10 * b + 32767;
+}
+
 bigint Randomizer::rand(unsigned int digits, unsigned int base) const
 {
+    // Found est le modulo supérieur pour obtenir la partie désirée du nombre aléatoire
     bigint found;
     mpz_ui_pow_ui(found.get_mpz_t(), base, digits);
-    bigint temp = mpz_sizeinbase(bigint(found - 1).get_mpz_t(), 2);
+
+    // On obtient le nombre minimal d'octets que prendrait un nombre avec le nombre de chiffres désiré
+    bigint temp = bop::getsize(bigint(found - 1), 2);
     mpz_cdiv_q_ui(temp.get_mpz_t(), temp.get_mpz_t(), 8);
+    // On obtient un nombre aléatoire de cette taille
     temp = rand(temp.get_ui());
 
-    return temp % found;
+    // Puis on lui applique le modulo supérieur pour obtenir la partie intéréssante
+    // Par exemple, si l'on veut quatre chiffres, le modulo supérieur est 10000 et ainsi lorsque la génération produit par exemple 65321, le modulo renvoie 5321
+    bigint out = temp % found;
+    // On s'assure que le nombre soit de la bonne taille (cas d'un nombre tel que 30077
+    size_t sz = bop::getsize(out, base, true);
+    // Sinon on le multiplie par la base puissance le nombre de chiffres manquants
+    if(sz < digits){
+        mpz_ui_pow_ui(found.get_mpz_t(), base, digits - sz);
+        out *= found;
+    }
+
+    return out;
+}
+
+bool Randomizer::__psinit = false;
+Randomizer& Randomizer::pseudo()
+{
+    static Randomizer pseudo;
+    if(!__psinit)
+    {
+        delete pseudo._impl;
+        srand(time(NULL));
+        pseudo._impl = new RandPseudo;
+        __psinit = true;
+    }
+
+    return pseudo;
+}
+
+
+bigint random_prime(const Randomizer& rand, unsigned int bytes)
+{
+    bigint num;
+    bigint x;
+    do
+    {
+        num = rand.rand(bytes);
+        // On retire le dernier chiffre en base 10
+        num -= num % 10;
+
+        // On ajoute un chiffre aléatoire qui soit impair et ne soit pas un multiple de 5 pour augmenter la probabilité qu'il soit premier
+        do
+        {
+            x = rand.rand(1, 10);
+        } while (x % 2 == 0 || x == 5);
+
+        num += x;
+
+    } while (!isprime(num, Randomizer::pseudo().rand()));
+
+    return num;
 }

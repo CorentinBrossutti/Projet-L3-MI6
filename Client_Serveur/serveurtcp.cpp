@@ -154,7 +154,7 @@ void ServeurTCP::donneesRecues() {
         do
         {
             unsigned int cursize = 0;
-            while(parts[prtidx] == "" || (cursize = mpz_sizeinbase(bigint(parts[prtidx].toStdString(), MSG_REP_BASE).get_mpz_t(), MSG_REP_BASE)) < plengths[prtidx])
+            while(parts[prtidx] == "" || (cursize = bop::getsize(bigint(parts[prtidx].toStdString(), MSG_REP_BASE), MSG_REP_BASE, true)) < plengths[prtidx])
             {
                 uint tr = plengths[prtidx] - cursize;
                 if(socket->bytesAvailable() + buffer.size() < tr)

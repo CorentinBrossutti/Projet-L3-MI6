@@ -1,6 +1,7 @@
 #pragma once
 
 #include "global.h"
+#include "math.h"
 
 #define GEN_SUCCESS 0
 #define GEN_ERR_UNKNOWN 1
@@ -12,11 +13,13 @@
 class RandImpl
 {
 public:
+    virtual ~RandImpl();
+
     virtual int randb(uint8_t*& buf, const size_t& blen) const = 0;
 };
 
 // Pseudo-aléatoire multiplateforme
-class RandOther : public RandImpl
+class RandPseudo : public RandImpl
 {
 public:
     virtual int randb(uint8_t*& buf, const size_t& blen) const;
@@ -48,11 +51,23 @@ public:
     Randomizer();
     ~Randomizer();
 
+    // Renvoie un grand nombre aléatoire arbitraire, similaire à la fonction std::rand
+    bigint rand() const;
     // Renvoie un bigint aléatoire composé du nombre d'octets passé en paramètre
     bigint rand(unsigned int bytes) const;
+    // Renvoie un bigint aléatoire avec le digits chiffres dans la base base
     bigint rand(unsigned int digits, unsigned int base) const;
 
-    static bool init_rand_other;
+    // Renvoie, quel que soit le système, un randomizer pseudo-aléatoire
+    static Randomizer& pseudo();
+
 protected:
     RandImpl* _impl;
+
+private:
+    static bool __psinit;
 };
+
+
+// Renvoie un nombre premier aléatoire constitué de bytes octets
+bigint random_prime(const Randomizer& rand, unsigned int bytes);

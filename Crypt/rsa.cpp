@@ -3,8 +3,6 @@
 #include "crypt/math.h"
 
 #include <time.h>
-#include <cstdio>
-#include <iostream>
 
 using namespace std;
 
@@ -132,22 +130,11 @@ bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
 
 RsaKey* Rsa::generate()
 {
-    bigint p, q;
-    srand(time(NULL));
-
-    do
-    {
-        p = random_plike_int(_rand, KSIZE);
-    } while (prime(p) != true);
-
-    do
-    {
-        q = random_plike_int(_rand, KSIZE);
-    } while (prime(q) != true);
+    bigint p = random_prime(_rand, KSIZE), q = random_prime(_rand, KSIZE);
 
     bigint n = p * q;
     bigint ind = (p - 1) * (q - 1);
-    bigint e = exposant_code(ind); 
+    bigint e = expcode(ind);
     bigint d = euclide(e, ind);
 
     if (d<0)

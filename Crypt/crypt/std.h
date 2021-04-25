@@ -7,6 +7,7 @@
 
 namespace engines
 {
+    // Renvoie un moteur de cryptage basé sur son nom (arg) si existant, sinon nullptr
 	MI6_CRYPT_API Engine* resolve(char* arg);
 }
 

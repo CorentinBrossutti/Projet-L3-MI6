@@ -11,17 +11,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Engine* eng = new Cesar;
-    Key* k = eng->generate();
-    Message m("tg william le gros pd");
-
-    eng->encrypt(m, k, true);
-    eng->decrypt(m, k, true);
-    cout << m.get() << endl;
-
-    delete k;
-    delete eng;
-
     int ret = EXIT_FAILURE;
     Engine* engine = nullptr;
     Key* key = nullptr;

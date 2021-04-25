@@ -1,22 +1,29 @@
-#include "crypt/global.h"
 #include "crypt/math.h"
+#include "crypt/global.h"
 
 #include <sstream>
-#include <iostream>
-#include <cstdio>
 
 using namespace std;
 
 
-unsigned int bop::count_bytes(const bigint& number)
+size_t bop::count_bytes(const bigint& number, bool exact)
 {
-    return (unsigned int)(ceil(mpz_sizeinbase(number.get_mpz_t(), 2) / 8.0));
+    return ceil(getsize(number, 2, exact) / 8.0);
+}
+
+size_t bop::getsize(const bigint& val, unsigned int base, bool exact)
+{
+    // Si exact, l'on est obligé de retourner la taille de la représentation textuelle
+    // Sinon mpz_sizeinbase suffit malgré sa marge d'erreur de 0/+1
+    return exact ?
+                val.get_str(base).size() :
+                mpz_sizeinbase(val.get_mpz_t(), base);
 }
 
 bigint bop::from_cptr(const char* val, uint8_t(*converter)(char))
 {
     bigint b;
-	// On transforme le message en entier, pour ça on itère sur les caractères...
+    // On transforme le message en entier, pour ça on itère sur les caractères... et on les convertit
     for (unsigned int i = 0; val[i] != '\0'; i++)
         b = b * 256 + converter(val[i]);
 
@@ -33,13 +40,18 @@ std::string bop::to_str(const bigint& val, char(*converter)(uint8_t))
 	stringstream sstream;
     bigint temp = val;
     bigint modt;
-    for (unsigned int i = 0; i < count_bytes(val); i++){
-        mpz_mod_ui(modt.get_mpz_t(), temp.get_mpz_t(), 256);
+    for (unsigned int i = 0; i < count_bytes(val); i++)
+    {
+        // On obtient le dernier octet en faisant le nombre modulo 256 (2^8)
+        modt = temp % 256;
+        // On convertit l'octet en son caractère et on le renvoie
         sstream << converter(modt.get_ui());
+        // On divise le nombre par 256 pour retirer le dernier octet
         mpz_fdiv_q_ui(temp.get_mpz_t(), temp.get_mpz_t(), 256);
     }
 
     string out = sstream.str();
+    // On inverse la représentation car elle commence par la fin
     reverse(out.begin(), out.end());
 
     return out;
@@ -48,16 +60,27 @@ std::string bop::to_str(const bigint& val, char(*converter)(uint8_t))
 vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz, bool inverted)
 {
     vector<bigint> v;
-    bigint b = val, mask;
+    bigint b = val, mod;
+    mpz_ui_pow_ui(mod.get_mpz_t(), 2, blocksz * 8);
+
+    while(b > 0)
+    {
+        v.push_back(b % mod);
+        b /= mod;
+    }
+
+    // Vieille version du découpage
+    /*bigint b = val, mask;
     mpz_ui_pow_ui(mask.get_mpz_t(), 2, blocksz * 8);
     mask -= 1;
 
     unsigned long long int bcount = count_bytes(val);
 
-    for(unsigned long long int i = 0;i < bcount;i+=blocksz){
+    for(unsigned long long int i = 0;i < bcount;i+=blocksz)
+    {
         v.push_back((bcount - i) >= blocksz ? b & mask : b);
         b >>= blocksz * 8;
-    }
+    }*/
 
     if(!inverted)
         reverse(v.begin(), v.end());
@@ -65,8 +88,9 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz, bool 
     return v;
 }
 
-unsigned int bop::decompose(const bigint& val, bigint*& recp, unsigned int blocksz)
+size_t bop::decompose(const bigint& val, bigint*& recp, unsigned int blocksz)
 {
+    // On le garde inversé car on va itérer dans l'autre sens, optimisation
     vector<bigint> temp = decompose_vec(val, blocksz, true);
 
     recp = new bigint[temp.size()];
@@ -77,6 +101,22 @@ unsigned int bop::decompose(const bigint& val, bigint*& recp, unsigned int block
     return temp.size();
 }
 
+bigint bop::recompose_vec(const vector<bigint>& from)
+{
+    if(from.size() == 0)
+        return 0;
+
+    bigint temp;
+    bigint mult;
+    for(bigint part : from)
+    {
+        mpz_ui_pow_ui(mult.get_mpz_t(), 16, getsize(part, 16, true));
+        temp = temp * mult + part;
+    }
+
+    return temp;
+}
+
 bigint bop::recompose(const bigint* from, unsigned int count)
 {
     if(count == 0)
@@ -84,8 +124,9 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 
     bigint temp;
     bigint mult;
-    for(unsigned int i = 0;i < count;i++){
-        mpz_ui_pow_ui(mult.get_mpz_t(), 16, mpz_sizeinbase(from[i].get_mpz_t(), 16));
+    for(unsigned int i = 0;i < count;i++)
+    {
+        mpz_ui_pow_ui(mult.get_mpz_t(), 16, getsize(from[i], 16, true));
         temp = temp * mult + from[i];
     }
 
@@ -93,24 +134,10 @@ bigint bop::recompose(const bigint* from, unsigned int count)
 }
 
 
-bigint random_plike_int(const Randomizer& rand, unsigned int bytes)
-{
-    bigint b = rand.rand(bytes);
-    b -= b % 10;
-
-    bigint x;
-    do
-    {
-        x = rand.rand(1, 10);
-    } while (x % 2 == 0 || x == 5);
-
-    return b + x;
-}
-
-bool prime(const bigint& num)
+bool isprime(const bigint& num, const bigint& rn)
 {
     bigint x;
-    x = rand() % num;
+    x = rn % num;
     bigint temp = num - 1;
 
     return modpow(x, temp, num) == 1;
@@ -139,6 +166,7 @@ bigint euclide(const bigint& a, const bigint& b)
         u2 = u3 - q * u2;
         v2 = v3 - q * v2;
     }
+
     return u1;
 }
 
@@ -151,9 +179,8 @@ bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
     {
         bigint r = (exp_bin % 2);
         if (r == 1)
-        {
             res = (res * temp) % num;
-        }
+
         exp_bin /= 2;
         temp = (temp * temp) % num;
     }
@@ -161,7 +188,7 @@ bigint modpow(const bigint& base, const bigint& exp, const bigint& num)
     return res;
 }
 
-bigint exposant_code(const bigint& num)
+bigint expcode(const bigint& num)
 {
     bigint tab[35] = { 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149 };
     for (int i = 0; i < 25; i++)
@@ -169,58 +196,6 @@ bigint exposant_code(const bigint& num)
         if (num % tab[i] != 0)
             return tab[i];
     }
+
     return -1;
-}
-
-
-byteset::byteset(const bigint& from)
-{
-	unsigned int count = bop::count_bytes(from);
-
-	_bytes = new bitset<8>[count];
-	/*for (unsigned int i = 0; i < count; i++)
-	{
-		// Cela fonctionne car get_ui retourne le nombre constitué des bits de poids faible
-		// Et bitset prend aussi les bits de poids faible si le nombre en constructeur est trop grand
-		_bytes[count - i - 1] = bitset<8>(from.get_ui());
-		// Couplé avec le right shift on arrive donc à itérer octet par octet
-		from >>= 8;
-	}*/
-	string str = from.get_str(2);
-    str.insert(0, count * 8 - mpz_sizeinbase(from.get_mpz_t(), 2), '0');
-    for (unsigned int i = 0; i < count; i++)
-        _bytes[i] = bitset<8>(str.substr(i * 8, 8));
-
-    _size = count;
-}
-
-byteset::~byteset()
-{
-	delete[] _bytes;
-}
-
-unsigned int byteset::size() const
-{
-	return _size;
-}
-
-bitset<8> byteset::get(unsigned int index) const
-{
-	if (index >= _size)
-		throw invalid_argument("L'indice spécifié est trop grand pour le byteset.");
-
-	return _bytes[index];
-}
-
-std::bitset<8> byteset::operator[](int index) const
-{
-	return get(index);
-}
-
-std::ostream& operator<<(std::ostream& output, const byteset& bytes)
-{
-	for (unsigned int i = 0; i < bytes.size(); i++)
-		output << bytes.get(i) << " ";
-
-	return output;
 }

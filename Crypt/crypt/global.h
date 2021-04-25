@@ -24,7 +24,7 @@
 #endif
 
 // Définit si l'API est en mode export/import, permet d'optimiser dans certains cas
-// CRYPT_EXPORTS est une variable globale à définir lors de la compilation
+// CRYPT_LIBRARY est une variable globale à définir lors de la compilation
 #ifdef CRYPT_LIBRARY
 #define MI6_CRYPT_API EXPORT
 #else

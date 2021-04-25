@@ -2,9 +2,12 @@
 
 #include "global.h"
 
+// Délimiteur par défaut des parties d'une clé dans sa représentation textuelle
 #define STR_KEY_DELIMITER "::"
+// Taille du délimiteur par défaut
 #define STR_KEY_DELIMSIZE 2
-#define KEY_STR_BASE 62
+// Base à utiliser pour les valeurs réelles des clés à stocker sous forme textuelle (de 2 à 62)
+#define STR_KEY_BASE 62
 
 // Une clé de cryptage générique
 struct MI6_CRYPT_API Key
@@ -12,9 +15,9 @@ struct MI6_CRYPT_API Key
 public:
     virtual ~Key();
 
-    // Obtenir une représentation textuelle de cette clé
+    // Renvoie une représentation textuelle de cette clé
     virtual std::string tostr() const = 0;
-    // Sauvegarder la clé dans un fichier
+    // Sauvegarde la clé dans un fichier
     virtual void save(const char* filepath) const = 0;
 };
 
@@ -22,6 +25,7 @@ public:
 struct MI6_CRYPT_API RealKey : public Key
 {
 public:
+    // L'entier représenté
 	bigint value;
 
     RealKey();
@@ -33,8 +37,9 @@ public:
     virtual std::string tostr() const;
     virtual void save(const char* filepath) const;
 
-    static RealKey* from_cptr(const char* stringrep, unsigned int base = KEY_STR_BASE);
-    static RealKey* from_str(const std::string& stringrep, unsigned int base = KEY_STR_BASE);
+    // Ces deux méthodes renvoient une clé réelle depuis sa représentation textuelle
+    static RealKey* from_cptr(const char* stringrep, unsigned int base = STR_KEY_BASE);
+    static RealKey* from_str(const std::string& stringrep, unsigned int base = STR_KEY_BASE);
 };
 
 // Une paire de clés de cryptage. Permet le polymorphisme et un design composite
@@ -54,6 +59,7 @@ public:
     virtual std::string tostr() const;
     virtual void save(const char* filepath) const;
 
-    static KeyPair* from_cptr(const char* stringrep, unsigned int base = KEY_STR_BASE);
-    static KeyPair* from_str(const std::string& stringrep, unsigned int base = KEY_STR_BASE);
+    // Ces deux méthodes renvoient une paire de clés depuis sa représentation textuelle
+    static KeyPair* from_cptr(const char* stringrep, unsigned int base = STR_KEY_BASE);
+    static KeyPair* from_str(const std::string& stringrep, unsigned int base = STR_KEY_BASE);
 };

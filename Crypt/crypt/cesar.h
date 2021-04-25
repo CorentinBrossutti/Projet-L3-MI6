@@ -6,6 +6,7 @@
 
 
 // Moteur de cryptage César
+// Le "chiffrement" se fait uniquement par ajout ou retrait d'un nombre arbitraire
 class MI6_CRYPT_API Cesar : public Engine
 {
 public:

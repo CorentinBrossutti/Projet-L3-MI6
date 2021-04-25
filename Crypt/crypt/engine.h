@@ -1,20 +1,22 @@
 #pragma once
 
-#include "math.h"
 #include "global.h"
+#include "math.h"
 #include "key.h"
 #include "random.h"
 
-#include <string>
-
+// Taille en octets du padding (du nonce)
 #define PADSIZE_BYTES 1
+// Taille des blocs (pour le découpage) en octets
 #define BSIZE_BYTES 8
+// Valeur de bigint indiquant qu'il est invalide
 #define INVALID_VALUE -1
 
 
 class Engine;
 
 // Un message à transmettre, contient un bigint encrypté ou non correspondant au message
+// Supporte le découpage
 class MI6_CRYPT_API Message
 {
 	friend class Engine;
@@ -54,7 +56,7 @@ protected:
 };
 
 
-// Un moteur de cryptage générique
+// Un moteur de cryptage générique (classe abstraite parente)
 class MI6_CRYPT_API Engine
 {
 public:
@@ -79,8 +81,10 @@ public:
     virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
 
 	// Encrypte un message avec une clé donnée
+    // Le booléen parts définit si le chiffrement se fait sur les parties du message ou sur le message globalement
     void encrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 	// Décrypte une message avec une clé donnée
+    // Le booléen parts définit si le chiffrement se fait sur les parties du message ou sur le message globalement
     void decrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
 
 	// Opération dynamique basée sur un argument textuel
