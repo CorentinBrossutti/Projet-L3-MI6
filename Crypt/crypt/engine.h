@@ -44,11 +44,13 @@ public:
 	std::string get(char (*converter)(uint8_t) = ascii_convert_to);
 
     // Ecrit le contenu textuel du message dans un fichier
-	void write(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
+    void write_str(const char* filepath, char (*converter)(uint8_t) = ascii_convert_to);
+    // Ecrit la valeur numérique dans la base spécifiée du message dans un fichier
+    void write_num(const char* filepath, unsigned int base = 62);
 
     MI6_CRYPT_API friend std::ostream& operator <<(std::ostream& output, Message& msg);
 protected:
-    unsigned int _count;
+    size_t _count;
 	bool _encrypted;
     bigint* _content;
     bigint _value;
@@ -63,41 +65,42 @@ public:
     virtual ~Engine();
 
 	// Génère une clé de cryptage
-	virtual Key* generate() = 0;
+    virtual Key* generate() const = 0;
 
     // Applique l'algorithme de cryptage avec une clé donnée et un nombre à encoder
-    virtual bigint run_crypt(const bigint& source, Key* key) = 0;
+    virtual bigint run_crypt(const bigint& source, Key* key) const = 0;
     // Applique l'algorithme de cryptage avec une clé donnée et un nombre à décoder
-    virtual bigint run_decrypt(const bigint& source, Key* key) = 0;
+    virtual bigint run_decrypt(const bigint& source, Key* key) const = 0;
 
     // Ajoute un nonce au nombre donné (padsize est le nombre d'octets à ajouter)
-    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint pad(const bigint& number, unsigned int padsize = PADSIZE_BYTES) const;
     // Retire le nonce du nombre donné (padsize est le nombre d'octets à retirer)
-    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint unpad(const bigint& number, unsigned int padsize = PADSIZE_BYTES) const;
 
 	// Encode un nombre avec une clé donnée
-    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES) const;
 	// Décode un nombre avec une clé donnée
-    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES) const;
 
 	// Encrypte un message avec une clé donnée
     // Le booléen parts définit si le chiffrement se fait sur les parties du message ou sur le message globalement
-    void encrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    void encrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES) const;
 	// Décrypte une message avec une clé donnée
     // Le booléen parts définit si le chiffrement se fait sur les parties du message ou sur le message globalement
-    void decrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
-
-	// Opération dynamique basée sur un argument textuel
-    bool operate(const std::string& arg, Message& message, Key*& key, unsigned int padsize = PADSIZE_BYTES);
+    void decrypt(Message& message, Key* key, bool parts = true, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES) const;
 
     // Construit un message reçu chiffré depuis un nombre
-    virtual Message* msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES);
+    virtual Message* msgprep(const bigint& stack, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES) const;
     // Construit un message reçu chiffré depuis une représentation textuelle
-    virtual Message* msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from);
+    virtual Message* msgprep(const std::string& stack_str, unsigned int blocksz = BSIZE_BYTES, unsigned int padsize = PADSIZE_BYTES, uint8_t (*converter)(char) = ascii_convert_from) const;
     // Construit un message reçu chiffré depuis ses parties numériques (vector)
-    virtual Message* msgprep(const std::vector<bigint>& parts);
+    virtual Message* msgprep(const std::vector<bigint>& parts) const;
     // Construit un message reçu chiffré depuis ses parties numériques (tableau)
-    virtual Message* msgprep(const bigint* parts, unsigned int length);
+    virtual Message* msgprep(const bigint* parts, unsigned int length) const;
+
+    // Traite une chaîne de caractères et renvoie la clé par défaut pour ce moteur
+    // Si le format n'est pas bon, erreur
+    virtual Key* parse_default_key(const std::string& str, unsigned int base = STR_KEY_BASE) const;
 protected:
     Randomizer _rand;
 };

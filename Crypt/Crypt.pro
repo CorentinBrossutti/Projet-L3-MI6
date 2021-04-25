@@ -18,7 +18,8 @@ SOURCES += \
     math.cpp \
     random.cpp \
     rsa.cpp \
-    std.cpp
+    std.cpp \
+    util.cpp
 
 HEADERS += \
     crypt/cesar.h \
@@ -28,7 +29,8 @@ HEADERS += \
     crypt/math.h \
     crypt/random.h \
     crypt/rsa.h \
-    crypt/std.h
+    crypt/std.h \
+    crypt/util.h
 
 # Default rules for deployment.
 #unix {

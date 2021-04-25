@@ -24,7 +24,7 @@ PublicKey* PublicKey::from_cptr(const char *stringrep, unsigned int base)
 
 PublicKey* PublicKey::from_str(const string &stringrep, unsigned int base)
 {
-    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    size_t delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("PublicKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), e = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
@@ -50,7 +50,7 @@ PrivateKey* PrivateKey::from_cptr(const char *stringrep, unsigned int base)
 
 PrivateKey* PrivateKey::from_str(const string &stringrep, unsigned int base)
 {
-    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    size_t delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("PrivateKey::from_str : impossible d'analyser la chaîne");
     string n = stringrep.substr(0, delimpos), d = stringrep.substr(delimpos + STR_KEY_DELIMSIZE);
@@ -86,7 +86,7 @@ RsaKey* RsaKey::from_str(const string &stringrep, unsigned int base)
 {
     string temp = stringrep;
 
-    unsigned long long int delimpos = stringrep.find(STR_KEY_DELIMITER);
+    size_t delimpos = stringrep.find(STR_KEY_DELIMITER);
     if(delimpos == string::npos)
         throw invalid_argument("RsaKey::from_str : impossible d'analyser la chaîne");
 
@@ -102,7 +102,7 @@ RsaKey* RsaKey::from_str(const string &stringrep, unsigned int base)
 }
 
 
-bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize)
+bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize) const
 {
     Key* encoder;
     if(dynamic_cast<RsaKey*>(key))
@@ -115,7 +115,7 @@ bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize)
     return Engine::encode(source, encoder, padsize);
 }
 
-bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
+bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize) const
 {
     Key* decoder;
     if(dynamic_cast<RsaKey*>(key))
@@ -128,7 +128,7 @@ bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize)
     return Engine::decode(source, decoder, padsize);
 }
 
-RsaKey* Rsa::generate()
+RsaKey* Rsa::generate() const
 {
     bigint p = random_prime(_rand, KSIZE), q = random_prime(_rand, KSIZE);
 
@@ -143,14 +143,19 @@ RsaKey* Rsa::generate()
     return new RsaKey(n, e, d);
 }
 
-bigint Rsa::run_crypt(const bigint& source, Key* key)
+bigint Rsa::run_crypt(const bigint& source, Key* key) const
 {
     KeyPair* kp = (KeyPair*)key;
     return modpow(source, ((RealKey*)kp->b)->value, ((RealKey*)kp->a)->value);
 }
 
-bigint Rsa::run_decrypt(const bigint& source, Key* key)
+bigint Rsa::run_decrypt(const bigint& source, Key* key) const
 {
     KeyPair* kp = (KeyPair*)key;
     return modpow(source, ((RealKey*)kp->b)->value, ((RealKey*)kp->a)->value);
+}
+
+Key* Rsa::parse_default_key(const std::string &str, unsigned int base) const
+{
+    return RsaKey::from_str(str, base);
 }

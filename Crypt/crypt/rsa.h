@@ -56,11 +56,13 @@ public:
 class MI6_CRYPT_API Rsa : public Engine
 {
 public:
-	virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
-	virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES);
+    virtual bigint encode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES) const;
+    virtual bigint decode(const bigint& source, Key* key, unsigned int padsize = PADSIZE_BYTES) const;
 
-	virtual RsaKey* generate();
+    virtual RsaKey* generate() const;
 
-    virtual bigint run_crypt(const bigint& source, Key* key);
-    virtual bigint run_decrypt(const bigint& source, Key* key);
+    virtual bigint run_crypt(const bigint& source, Key* key) const;
+    virtual bigint run_decrypt(const bigint& source, Key* key) const;
+
+    virtual Key* parse_default_key(const std::string& str, unsigned int base = STR_KEY_BASE) const;
 };

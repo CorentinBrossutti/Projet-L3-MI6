@@ -18,7 +18,7 @@ public:
     // Renvoie une représentation textuelle de cette clé
     virtual std::string tostr() const = 0;
     // Sauvegarde la clé dans un fichier
-    virtual void save(const char* filepath) const = 0;
+    virtual void save(const char* filepath) const;
 };
 
 // Clé de cryptage encapsulant un entier
@@ -35,7 +35,6 @@ public:
     virtual ~RealKey();
 
     virtual std::string tostr() const;
-    virtual void save(const char* filepath) const;
 
     // Ces deux méthodes renvoient une clé réelle depuis sa représentation textuelle
     static RealKey* from_cptr(const char* stringrep, unsigned int base = STR_KEY_BASE);
@@ -57,7 +56,6 @@ public:
     virtual ~KeyPair();
 
     virtual std::string tostr() const;
-    virtual void save(const char* filepath) const;
 
     // Ces deux méthodes renvoient une paire de clés depuis sa représentation textuelle
     static KeyPair* from_cptr(const char* stringrep, unsigned int base = STR_KEY_BASE);

@@ -1,8 +1,8 @@
 #include "crypt/global.h"
 #include "crypt/engine.h"
+#include "crypt/util.h"
 
-#include <sstream>
-#include <fstream>
+#include <ostream>
 
 using namespace std;
 
@@ -86,15 +86,14 @@ string Message::get(char (*converter)(uint8_t))
     return _strcontent.empty() ? (_strcontent = bop::to_str(value(), converter)) : _strcontent;
 }
 
-void Message::write(const char* filepath, char (*converter)(uint8_t))
+void Message::write_str(const char* filepath, char (*converter)(uint8_t))
 {
-	ofstream ofs;
-	ofs.open(filepath, ios::out);
-	if (ofs.fail())
-		return;
+    files::fwrite_str(filepath, get(converter));
+}
 
-	ofs << get(converter);
-	ofs.close();
+void Message::write_num(const char *filepath, unsigned int base)
+{
+    files::fwrite_str(filepath, value().get_str(base));
 }
 
 std::ostream& operator <<(std::ostream& output, Message& msg)
@@ -107,7 +106,7 @@ std::ostream& operator <<(std::ostream& output, Message& msg)
 
 Engine::~Engine() {}
 
-bigint Engine::pad(const bigint& number, unsigned int padsize)
+bigint Engine::pad(const bigint& number, unsigned int padsize) const
 {
     bigint p;
     mpz_ui_pow_ui(p.get_mpz_t(), 2, padsize * 8);
@@ -115,7 +114,7 @@ bigint Engine::pad(const bigint& number, unsigned int padsize)
     return number * p + _rand.rand(padsize);
 }
 
-bigint Engine::unpad(const bigint& number, unsigned int padsize)
+bigint Engine::unpad(const bigint& number, unsigned int padsize) const
 {
     bigint num;
     mpz_ui_pow_ui(num.get_mpz_t(), 2, padsize * 8);
@@ -124,17 +123,17 @@ bigint Engine::unpad(const bigint& number, unsigned int padsize)
     return num;
 }
 
-bigint Engine::encode(const bigint& source, Key* key, unsigned int padsize)
+bigint Engine::encode(const bigint& source, Key* key, unsigned int padsize) const
 {
     return run_crypt(pad(source, padsize), key);
 }
 
-bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize)
+bigint Engine::decode(const bigint& source, Key* key, unsigned int padsize) const
 {
     return unpad(run_decrypt(source, key), padsize);
 }
 
-void Engine::encrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize)
+void Engine::encrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize) const
 {
     if(parts)
     {
@@ -152,7 +151,7 @@ void Engine::encrypt(Message& message, Key* key, bool parts, unsigned int blocks
 	message._strcontent = string();
 }
 
-void Engine::decrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize)
+void Engine::decrypt(Message& message, Key* key, bool parts, unsigned int blocksz, unsigned int padsize) const
 {
     if(parts)
     {
@@ -170,31 +169,17 @@ void Engine::decrypt(Message& message, Key* key, bool parts, unsigned int blocks
 	message._strcontent = string();
 }
 
-bool Engine::operate(const string& arg, Message& message, Key*& key, unsigned int padsize)
-{
-    if (arg == "encrypt")
-		encrypt(message, key, padsize);
-    else if (arg == "decrypt")
-		decrypt(message, key, padsize);
-    else if(arg == "gkey")
-       key = generate();
-    else
-        return false;
-
-    return true;
-}
-
-Message* Engine::msgprep(const bigint &stack, unsigned int blocksz, unsigned int padsize)
+Message* Engine::msgprep(const bigint& stack, unsigned int blocksz, unsigned int padsize) const
 {
     return new Message(stack, true, blocksz + padsize);
 }
 
-Message* Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned int padsize, uint8_t (*converter)(char))
+Message* Engine::msgprep(const string& stack_str, unsigned int blocksz, unsigned int padsize, uint8_t (*converter)(char)) const
 {
     return msgprep(bop::from_str(stack_str, converter), blocksz, padsize);
 }
 
-Message* Engine::msgprep(const vector<bigint>& parts)
+Message* Engine::msgprep(const vector<bigint>& parts) const
 {
     Message* m = new Message;
     m->_encrypted = true;
@@ -208,7 +193,7 @@ Message* Engine::msgprep(const vector<bigint>& parts)
     return m;
 }
 
-Message* Engine::msgprep(const bigint *parts, unsigned int length)
+Message* Engine::msgprep(const bigint *parts, unsigned int length) const
 {
     Message* m = new Message;
     m->_encrypted = true;
@@ -219,4 +204,9 @@ Message* Engine::msgprep(const bigint *parts, unsigned int length)
         m->_content[i] = parts[i];
 
     return m;
+}
+
+Key* Engine::parse_default_key(const string& str, unsigned int base) const
+{
+    return nullptr;
 }

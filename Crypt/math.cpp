@@ -74,9 +74,9 @@ vector<bigint> bop::decompose_vec(const bigint& val, unsigned int blocksz, bool 
     mpz_ui_pow_ui(mask.get_mpz_t(), 2, blocksz * 8);
     mask -= 1;
 
-    unsigned long long int bcount = count_bytes(val);
+    size_t bcount = count_bytes(val);
 
-    for(unsigned long long int i = 0;i < bcount;i+=blocksz)
+    for(size_t i = 0;i < bcount;i+=blocksz)
     {
         v.push_back((bcount - i) >= blocksz ? b & mask : b);
         b >>= blocksz * 8;
