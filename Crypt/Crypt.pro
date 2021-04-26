@@ -56,12 +56,12 @@ INSTALLS += dlls_to_move
 }
 
 unix:!macx:CONFIG(release, debug|release){
-LIBS += -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../lib/unix/mpir/release/ -lmpirxx
+LIBS += -Wl,-rpath,$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../lib/unix/mpir/release/ -lmpirxx
 INCLUDEPATH += $$PWD/../lib/unix/mpir/release
 DEPENDPATH += $$PWD/../lib/unix/mpir/release
 }
 else:unix:!macx:CONFIG(debug, debug|release){
-LIBS += -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../lib/unix/mpir/debug/ -lmpirxx
+LIBS += -Wl,-rpath,$$PWD/../lib/unix/mpir/debug/ -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../lib/unix/mpir/debug/ -lmpirxx
 INCLUDEPATH += $$PWD/../lib/unix/mpir/debug
 DEPENDPATH += $$PWD/../lib/unix/mpir/debug
 }

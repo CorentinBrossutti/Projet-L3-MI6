@@ -39,6 +39,7 @@ void fenetreConnexion::on_boutonConnexion_clicked() {
 //Fonction appellé quand on essaie de se connecter
 void fenetreConnexion::tentativeConnexion() {
     afficherMessage(ui->displayMessage,tr("<em>Tentative de connexion en cours...</em>"));
+
 }
 
 void fenetreConnexion::connecte() {
