@@ -107,7 +107,7 @@ bigint Rsa::encode(const bigint& source, Key* key, unsigned int padsize) const
     Key* encoder;
     if(dynamic_cast<RsaKey*>(key))
         encoder = ((RsaKey*)key)->publ;
-    else if(dynamic_cast<PublicKey*>(key))
+    else if(dynamic_cast<KeyPair*>(key))
         encoder = key;
     else
         throw invalid_argument("Rsa::encode : invalid key");
@@ -120,7 +120,7 @@ bigint Rsa::decode(const bigint& source, Key* key, unsigned int padsize) const
     Key* decoder;
     if(dynamic_cast<RsaKey*>(key))
         decoder = ((RsaKey*)key)->priv;
-    else if(dynamic_cast<PrivateKey*>(key))
+    else if(dynamic_cast<KeyPair*>(key))
         decoder = key;
     else
         throw invalid_argument("Rsa::decode : invalid key");
@@ -157,5 +157,12 @@ bigint Rsa::run_decrypt(const bigint& source, Key* key) const
 
 Key* Rsa::parse_default_key(const std::string &str, unsigned int base) const
 {
-    return RsaKey::from_str(str, base);
+    try
+    {
+        return RsaKey::from_str(str, base);
+    }
+    catch (invalid_argument iarg)
+    {
+        return nullptr;
+    }
 }

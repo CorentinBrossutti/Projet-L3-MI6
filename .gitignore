@@ -1,8 +1,5 @@
 .build/
 build/win/chat/client/
-
 build/win/chat/server/
-
 build/win/crypt/
-
 build/win/sdpe/

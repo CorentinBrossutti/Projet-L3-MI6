@@ -20,5 +20,12 @@ bigint Cesar::run_decrypt(const bigint &source, Key *key) const
 
 Key* Cesar::parse_default_key(const std::string& str, unsigned int base) const
 {
-    return RealKey::from_str(str, base);
+    try
+    {
+        return RealKey::from_str(str, base);
+    }
+    catch (invalid_argument iarg)
+    {
+        return nullptr;
+    }
 }
