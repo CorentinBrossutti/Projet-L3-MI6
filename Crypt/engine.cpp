@@ -2,8 +2,6 @@
 #include "crypt/engine.h"
 #include "crypt/util.h"
 
-#include <ostream>
-
 using namespace std;
 
 

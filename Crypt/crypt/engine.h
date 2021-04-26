@@ -5,6 +5,8 @@
 #include "key.h"
 #include "random.h"
 
+#include <ostream>
+
 // Taille en octets du padding (du nonce)
 #define PADSIZE_BYTES 1
 // Taille des blocs (pour le découpage) en octets

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cstdio>
-#include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -87,6 +87,23 @@ int process(int argc, char** argv, Engine*& engine, Key*& key, Message*& msg)
             cout << "Message traite avec succes." << endl;
             return EXIT_SUCCESS;
         }
+        // Pas inclus (manque de temps)
+        /*else if(!strcmp(argv[2], "sign") || !strcmp(argv[2], "verify"))
+        {
+            if(!strcmp(argv[1], "rsa"))
+            {
+                char* temp[argc];
+                for(int i = 0;i < argc;i++)
+                    strcpy(temp[i], argv[i]);
+                strcpy(temp[2], strcmp(argv[2], "sign") ? "encrypt" : "decrypt");
+
+            }
+            else
+            {
+                cout << "Seul le moteur RSA supporte les signatures." << endl;
+                return EXIT_FAILURE;
+            }
+        }*/
         else
         {
             cout << "Operation \"" << argv[2] << "\" non reconnue." << endl;

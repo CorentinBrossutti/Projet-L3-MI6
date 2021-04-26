@@ -40,8 +40,8 @@ ServeurTCP::ServeurTCP()
 
 #ifdef CESAR
     _engine = new Cesar;
-#else
 
+#else
     _engine = new Rsa;
 #endif
     _key = _engine->generate();
