@@ -61,9 +61,6 @@
          </layout>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QTextBrowser" name="displayMessage"/>
-       </item>
        <item row="0" column="0">
         <widget class="QWidget" name="group_titre_image" native="true">
          <property name="enabled">
@@ -75,11 +72,11 @@
            <height>150</height>
           </size>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0">
+         <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,0,0,0,0">
           <property name="leftMargin">
            <number>9</number>
           </property>
-          <item row="0" column="2">
+          <item row="0" column="3">
            <widget class="QWidget" name="group_nom" native="true">
             <property name="enabled">
              <bool>true</bool>
@@ -145,7 +142,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QWidget" name="gridWidget" native="true">
+           <widget class="QWidget" name="zone_pseudo_2" native="true">
             <property name="maximumSize">
              <size>
               <width>250</width>
@@ -179,8 +176,24 @@
             </layout>
            </widget>
           </item>
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QTextBrowser" name="displayMessage"/>
        </item>
       </layout>
      </widget>

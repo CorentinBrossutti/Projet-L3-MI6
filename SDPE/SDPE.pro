@@ -27,12 +27,12 @@ INSTALLS += dlls_to_move
 }
 
 unix:!macx:CONFIG(release, debug|release){
-LIBS += -Wl,-rpath,$$PWD/../build/unix/crypt/release/ -Wl,-rpath,$$PWD/../lib/unix/mpir/release/ -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../lib/unix/mpir/release/ -lmpirxx -L$$PWD/../build/unix/crypt/release/ -lMI6.Crypt
+LIBS += -Wl,-rpath,$$PWD/../build/unix/crypt/release/ -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../lib/unix/mpir/release/ -lmpirxx -L$$PWD/../build/unix/crypt/release/ -lMI6.Crypt
 INCLUDEPATH += $$PWD/../lib/unix/mpir/release
 DEPENDPATH += $$PWD/../lib/unix/mpir/release
 }
 else:unix:!macx:CONFIG(debug, debug|release){
-LIBS += -Wl,-rpath,$$PWD/../build/unix/crypt/debug/ -Wl,-rpath,$$PWD/../lib/unix/mpir/debug/ -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../lib/unix/mpir/debug/ -lmpirxx -L$$PWD/../build/unix/crypt/debug/ -lMI6.Crypt
+LIBS += -Wl,-rpath,$$PWD/../build/unix/crypt/debug/ -L$$PWD/../lib/unix/mpir/debug/ -lmpir -L$$PWD/../lib/unix/mpir/debug/ -lmpirxx -L$$PWD/../build/unix/crypt/debug/ -lMI6.Crypt
 INCLUDEPATH += $$PWD/../lib/unix/mpir/debug
 DEPENDPATH += $$PWD/../lib/unix/mpir/debug
 }
