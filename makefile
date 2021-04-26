@@ -1,10 +1,15 @@
-CHEMIN = build/unix/crypt/release build/unix/SDPE/release build/unix/chat/server/release build/unix/chat/client/release
+CHEMIN_BUILD = build/unix/crypt/release build/unix/SDPE/release build/unix/chat/server/release build/unix/chat/client/release
+CHEMIN_DEPLOY = deploy/mpir deploy/crypt/release
 MKDIRP = mkdir -p
+CPR = cp -r
+MV = mv
 QMAKE = qmake
 DIR_CRYPT = build/unix/crypt/release
 DIR_SDPE = build/unix/SDPE/release
 DIR_SERVEUR = build/unix/chat/server/release
 DIR_CLIENT = build/unix/chat/client/release
+DIR_MPIR_RELEASE = lib/unix/mpir/release
+DIR_DEPLOY = deploy
 CD = cd
 AND = &&
 CREER = make
@@ -16,11 +21,31 @@ PRO_CRYPT = Crypt.pro
 PRO_SDPE = SDPE.pro
 PRO_SERVEUR = Client_Serveur.pro
 PRO_CLIENT = App_Client.pro
+EXEC_SDPE = MI6.SDPE
+EXEC_SERVEUR = MI6.ChatServer
+EXEC_CLIENT = MI6.ChatClient
 
-all : dossiers compilation
+all : dossiers deploy
 
 dossiers : 
-	${MKDIRP} ${CHEMIN}
+	${MKDIRP} ${CHEMIN_BUILD} ${AND} ${MKDIRP} ${CHEMIN_DEPLOY}
+
+deploy : compilation copyMpir mvCrypt mvSDPE mvClient mvServeur nettoyer
+
+copyMpir :
+	${CPR} ${DIR_MPIR_RELEASE} ${DIR_DEPLOY}/mpir
+
+mvCrypt :
+	${MV} ${DIR_CRYPT}/lib* ${DIR_DEPLOY}/crypt/release
+
+mvSDPE :
+	${MV} ${DIR_SDPE}/${EXEC_SDPE} ${DIR_DEPLOY}
+
+mvClient :
+	${MV} ${DIR_CLIENT}/${EXEC_CLIENT} ${DIR_DEPLOY}
+
+mvServeur :
+	${MV} ${DIR_SERVEUR}/${EXEC_SERVEUR} ${DIR_DEPLOY}
 
 compilation : QmakePro compCrypt compSDPE compServeur compClient
 
@@ -52,5 +77,8 @@ serveur :
 client :
 	${CD} ${DIR_CLIENT} ${AND} ${QMAKE} ${ARRIERE_CLIENT}/${PRO_CLIENT}
 
-veryclean :
+nettoyer :
 	rm -r build/
+
+clean :
+	rm -r deploy/
