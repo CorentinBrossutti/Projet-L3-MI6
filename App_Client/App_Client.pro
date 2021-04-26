@@ -53,7 +53,7 @@ INSTALLS += dlls_to_move
 }
 
 unix:!macx:CONFIG(release, debug|release){
-LIBS += -Wl,-rpath,$$PWD/../build/unix/crypt/release/ -Wl,-rpath,$$PWD/../lib/unix/mpir/release/ -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../build/unix/crypt/release/ -lMI6.Crypt
+LIBS += -Wl,-rpath,crypt/release/ -Wl,-rpath,mpir/release/ -L$$PWD/../lib/unix/mpir/release/ -lmpir -L$$PWD/../build/unix/crypt/release/ -lMI6.Crypt
 INCLUDEPATH += $$PWD/../lib/unix/mpir/release
 DEPENDPATH += $$PWD/../lib/unix/mpir/release
 }

@@ -31,6 +31,7 @@ void XmlDoc::chargerFichierConfig(QString nomFichier) {
     xmlDoc.close(); //On en a finis avec le document XML, on peut le fermer
 }
 
+// Methode de création du fichier de sauvegarde des données de l'utilisateur si il n'existe pas
 void XmlDoc::creerFichier(QString monFichier) {
     QDomDocument doc;
     QDomElement infoClient = doc.createElement("infoClient");
@@ -146,8 +147,8 @@ void XmlDoc::sauvegarderPseudo(QString nomFichier, QString pseudo) {
 void XmlDoc::sauvegarderIp(QString nomFichier, QString ip) {
     chargerFichierConfig(nomFichier);
 
-    QDomElement newIp = doc.createElement(QString("ip")); //On crée notre nouveau Noeud
-    QDomText textIp = doc.createTextNode(QString(ip)); //On y met le pseudo voulu
+    QDomElement newIp = doc.createElement(QString("ip"));
+    QDomText textIp = doc.createTextNode(QString(ip));
     newIp.appendChild(textIp);
 
     docElement = doc.documentElement(); //On récupère le document chargé
@@ -156,8 +157,8 @@ void XmlDoc::sauvegarderIp(QString nomFichier, QString ip) {
     while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
-            if (element.tagName() == "ip") { //Si on trouve notre noeud qui contient le pseudo
-                docElement.replaceChild(newIp, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
+            if (element.tagName() == "ip") {
+                docElement.replaceChild(newIp, noeud);
             }
             noeud = noeud.nextSibling();
         }
@@ -177,8 +178,8 @@ void XmlDoc::sauvegarderIp(QString nomFichier, QString ip) {
 void XmlDoc::sauvegarderPort(QString nomFichier, QString port) {
     chargerFichierConfig(nomFichier);
 
-    QDomElement newPort = doc.createElement(QString("port")); //On crée notre nouveau Noeud
-    QDomText textPort = doc.createTextNode(QString(port)); //On y met le pseudo voulu
+    QDomElement newPort = doc.createElement(QString("port"));
+    QDomText textPort = doc.createTextNode(QString(port));
     newPort.appendChild(textPort);
 
     docElement = doc.documentElement(); //On récupère le document chargé
@@ -187,8 +188,8 @@ void XmlDoc::sauvegarderPort(QString nomFichier, QString port) {
     while(!noeud.isNull()) { //On parcourt notre Noeud
         element = noeud.toElement();
         if (!element.isNull()) {
-            if (element.tagName() == "port") { //Si on trouve notre noeud qui contient le pseudo
-                docElement.replaceChild(newPort, noeud); //Alors on le remplace par le nouveau Noeud qui continent notre nouveau Pseudo
+            if (element.tagName() == "port") {
+                docElement.replaceChild(newPort, noeud);
             }
             noeud = noeud.nextSibling();
         }

@@ -1,0 +1,6 @@
+<infoClient>
+    <pseudo/>
+    <ip/>
+    <port/>
+    <cle>BxQpUib1kng2qqyz0ksCGUqD84YDyIQBsw8g9jqT02DmxDE8NmcezjoP183QOBzT2dsT1R6xIq8g2hG2tlQEUR::3::7yHszoOgVCS1ttzK0VFSqKYo5NhTyrc7vI5mlpEJKgnuDF1HQJJkC5WleGnUvQ5iOVWJnDHCIlATO2ddZQ2tX1</cle>
+</infoClient>

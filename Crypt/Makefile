@@ -40,7 +40,7 @@ DISTNAME      = MI6.Crypt1.0.0
 DISTDIR = /home/demeersseman/Documents/lifprojet/Projet/Crypt/.tmp/MI6.Crypt1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -shared -Wl,-soname,libMI6.Crypt.so.1
-LIBS          = $(SUBLIBS) -L/home/demeersseman/Documents/lifprojet/Projet/Crypt/../lib/unix/mpir/release/ -lmpir -lmpirxx   
+LIBS          = $(SUBLIBS) -Wl,-rpath,/home/demeersseman/Documents/lifprojet/Projet/Crypt/../lib/unix/mpir/release/ -lmpir -L/home/demeersseman/Documents/lifprojet/Projet/Crypt/../lib/unix/mpir/release/ -lmpirxx   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -59,7 +59,8 @@ SOURCES       = cesar.cpp \
 		math.cpp \
 		random.cpp \
 		rsa.cpp \
-		std.cpp 
+		std.cpp \
+		util.cpp 
 OBJECTS       = cesar.o \
 		engine.o \
 		global.o \
@@ -67,7 +68,8 @@ OBJECTS       = cesar.o \
 		math.o \
 		random.o \
 		rsa.o \
-		std.o
+		std.o \
+		util.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -124,6 +126,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -143,14 +146,16 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		crypt/math.h \
 		crypt/random.h \
 		crypt/rsa.h \
-		crypt/std.h cesar.cpp \
+		crypt/std.h \
+		crypt/util.h cesar.cpp \
 		engine.cpp \
 		global.cpp \
 		key.cpp \
 		math.cpp \
 		random.cpp \
 		rsa.cpp \
-		std.cpp
+		std.cpp \
+		util.cpp
 QMAKE_TARGET  = MI6.Crypt
 DESTDIR       = 
 TARGET        = libMI6.Crypt.so.1.0.0
@@ -235,6 +240,7 @@ Makefile: Crypt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -305,6 +311,7 @@ Makefile: Crypt.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -377,8 +384,9 @@ engine.o: engine.cpp crypt/global.h \
 		../lib/unix/mpir/release/mpir.h \
 		crypt/engine.h \
 		crypt/math.h \
+		crypt/key.h \
 		crypt/random.h \
-		crypt/key.h
+		crypt/util.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o engine.o engine.cpp
 
 global.o: global.cpp crypt/global.h \
@@ -391,20 +399,20 @@ key.o: key.cpp crypt/global.h \
 		../lib/unix/mpir/release/mpir.h \
 		crypt/key.h \
 		crypt/math.h \
-		crypt/random.h
+		crypt/util.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o key.o key.cpp
 
-math.o: math.cpp crypt/global.h \
+math.o: math.cpp crypt/math.h \
+		crypt/global.h \
 		../lib/unix/mpir/release/mpirxx.h \
-		../lib/unix/mpir/release/mpir.h \
-		crypt/math.h \
-		crypt/random.h
+		../lib/unix/mpir/release/mpir.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o math.o math.cpp
 
 random.o: random.cpp crypt/random.h \
 		crypt/global.h \
 		../lib/unix/mpir/release/mpirxx.h \
-		../lib/unix/mpir/release/mpir.h
+		../lib/unix/mpir/release/mpir.h \
+		crypt/math.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o random.o random.cpp
 
 rsa.o: rsa.cpp crypt/global.h \
@@ -426,8 +434,15 @@ std.o: std.cpp crypt/std.h \
 		crypt/engine.h \
 		crypt/math.h \
 		crypt/random.h \
-		crypt/cesar.h
+		crypt/cesar.h \
+		crypt/util.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o std.o std.cpp
+
+util.o: util.cpp crypt/util.h \
+		crypt/global.h \
+		../lib/unix/mpir/release/mpirxx.h \
+		../lib/unix/mpir/release/mpir.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o util.o util.cpp
 
 ####### Install
 

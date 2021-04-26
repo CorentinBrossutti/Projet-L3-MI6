@@ -88,6 +88,7 @@ void fenetreConnexion::erreurSocket(QAbstractSocket::SocketError erreur) {
     ui->boutonConnexion->setEnabled(true);
 }
 
+// Methode pour sauvegarder les données de l'utilisateur
 void fenetreConnexion::sauvegardeDonnee(QString nom, QString ip, QString port) {
     docXML.sauvegarderPseudo(fichierXML, nom);
     docXML.sauvegarderIp(fichierXML, ip);
@@ -95,6 +96,7 @@ void fenetreConnexion::sauvegardeDonnee(QString nom, QString ip, QString port) {
     afficherDonne();
 }
 
+// On recupere les données de l'utilisateur et on les affiche
 void fenetreConnexion::afficherDonne() {
     pseudo = chargePseudo();
     ui->boxPseudo->clear();
