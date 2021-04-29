@@ -17,7 +17,6 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
     pcount = 0;
     parts = nullptr;
     pseudo = chargePseudo();
-    boxPseudo->setText(pseudo);
 #ifdef CESAR
     _engine = new Cesar;
     QString cle = chargeCle();
@@ -66,7 +65,7 @@ void ClientTcp::afficherMessage(QTextBrowser * afficheur, QString message) {
 //Methdode envoieMessage qui va envoyer un message
 void ClientTcp::envoieMessage()
 {
-    pseudo = chargePseudo();
+    //pseudo = chargePseudo();
     send(tr("<strong>") + pseudo +tr("</strong> : ") + boxMessage->text());
     boxMessage->clear();
     boxMessage->setFocus();
@@ -246,25 +245,20 @@ void ClientTcp::connecte() {
     // local_key->publ->str()
 }
 
-
-//Cette fonction est appelé lorsqu'on est déconnecté du serveur
-void ClientTcp::deconnecte() {
-    //afficherMessage(displayMessage, tr("<em>Déconnecté du serveur </em>"));
-}
-
 //Méthode de changement de Pseudo
 void ClientTcp::sauvegardePseudo(QString nom) {
     docXML.sauvegarderPseudo(fichierXML, nom);
     pseudo = chargePseudo();
-    boxPseudo->setFocus();
 }
 
 void ClientTcp::on_boutonPseudo_clicked() {
     sauvegardePseudo(boxPseudo->text());
+    boxPseudo->setFocus();
 }
 
 void ClientTcp::on_boxPseudo_returnPressed() {
     sauvegardePseudo(boxPseudo->text());
+    boxPseudo->setFocus();
 }
 
 
@@ -283,6 +277,11 @@ void ClientTcp::sauvegardeCle(QString cle) {
 //Méthode de chargement de la Clé
 QString ClientTcp::chargeCle() {
     return docXML.chargerCle(fichierXML);
+}
+
+//Méthode de changement du texte
+void ClientTcp::setPseudo(QString pseudo) {
+    boxPseudo->setText(pseudo);
 }
 
 

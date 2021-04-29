@@ -33,6 +33,11 @@ public:
     QString chargePseudo();
     void sauvegardeCle(QString cle);
     QString chargeCle();
+    
+    ///////////////////////////////////////////
+    /// spécifique QT
+    ///////////////////////////////////////////
+    void setPseudo(QString pseudo); //Méthode de changement du text dans le widget boxPseudo de l'ui
 
 private slots:
 
@@ -44,7 +49,6 @@ private slots:
     void envoieMessage();
     void donneesRecues();
     void connecte();
-    void deconnecte();
 
     void send(const QString& val, bool part = true, unsigned short flag = PARTED_MESSAGE, bool encrypt = true);
 

@@ -28,7 +28,6 @@ void fenetreConnexion::afficherMessage(QTextEdit * afficheur, QString message) {
 }
 
 void fenetreConnexion::on_boutonConnexion_clicked() {
-
     tentativeConnexion();
     ui->boutonConnexion->setEnabled(false);
     socket->abort(); //On désactive les connexions précédentes s'il y en a
@@ -51,6 +50,8 @@ void fenetreConnexion::connecte() {
 void fenetreConnexion::afficherFenetrePrincipale() {
     sauvegardeDonnee(ui->boxPseudo->text(),ui->boxIp->text(),ui->boxPort->text());
     fenetrePrincipale->setSocket(this->socket); // Avant d'afficher la fenetre de chat on donne le socke à la classe de la fenetre de chat
+    fenetrePrincipale->sauvegardePseudo(ui->boxPseudo->text());
+    fenetrePrincipale->setPseudo(ui->boxPseudo->text());
     fenetrePrincipale->show();
     this->hide(); // On cache la fenetre de connexion
     connect(fenetrePrincipale,SIGNAL(closed()), this, SLOT(afficherMenuConnexion()));
