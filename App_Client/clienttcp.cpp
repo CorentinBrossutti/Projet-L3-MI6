@@ -39,9 +39,6 @@ ClientTcp::ClientTcp(QTcpSocket *socket)
 
 ClientTcp::~ClientTcp()
 {
-    //delete server_key;
-    //delete local_key;
-    //delete ui;
     delete _engine;
     delete _lkey;
     delete _skey;
@@ -241,8 +238,6 @@ void ClientTcp::donneesRecues() {
 //La fonction est appelé si on a réussi à se connecter au serveur
 void ClientTcp::connecte() {
     afficherMessage(displayMessage, tr("<em>Connexion réussie !</em>"));
-    // TODO envoyer clé publique au serveur
-    // local_key->publ->str()
 }
 
 //Méthode de changement de Pseudo

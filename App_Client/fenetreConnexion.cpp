@@ -29,16 +29,15 @@ void fenetreConnexion::afficherMessage(QTextEdit * afficheur, QString message) {
 
 void fenetreConnexion::on_boutonConnexion_clicked() {
     tentativeConnexion();
-    ui->boutonConnexion->setEnabled(false);
-    socket->abort(); //On désactive les connexions précédentes s'il y en a
-    //On va se connecter au serveur demandé
-    socket->connectToHost(ui->boxIp->text(), ui->boxPort->value());
 }
 
 //Fonction appellé quand on essaie de se connecter
 void fenetreConnexion::tentativeConnexion() {
     afficherMessage(ui->displayMessage,tr("<em>Tentative de connexion en cours...</em>"));
-
+    ui->boutonConnexion->setEnabled(false);
+    socket->abort(); //On désactive les connexions précédentes s'il y en a
+    //On va se connecter au serveur demandé
+    socket->connectToHost(ui->boxIp->text(), ui->boxPort->value());
 }
 
 void fenetreConnexion::connecte() {

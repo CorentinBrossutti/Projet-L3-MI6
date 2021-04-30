@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Fenêtre de connexion</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="image.qrc">
+    <normaloff>:/bulle.jpg</normaloff>:/bulle.jpg</iconset>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
@@ -204,6 +208,8 @@
   <tabstop>boxPseudo</tabstop>
   <tabstop>boutonConnexion</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="image.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -6,14 +6,8 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    //ClientTcp fenetre;
-    //XmlDoc *Doc = new XmlDoc();
-    //fenetre.show();
-    //Doc->show();
     fenetreConnexion fenetre;
-    fenetre.setWindowTitle("Voici la fenêtre de connexion !");
     fenetre.show();
-    //Doc->show();
 
     return app.exec();
 }

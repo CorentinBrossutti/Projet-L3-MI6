@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>conversation_102940.png</file>
+        <file>bulle.jpg</file>
     </qresource>
 </RCC>
